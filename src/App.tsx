@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import Options from './pages/Options';
 import Futures from './pages/Futures';
 import Settings from './pages/Settings';
+import Import from './pages/Import';
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const App: React.FC = () => {
             <Route path="/options" element={<Options />} />
             <Route path="/futures" element={<Futures />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/import" element={<Import />} />
           </Routes>
         </main>
         

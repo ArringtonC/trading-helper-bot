@@ -1,37 +1,37 @@
-import { Account, Projection } from '../types/account';
+import { Account } from '../types/account';
+
+interface Projection {
+  month: string;
+  balance: number;
+}
 
 /**
  * Service for calculating account projections
  */
 export class ProjectionService {
   /**
-   * Calculate monthly projections for an account for the remaining months in the year
-   * 
-   * @param account Account to generate projections for
+   * Calculate yearly projections for an account
+   * @param account Account to calculate projections for
    * @returns Array of monthly projections
    */
   public static calculateYearlyProjections(account: Account): Projection[] {
-    const currentDate = new Date(account.lastUpdated);
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth(); // 0-indexed (0 = January)
-    
     const projections: Projection[] = [];
-    let runningBalance = account.balance;
+    const currentDate = new Date();
+    const currentBalance = account.balance;
     
-    // Generate a projection for each month remaining in the year
-    for (let month = currentMonth; month <= 11; month++) {
-      // Add monthly deposit for current and future months
-      if (month >= currentMonth) {
-        runningBalance += account.monthlyDeposit || 0;
-      }
-      
-      // Format month name (e.g., "Jan", "Feb", etc.)
-      const monthName = new Date(currentYear, month, 1)
-        .toLocaleString('default', { month: 'short' });
+    // Calculate monthly growth rate based on historical performance
+    // This is a simplified calculation - in a real app, you'd want to use
+    // actual historical data and possibly machine learning models
+    const monthlyGrowthRate = 0.02; // 2% monthly growth assumption
+    
+    // Generate projections for the next 12 months
+    for (let i = 0; i < 12; i++) {
+      const projectionDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 1);
+      const projectedBalance = currentBalance * Math.pow(1 + monthlyGrowthRate, i + 1);
       
       projections.push({
-        month: monthName,
-        balance: runningBalance
+        month: projectionDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+        balance: projectedBalance
       });
     }
     

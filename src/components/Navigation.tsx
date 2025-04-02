@@ -10,11 +10,12 @@ const Navigation: React.FC = () => {
     { path: '/', label: 'Dashboard' },
     { path: '/options', label: 'Options' },
     { path: '/futures', label: 'Futures' },
+    { path: '/import', label: 'Import' },
     { path: '/settings', label: 'Settings' }
   ];
   
   return (
-    <div className="flex border-b border-gray-200">
+    <div className="flex border-b border-gray-200 overflow-x-auto">
       {navItems.map(item => (
         <Link 
           key={item.path}
