@@ -36,4 +36,4 @@ const TradeCard: React.FC<TradeCardProps> = ({ symbol, type, price, quantity, ti
   );
 };
 
-export default TradeCard; 
+export default TradeCard;

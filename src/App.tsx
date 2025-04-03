@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Dashboard from './pages/Dashboard';
@@ -6,8 +6,14 @@ import Options from './pages/Options';
 import Futures from './pages/Futures';
 import Settings from './pages/Settings';
 import Import from './pages/Import';
+import { initializeSampleData } from './utils/sampleData';
 
 const App: React.FC = () => {
+  // Initialize sample data when the app starts
+  useEffect(() => {
+    initializeSampleData();
+  }, []);
+
   return (
     <Router>
       <div className="min-h-screen bg-gray-50">

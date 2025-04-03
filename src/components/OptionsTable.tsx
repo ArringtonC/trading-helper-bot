@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
-import { OptionTrade, calculateTradePL, daysUntilExpiration, OptionStrategy } from '../types/options';
+import React, { useState, useMemo, useCallback } from 'react';
+import { OptionTrade, calculateTradePL } from '../types/options';
+import { format, differenceInDays, parseISO } from 'date-fns';
 
 interface OptionsTableProps {
   positions: OptionTrade[];
@@ -11,7 +12,7 @@ interface OptionsTableProps {
   showPL?: boolean;
 }
 
-type SortField = 'symbol' | 'type' | 'strike' | 'expiry' | 'quantity' | 'premium' | 'days';
+type SortField = 'symbol' | 'type' | 'strike' | 'expiry' | 'quantity' | 'premium' | 'days' | 'pnl';
 type SortDirection = 'asc' | 'desc';
 
 interface SortConfig {
@@ -34,34 +35,104 @@ const OptionsTable: React.FC<OptionsTableProps> = ({
   // Initialize hooks at the top level
   const [sortConfig, setSortConfig] = useState<SortConfig>({ field: 'expiry', direction: 'asc' });
   const [filter, setFilter] = useState('');
+  const [groupBy, setGroupBy] = useState<'none' | 'symbol' | 'strategy'>('none');
   
-  // Current date for expiration calculations
-  const currentDate = new Date();
+  // Format date for display
+  const formatDate = useCallback((date: Date): string => {
+    return format(date, 'MMM d, yyyy');
+  }, []);
+  
+  // Calculate days until expiration
+  const daysUntilExpiration = useCallback((position: OptionTrade): number => {
+    const today = new Date();
+    const expiry = new Date(position.expiry);
+    const diffTime = expiry.getTime() - today.getTime();
+    return Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+  }, []);
+  
+  // Calculate days open
+  const daysOpen = useCallback((position: OptionTrade): number => {
+    const today = new Date();
+    const openDate = new Date(position.openDate);
+    const closeDate = position.closeDate ? new Date(position.closeDate) : today;
+    return differenceInDays(closeDate, openDate);
+  }, []);
+  
+  // Determine if a trade is open or closed
+  const isOpen = useCallback((position: OptionTrade): boolean => {
+    return !position.closeDate;
+  }, []);
+  
+  // Calculate P&L for a trade
+  const calculatePL = useCallback((position: OptionTrade): number => {
+    if (isOpen(position)) {
+      return 0;
+    }
+    
+    // For imported trades, use the realizedPL from notes if available
+    if (position.notes && position.notes.includes('Realized P&L:')) {
+      const plMatch = position.notes.match(/Realized P&L: \$([\d.]+)/);
+      if (plMatch && plMatch[1]) {
+        return parseFloat(plMatch[1]);
+      }
+    }
+    
+    // For manually closed trades, calculate based on premium difference
+    if (position.closePremium !== undefined) {
+      const premiumDiff = position.closePremium - position.premium;
+      const totalPL = premiumDiff * position.quantity;
+      return totalPL - (position.commission || 0);
+    }
+    
+    // Fallback to the calculateTradePL function
+    return calculateTradePL(position);
+  }, [isOpen]);
   
   // Calculate summary statistics
   const summary = useMemo(() => {
-    const openPositions = positions.filter(p => !p.closeDate);
-    const closedPositions = positions.filter(p => p.closeDate);
+    const openPositions = positions.filter(p => isOpen(p));
+    const closedPositions = positions.filter(p => !isOpen(p));
+    const winningTrades = closedPositions.filter(p => calculatePL(p) > 0);
     
     return {
       totalPositions: positions.length,
       openPositions: openPositions.length,
       closedPositions: closedPositions.length,
-      totalPL: closedPositions.reduce((sum, p) => sum + calculateTradePL(p), 0),
+      totalPL: closedPositions.reduce((sum, p) => sum + calculatePL(p), 0),
       averageDaysToExpiry: openPositions.length > 0 
         ? openPositions.reduce((sum, p) => sum + daysUntilExpiration(p), 0) / openPositions.length
+        : 0,
+      winRate: closedPositions.length > 0 
+        ? (winningTrades.length / closedPositions.length) * 100 
+        : 0,
+      averageDaysHeld: closedPositions.length > 0
+        ? closedPositions.reduce((sum, p) => sum + daysOpen(p), 0) / closedPositions.length
         : 0
     };
-  }, [positions, currentDate]);
+  }, [positions, isOpen, calculatePL, daysUntilExpiration, daysOpen]);
+  
+  // Group positions by symbol or strategy
+  const groupedPositions = useMemo(() => {
+    if (groupBy === 'none') {
+      return { 'All Positions': positions };
+    }
+    
+    const groups: Record<string, OptionTrade[]> = {};
+    
+    positions.forEach(position => {
+      const key = groupBy === 'symbol' ? position.symbol : position.strategy;
+      if (!groups[key]) {
+        groups[key] = [];
+      }
+      groups[key].push(position);
+    });
+    
+    return groups;
+  }, [positions, groupBy]);
   
   // Sort and filter positions
-  const sortedPositions = useMemo(() => {
-    let filtered = positions.filter(p => 
-      p.symbol.toLowerCase().includes(filter.toLowerCase()) ||
-      p.putCall.toLowerCase().includes(filter.toLowerCase())
-    );
-    
-    return [...filtered].sort((a, b) => {
+  const sortPositions = useCallback((positions: OptionTrade[]) => {
+    return [...positions].sort((a, b) => {
       let comparison = 0;
       
       switch (sortConfig.field) {
@@ -86,219 +157,218 @@ const OptionsTable: React.FC<OptionsTableProps> = ({
         case 'days':
           comparison = daysUntilExpiration(a) - daysUntilExpiration(b);
           break;
+        case 'pnl':
+          comparison = calculatePL(a) - calculatePL(b);
+          break;
       }
       
       return sortConfig.direction === 'asc' ? comparison : -comparison;
     });
-  }, [positions, sortConfig, filter, currentDate]);
+  }, [sortConfig, daysUntilExpiration, calculatePL]);
   
   const handleSort = (field: SortField) => {
-    setSortConfig(prev => ({
+    setSortConfig(prevConfig => ({
       field,
-      direction: prev.field === field && prev.direction === 'asc' ? 'desc' : 'asc'
+      direction: prevConfig.field === field && prevConfig.direction === 'asc' ? 'desc' : 'asc'
     }));
   };
   
   const SortHeader: React.FC<{ field: SortField; children: React.ReactNode }> = ({ field, children }) => (
     <th 
-      className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
       onClick={() => handleSort(field)}
+      className="cursor-pointer hover:bg-gray-100"
     >
-      <div className="flex items-center">
-        {children}
-        {sortConfig.field === field && (
-          <span className="ml-1">
-            {sortConfig.direction === 'asc' ? '↑' : '↓'}
-          </span>
-        )}
-      </div>
+      {children}
+      {sortConfig.field === field && (
+        <span className="ml-1">
+          {sortConfig.direction === 'asc' ? '↑' : '↓'}
+        </span>
+      )}
     </th>
   );
-
-  // Render empty state if no positions
-  if (!positions || positions.length === 0) {
-    return (
-      <div className="bg-gray-50 p-4 border border-gray-200 rounded-md text-center">
-        <p className="text-gray-500">No positions found</p>
-      </div>
-    );
-  }
   
-  // Render table with positions
-  return (
-    <div className="space-y-4">
-      {/* Filter input */}
-      <div className="flex justify-between items-center">
-        <input
-          type="text"
-          placeholder="Filter by symbol or type..."
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <div className="text-sm text-gray-500">
-          Showing {sortedPositions.length} of {positions.length} positions
-        </div>
-      </div>
-      
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
-          <thead className="bg-gray-50">
-            <tr>
+  // Render a group of positions
+  const renderPositionGroup = (groupName: string, positions: OptionTrade[]) => {
+    const sortedPositions = sortPositions(positions);
+    const filteredPositions = sortedPositions.filter(p => 
+      p.symbol.toLowerCase().includes(filter.toLowerCase()) ||
+      p.putCall.toLowerCase().includes(filter.toLowerCase()) ||
+      p.strategy.toLowerCase().includes(filter.toLowerCase())
+    );
+    
+    if (filteredPositions.length === 0) {
+      return null;
+    }
+    
+    return (
+      <div key={groupName} className="mb-6">
+        {groupBy !== 'none' && (
+          <h3 className="text-lg font-semibold mb-2 pb-1 border-b border-gray-200">
+            {groupName} ({filteredPositions.length})
+          </h3>
+        )}
+        
+        <table className="min-w-full bg-white border border-gray-200">
+          <thead>
+            <tr className="bg-gray-100">
               <SortHeader field="symbol">Symbol</SortHeader>
               <SortHeader field="type">Type</SortHeader>
               <SortHeader field="strike">Strike</SortHeader>
               <SortHeader field="expiry">Expiry</SortHeader>
               <SortHeader field="quantity">Qty</SortHeader>
               <SortHeader field="premium">Premium</SortHeader>
-              {positions[0].closeDate && (
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Close</th>
-              )}
-              {showPL && (
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">P&L</th>
-              )}
-              {!positions[0].closeDate && (
-                <SortHeader field="days">Days</SortHeader>
-              )}
-              {showActions && (
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-              )}
+              {showPL && <SortHeader field="pnl">P&L</SortHeader>}
+              <SortHeader field="days">Days</SortHeader>
+              <th>Status</th>
+              {showActions && <th>Actions</th>}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
-            {sortedPositions.map((position) => {
-              const pl = calculateTradePL(position);
-              const daysToExpiry = daysUntilExpiration(position);
-              const isExpired = daysToExpiry <= 0;
-              
-              return (
-                <tr 
-                  key={position.id} 
-                  className="hover:bg-gray-50 cursor-pointer"
-                  onClick={(e) => {
-                    // Prevent row click when clicking action buttons
-                    if (e.target instanceof HTMLButtonElement) {
-                      e.stopPropagation();
-                      return;
-                    }
-                    onView?.(position);
-                  }}
-                >
-                  <td className="px-4 py-2 whitespace-nowrap">
-                    <div className="group relative">
-                      <span>{position.symbol}</span>
-                      <div className="absolute left-0 top-full mt-1 w-48 bg-gray-800 text-white text-xs rounded p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        Opened: {position.openDate.toLocaleDateString()}
-                        {position.closeDate && <br />}
-                        {position.closeDate && `Closed: ${position.closeDate.toLocaleDateString()}`}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
-                    <span 
-                      className={position.putCall === 'CALL' ? 'text-green-600' : 'text-red-600'}
-                    >
-                      {position.putCall}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap">${position.strike.toFixed(2)}</td>
-                  <td className="px-4 py-2 whitespace-nowrap">
-                    {position.expiry.toLocaleDateString()}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
-                    <span className={position.quantity > 0 ? 'text-green-600' : 'text-red-600'}>
-                      {position.quantity}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap">${position.premium.toFixed(2)}</td>
-                  {position.closeDate && (
-                    <td className="px-4 py-2 whitespace-nowrap">
-                      ${position.closePremium?.toFixed(2) || '-'}
-                    </td>
-                  )}
-                  {showPL && (
-                    <td className="px-4 py-2 whitespace-nowrap">
-                      <span className={pl >= 0 ? 'text-green-600' : 'text-red-600'}>
-                        ${pl.toFixed(2)}
-                      </span>
-                    </td>
-                  )}
-                  {!position.closeDate && (
-                    <td className="px-4 py-2 whitespace-nowrap">
-                      <span className={isExpired ? 'text-red-600' : ''}>
-                        {daysToExpiry}
-                      </span>
-                    </td>
-                  )}
-                  {showActions && (
-                    <td className="px-4 py-2 whitespace-nowrap">
-                      <div className="flex space-x-2">
-                        {onClose && !position.closeDate && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onClose(position.id);
-                            }}
-                            className="text-blue-600 hover:text-blue-800"
-                          >
-                            Close
-                          </button>
-                        )}
-                        {onEdit && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onEdit(position.id);
-                            }}
-                            className="text-gray-600 hover:text-gray-800"
-                          >
-                            Edit
-                          </button>
-                        )}
-                        {onDelete && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onDelete(position.id);
-                            }}
-                            className="text-red-600 hover:text-red-800"
-                          >
-                            Delete
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  )}
-                </tr>
-              );
-            })}
-            
-            {/* Summary row */}
-            <tr className="bg-gray-50 font-medium">
-              <td colSpan={4} className="px-4 py-2 text-right">Summary:</td>
-              <td className="px-4 py-2">
-                {summary.openPositions} open / {summary.closedPositions} closed
-              </td>
-              <td className="px-4 py-2">-</td>
-              {positions[0].closeDate && <td className="px-4 py-2">-</td>}
-              {showPL && (
-                <td className="px-4 py-2">
-                  <span className={summary.totalPL >= 0 ? 'text-green-600' : 'text-red-600'}>
-                    ${summary.totalPL.toFixed(2)}
+          <tbody>
+            {filteredPositions.map((position) => (
+              <tr key={position.id} className="border-t border-gray-200 hover:bg-gray-50">
+                <td className="py-2 px-4">
+                  <div className="font-medium">{position.symbol}</div>
+                  <div className="text-xs text-gray-500">
+                    Opened: {formatDate(position.openDate)}
+                  </div>
+                </td>
+                <td className="py-2 px-4">
+                  <span className={`px-2 py-1 rounded text-xs ${
+                    position.putCall === 'CALL' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                  }`}>
+                    {position.putCall}
                   </span>
                 </td>
-              )}
-              {!positions[0].closeDate && (
-                <td className="px-4 py-2">
-                  {summary.averageDaysToExpiry.toFixed(1)} avg
+                <td className="py-2 px-4">${position.strike.toFixed(2)}</td>
+                <td className="py-2 px-4">
+                  <div>{formatDate(position.expiry)}</div>
+                  <div className={`text-xs ${
+                    daysUntilExpiration(position) <= 3 ? 'text-red-600 font-medium' : 'text-gray-500'
+                  }`}>
+                    {daysUntilExpiration(position)}d left
+                  </div>
                 </td>
-              )}
-              {showActions && <td className="px-4 py-2">-</td>}
-            </tr>
+                <td className="py-2 px-4">
+                  <span className={`${
+                    position.quantity > 0 ? 'text-blue-600' : 'text-red-600'
+                  }`}>
+                    {position.quantity}
+                  </span>
+                </td>
+                <td className="py-2 px-4">${position.premium.toFixed(2)}</td>
+                {showPL && (
+                  <td className={`py-2 px-4 font-medium ${
+                    calculatePL(position) > 0 ? 'text-green-600' : 
+                    calculatePL(position) < 0 ? 'text-red-600' : ''
+                  }`}>
+                    ${calculatePL(position).toFixed(2)}
+                  </td>
+                )}
+                <td className="py-2 px-4">{daysOpen(position)}</td>
+                <td className="py-2 px-4">
+                  <span className={`px-2 py-1 rounded text-xs ${
+                    isOpen(position) ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                  }`}>
+                    {isOpen(position) ? 'OPEN' : 'CLOSED'}
+                  </span>
+                </td>
+                {showActions && (
+                  <td className="py-2 px-4">
+                    <div className="flex space-x-2">
+                      {isOpen(position) && onClose && (
+                        <button
+                          onClick={() => onClose(position.id)}
+                          className="text-blue-600 hover:text-blue-800"
+                        >
+                          Close
+                        </button>
+                      )}
+                      {onDelete && (
+                        <button
+                          onClick={() => onDelete(position.id)}
+                          className="text-red-600 hover:text-red-800"
+                        >
+                          Delete
+                        </button>
+                      )}
+                      {onView && (
+                        <button
+                          onClick={() => onView(position)}
+                          className="text-gray-600 hover:text-gray-800"
+                        >
+                          View
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                )}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
+    );
+  };
+  
+  return (
+    <div className="overflow-x-auto">
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
+          <div className="text-sm text-gray-500">Total P&L</div>
+          <div className={`text-xl font-bold ${
+            summary.totalPL > 0 ? 'text-green-600' : 
+            summary.totalPL < 0 ? 'text-red-600' : ''
+          }`}>
+            ${summary.totalPL.toFixed(2)}
+          </div>
+        </div>
+        <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
+          <div className="text-sm text-gray-500">Win Rate</div>
+          <div className="text-xl font-bold">
+            {summary.winRate.toFixed(1)}%
+          </div>
+        </div>
+        <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
+          <div className="text-sm text-gray-500">Avg Days Held</div>
+          <div className="text-xl font-bold">
+            {summary.averageDaysHeld.toFixed(1)}
+          </div>
+        </div>
+        <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
+          <div className="text-sm text-gray-500">Positions</div>
+          <div className="text-xl font-bold">
+            {summary.openPositions} open / {summary.closedPositions} closed
+          </div>
+        </div>
+      </div>
+      
+      {/* Filters and Controls */}
+      <div className="mb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="flex items-center space-x-4">
+          <input
+            type="text"
+            placeholder="Filter positions..."
+            className="px-3 py-1 border rounded"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+          <select 
+            className="px-3 py-1 border rounded"
+            value={groupBy}
+            onChange={(e) => setGroupBy(e.target.value as 'none' | 'symbol' | 'strategy')}
+          >
+            <option value="none">No Grouping</option>
+            <option value="symbol">Group by Symbol</option>
+            <option value="strategy">Group by Strategy</option>
+          </select>
+        </div>
+      </div>
+      
+      {/* Position Groups */}
+      {Object.entries(groupedPositions).map(([groupName, positions]) => 
+        renderPositionGroup(groupName, positions)
+      )}
     </div>
   );
 };

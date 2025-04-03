@@ -1,4 +1,6 @@
 import { OptionTrade, OptionsPortfolio, OptionPortfolioStats, calculateTradePL } from '../types/options';
+import { safeParseDate } from '../utils/dateUtils';
+import { SAMPLE_TRADES } from '../utils/sampleData';
 
 const STORAGE_KEY = 'options_portfolios';
 
@@ -12,7 +14,8 @@ export class OptionService {
    * Check if an option is expired
    */
   private static isOptionExpired(trade: OptionTrade, currentDate: Date = new Date()): boolean {
-    return trade.expiry <= currentDate;
+    const expiry = safeParseDate(trade.expiry);
+    return expiry ? expiry <= currentDate : false;
   }
 
   /**
@@ -20,7 +23,19 @@ export class OptionService {
    */
   static getOptionsPortfolio(accountId: string): OptionsPortfolio {
     const portfolios = this.getAllPortfolios();
-    return portfolios[accountId] || { accountId, trades: [] };
+    
+    // If no portfolio exists for the demo account, create one with sample trades
+    if (accountId === 'demo1' && !portfolios[accountId]) {
+      const demoPortfolio = {
+        id: 'demo1',
+        accountId: 'demo1',
+        trades: SAMPLE_TRADES
+      };
+      this.savePortfolio(demoPortfolio);
+      return demoPortfolio;
+    }
+    
+    return portfolios[accountId] || { id: accountId, accountId, trades: [] };
   }
 
   /**
@@ -29,9 +44,32 @@ export class OptionService {
   static getAllPortfolios(): Record<string, OptionsPortfolio> {
     const data = localStorage.getItem(STORAGE_KEY);
     if (!data) {
-      return {};
+      // Initialize with demo portfolio
+      const initialData = {
+        'demo1': {
+          id: 'demo1',
+          accountId: 'demo1',
+          trades: SAMPLE_TRADES
+        }
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(initialData));
+      return initialData;
     }
-    return JSON.parse(data);
+    
+    const parsedData = JSON.parse(data);
+    
+    // Convert date strings back to Date objects
+    Object.keys(parsedData).forEach(accountId => {
+      const portfolio = parsedData[accountId];
+      portfolio.trades = portfolio.trades.map((trade: any) => ({
+        ...trade,
+        openDate: safeParseDate(trade.openDate) || new Date(),
+        expiry: safeParseDate(trade.expiry) || new Date(),
+        closeDate: trade.closeDate ? safeParseDate(trade.closeDate) : undefined
+      }));
+    });
+    
+    return parsedData;
   }
 
   /**

@@ -24,10 +24,18 @@ export class AccountService {
       const accounts = JSON.parse(accountsJson) as Account[];
       
       // Convert string dates back to Date objects
-      return accounts.map(account => ({
+      const accountsWithDates = accounts.map(account => ({
         ...account,
         lastUpdated: new Date(account.lastUpdated)
       }));
+      
+      // Ensure demo account is always present
+      if (!accountsWithDates.some(a => a.id === DEMO_ACCOUNT.id)) {
+        accountsWithDates.unshift(DEMO_ACCOUNT);
+        this.saveAccounts(accountsWithDates);
+      }
+      
+      return accountsWithDates;
     } catch (error) {
       console.error('Error parsing accounts from localStorage', error);
       return [DEMO_ACCOUNT];
@@ -38,6 +46,10 @@ export class AccountService {
    * Save accounts to local storage
    */
   public static saveAccounts(accounts: Account[]): void {
+    // Ensure demo account is always present
+    if (!accounts.some(a => a.id === DEMO_ACCOUNT.id)) {
+      accounts.unshift(DEMO_ACCOUNT);
+    }
     localStorage.setItem(this.storageKey, JSON.stringify(accounts));
   }
   
@@ -57,6 +69,10 @@ export class AccountService {
     const index = accounts.findIndex(account => account.id === updatedAccount.id);
     
     if (index !== -1) {
+      // Don't allow updating the demo account
+      if (updatedAccount.id === DEMO_ACCOUNT.id) {
+        return;
+      }
       accounts[index] = updatedAccount;
       this.saveAccounts(accounts);
     }
@@ -75,6 +91,10 @@ export class AccountService {
    * Delete an account
    */
   public static deleteAccount(id: string): void {
+    // Don't allow deleting the demo account
+    if (id === DEMO_ACCOUNT.id) {
+      return;
+    }
     const accounts = this.getAccounts();
     const filtered = accounts.filter(account => account.id !== id);
     this.saveAccounts(filtered);
@@ -88,6 +108,11 @@ export class AccountService {
     
     if (!account) {
       return undefined;
+    }
+    
+    // Don't allow deposits to demo account
+    if (account.id === DEMO_ACCOUNT.id) {
+      return account;
     }
     
     const updatedAccount: Account = {

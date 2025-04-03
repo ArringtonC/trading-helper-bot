@@ -4,7 +4,7 @@ import { Account } from '../types/account';
 
 interface AccountCardProps {
   account: Account;
-  onAddDeposit: () => void;
+  onAddDeposit: (amount: number) => void;
 }
 
 const AccountCard: React.FC<AccountCardProps> = ({ account, onAddDeposit }) => {
@@ -23,7 +23,7 @@ const AccountCard: React.FC<AccountCardProps> = ({ account, onAddDeposit }) => {
         <h2 className="text-lg font-medium text-gray-900">Account Balance</h2>
         {account.monthlyDeposit && account.monthlyDeposit > 0 && (
           <button
-            onClick={onAddDeposit}
+            onClick={() => onAddDeposit(account.monthlyDeposit || 0)}
             className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
           >
             Add Monthly Deposit (${account.monthlyDeposit.toLocaleString()})

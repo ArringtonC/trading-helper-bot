@@ -1,433 +1,336 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { IBKRService } from '../services/IBKRService';
-import { AccountService } from '../services/AccountService';
-import { OptionService } from '../services/OptionService';
+import React, { useState, useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
 import { IBKRActivityStatementParser } from '../services/IBKRActivityStatementParser';
+import { OptionService } from '../services/OptionService';
+import { AccountService } from '../services/AccountService';
+import { Account, AccountType } from '../types/account';
+import { OptionTrade } from '../types/options';
+import { Button, Card, Container, Form, Row, Col, Alert, Spinner } from 'react-bootstrap';
 
 /**
  * Integrated Import page component with service connections
  */
 const Import: React.FC = () => {
-  const [importType, setImportType] = useState<'ibkr' | 'manual' | null>(null);
   const [file, setFile] = useState<File | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [importMethod, setImportMethod] = useState<'ibkr' | 'manual'>('ibkr');
+  const [importing, setImporting] = useState(false);
   const [importSummary, setImportSummary] = useState<{
-    accountName: string;
-    accountId: string;
-    totalPositions: number;
-    optionsPositions: number;
-    stockPositions: number;
-    balance: number;
-    completed: boolean;
+    accountInfo: any;
+    trades: any[];
+    positions: any[];
+    optionTrades: OptionTrade[];
   } | null>(null);
-  
-  const navigate = useNavigate();
-  
-  // Read file content as text
-  const readFileContent = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      
-      reader.onload = (event) => {
-        if (event.target && typeof event.target.result === 'string') {
-          resolve(event.target.result);
-        } else {
-          reject(new Error('Failed to read file as text'));
-        }
-      };
-      
-      reader.onerror = () => {
-        reject(new Error('Error reading file'));
-      };
-      
-      reader.readAsText(file);
-    });
+  const [error, setError] = useState<string | null>(null);
+  const [debugInfo, setDebugInfo] = useState<string[]>([]);
+
+  const addDebugInfo = (message: string) => {
+    console.log(`[DEBUG] ${message}`);
+    setDebugInfo(prev => [...prev, `${new Date().toISOString()}: ${message}`]);
   };
-  
-  // Handle IBKR import
+
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    if (acceptedFiles.length > 0) {
+      setFile(acceptedFiles[0]);
+      setImportSummary(null);
+      setError(null);
+      setDebugInfo([]);
+      addDebugInfo(`File selected: ${acceptedFiles[0].name} (${acceptedFiles[0].size} bytes)`);
+    }
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'text/csv': ['.csv'],
+      'text/plain': ['.txt', '.csv']
+    },
+    multiple: false
+  });
+
   const handleImport = async () => {
     if (!file) {
       setError('Please select a file to import');
       return;
     }
-    
-    setIsLoading(true);
+
+    setImporting(true);
     setError(null);
-    
+    setImportSummary(null);
+    setDebugInfo([]);
+    addDebugInfo('Starting import process...');
+
     try {
-      // Read file content
-      const content = await readFileContent(file);
-      
-      // Create a parser instance
-      const parser = new IBKRActivityStatementParser(content);
-      
-      // Parse the content
-      const parseResult = parser.parse();
-      
-      // Convert IBKRAccountInfo to IBKRAccount
-      const ibkrAccount = {
-        id: parseResult.accountInfo.accountId,
-        name: parseResult.accountInfo.accountName,
-        type: parseResult.accountInfo.accountType === 'MARGIN' ? 'MARGIN' as const : 'CASH' as const,
-        currency: parseResult.accountInfo.baseCurrency,
-        balance: parseResult.accountInfo.balance,
-        cash: parseResult.accountInfo.balance,
-        marketValue: 0,
-        positions: parseResult.positions.map(p => ({
-          symbol: p.symbol,
-          quantity: p.quantity,
-          marketPrice: p.closePrice,
-          marketValue: p.value,
-          averageCost: p.costPrice,
-          unrealizedPL: p.unrealizedPL,
-          realizedPL: 0,
-          assetType: p.assetCategory.includes('Options') ? 'OPTION' as const : 'STOCK' as const,
-          currency: p.currency,
-          accountId: parseResult.accountInfo.accountId,
-          lastUpdated: new Date()
-        })),
-        lastUpdated: new Date()
-      };
-      
-      // Convert to account
-      const account = IBKRService.convertToAccount(ibkrAccount);
-      
-      // Save account to storage
-      AccountService.addAccount(account);
-      
-      // Extract option trades
-      const optionTrades = parseResult.optionTrades;
-      
-      // Save option trades to storage
-      optionTrades.forEach(trade => {
-        OptionService.addTrade(account.id, trade);
-      });
-      
-      // Set import summary
-      setImportSummary({
-        accountName: account.name,
-        accountId: account.id,
-        totalPositions: parseResult.positions.length,
-        optionsPositions: optionTrades.length,
-        stockPositions: parseResult.positions.length - optionTrades.length,
-        balance: account.balance,
-        completed: true
-      });
-    } catch (err: any) {
-      setError(`Import failed: ${err.message}`);
-      setImportSummary(null);
+      console.log('Reading file content...');
+      const content = await file.text();
+      console.log(`File content read: ${content.length} characters`);
+      addDebugInfo(`File content read: ${content.length} characters`);
+      addDebugInfo(`First 100 characters: ${content.substring(0, 100)}`);
+      addDebugInfo(`File content type: ${typeof content}`);
+      addDebugInfo(`File content contains tabs: ${content.includes('\t')}`);
+      addDebugInfo(`File content contains newlines: ${content.includes('\n')}`);
+      addDebugInfo(`File content contains commas: ${content.includes(',')}`);
+
+      if (importMethod === 'ibkr') {
+        console.log('Parsing IBKR activity statement...');
+        addDebugInfo('Parsing IBKR activity statement...');
+        
+        try {
+          const parser = new IBKRActivityStatementParser(content);
+          addDebugInfo('Parser created, starting parse...');
+          console.log('Parser created, starting parse...');
+          
+          try {
+            console.log('Calling parser.parse()...');
+            const result = parser.parse();
+            console.log('Parse completed successfully');
+            addDebugInfo(`Parse completed. Account info: ${JSON.stringify(result.accountInfo)}`);
+            addDebugInfo(`Found ${result.trades.length} trades`);
+            addDebugInfo(`Found ${result.positions.length} positions`);
+            addDebugInfo(`Converted to ${result.optionTrades.length} option trades`);
+
+            setImportSummary(result);
+
+            // Import the account and trades
+            addDebugInfo('Importing account and trades...');
+            console.log('Importing account and trades...');
+
+            // Create or update account
+            const account: Account = {
+              id: result.accountInfo.accountId,
+              name: result.accountInfo.accountName,
+              type: AccountType.IBKR,
+              balance: result.accountInfo.balance,
+              lastUpdated: new Date()
+            };
+
+            console.log(`Creating account: ${JSON.stringify(account)}`);
+            addDebugInfo(`Creating account: ${JSON.stringify(account)}`);
+            
+            try {
+              await AccountService.addAccount(account);
+              console.log(`Account saved: ${account.id}`);
+              addDebugInfo(`Account saved: ${account.id}`);
+
+              // Import option trades
+              console.log(`Starting to import ${result.optionTrades.length} option trades...`);
+              addDebugInfo(`Starting to import ${result.optionTrades.length} option trades...`);
+              
+              for (const trade of result.optionTrades) {
+                console.log(`Importing trade: ${JSON.stringify(trade)}`);
+                addDebugInfo(`Importing trade: ${JSON.stringify(trade)}`);
+                await OptionService.addTrade(account.id, trade);
+                console.log(`Option trade added: ${trade.id}`);
+                addDebugInfo(`Option trade added: ${trade.id}`);
+              }
+              
+              console.log(`All ${result.optionTrades.length} option trades imported successfully`);
+              addDebugInfo(`All ${result.optionTrades.length} option trades imported successfully`);
+            } catch (accountError) {
+              console.error('Error saving account:', accountError);
+              addDebugInfo(`Error saving account: ${accountError instanceof Error ? accountError.message : String(accountError)}`);
+              throw accountError;
+            }
+          } catch (parseError) {
+            console.error('Error parsing IBKR activity statement:', parseError);
+            addDebugInfo(`Error parsing IBKR activity statement: ${parseError instanceof Error ? parseError.message : String(parseError)}`);
+            throw parseError;
+          }
+        } catch (parserError) {
+          console.error('Error creating parser:', parserError);
+          addDebugInfo(`Error creating parser: ${parserError instanceof Error ? parserError.message : String(parserError)}`);
+          throw parserError;
+        }
+      } else {
+        // Manual import logic would go here
+        setError('Manual import not implemented yet');
+      }
+    } catch (err) {
+      console.error('Import error:', err);
+      setError(`Import failed: ${err instanceof Error ? err.message : String(err)}`);
+      addDebugInfo(`Error: ${err instanceof Error ? err.message : String(err)}`);
+      if (err instanceof Error && err.stack) {
+        console.error('Error stack:', err.stack);
+        addDebugInfo(`Error stack: ${err.stack}`);
+      }
     } finally {
-      setIsLoading(false);
+      setImporting(false);
     }
   };
-  
-  // Navigation after successful import
-  const handleGoToAccount = () => {
-    if (importSummary && importSummary.accountId) {
-      navigate(`/?accountId=${importSummary.accountId}`);
-    } else {
-      navigate('/');
+
+  // Add a function to log the file content to the console
+  const logFileContent = async () => {
+    if (!file) {
+      setError('Please select a file to import');
+      return;
+    }
+
+    try {
+      const content = await file.text();
+      console.log('File content:', content);
+      addDebugInfo('File content logged to console');
+    } catch (err) {
+      console.error('Error reading file:', err);
+      setError(`Error reading file: ${err instanceof Error ? err.message : String(err)}`);
     }
   };
-  
+
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-6">Import Account Data</h1>
-      
-      {!importType ? (
-        <div className="space-y-6">
-          <p className="text-gray-600">
-            Choose an import method to add account data to the Trading Helper Bot.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* IBKR Import Option */}
-            <div
-              onClick={() => setImportType('ibkr')}
-              className="bg-white p-6 rounded-lg shadow border border-gray-200 cursor-pointer hover:border-blue-500 transition-colors"
-            >
-              <div className="flex items-center mb-4">
-                <div className="bg-blue-100 p-3 rounded-full mr-4">
-                  <svg
-                    className="w-6 h-6 text-blue-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    ></path>
-                  </svg>
-                </div>
-                <h2 className="text-lg font-medium">Import from IBKR</h2>
-              </div>
-              <p className="text-gray-600 text-sm">
-                Import account data and positions from Interactive Brokers activity statements or portfolio reports.
-              </p>
-              <div className="mt-4">
-                <span className="text-blue-600 text-sm font-medium">Select This Option →</span>
-              </div>
-            </div>
-            
-            {/* Manual Entry Option */}
-            <div
-              onClick={() => setImportType('manual')}
-              className="bg-white p-6 rounded-lg shadow border border-gray-200 cursor-pointer hover:border-blue-500 transition-colors"
-            >
-              <div className="flex items-center mb-4">
-                <div className="bg-green-100 p-3 rounded-full mr-4">
-                  <svg
-                    className="w-6 h-6 text-green-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                    ></path>
-                  </svg>
-                </div>
-                <h2 className="text-lg font-medium">Manual Entry</h2>
-              </div>
-              <p className="text-gray-600 text-sm">
-                Manually create a new account and enter your positions and balances.
-              </p>
-              <div className="mt-4">
-                <span className="text-blue-600 text-sm font-medium">Select This Option →</span>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-gray-50 p-4 rounded-md mt-6">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">Import Notes</h3>
-            <ul className="text-xs text-gray-600 space-y-1 list-disc pl-5">
-              <li>Imported accounts will be added to your existing accounts.</li>
-              <li>For IBKR imports, positions will be mapped to the appropriate asset types.</li>
-              <li>Options positions will be added to your options portfolio.</li>
-              <li>Your data is stored locally and never sent to external servers.</li>
-            </ul>
-          </div>
-        </div>
-      ) : importType === 'ibkr' ? (
-        !importSummary ? (
-          <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-            <h2 className="text-xl font-bold mb-4">Import IBKR Account</h2>
-            
-            <div className="space-y-6">
+    <Container className="py-4">
+      <h1 className="mb-4">Import Data</h1>
+
+      <Card className="mb-4">
+        <Card.Body>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Import Method</Form.Label>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Select IBKR Statement File (CSV or Excel)
-                </label>
-                <div className="flex items-center justify-center w-full">
-                  <label className="flex flex-col rounded-lg border-2 border-dashed border-gray-300 w-full h-40 p-10 group text-center cursor-pointer">
-                    <div className="h-full w-full text-center flex flex-col items-center justify-center">
-                      {file ? (
-                        <>
-                          <p className="text-gray-700 font-semibold">
-                            {file.name}
-                          </p>
-                          <p className="text-gray-500 text-sm">
-                            {(file.size / 1024).toFixed(0)} KB
-                          </p>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setFile(null);
-                            }}
-                            className="mt-2 text-xs text-red-600 hover:text-red-800"
-                          >
-                            Remove file
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <svg
-                            className="w-10 h-10 text-gray-400 group-hover:text-gray-600"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                            ></path>
-                          </svg>
-                          <p className="text-gray-500 text-sm mt-2">
-                            Drag and drop file here, or click to select
-                          </p>
-                          <p className="text-gray-400 text-xs">
-                            Supported formats: CSV, Excel
-                          </p>
-                        </>
-                      )}
-                    </div>
-                    <input
-                      type="file"
-                      className="hidden"
-                      accept=".csv,.xlsx,.xls"
-                      onChange={(e) => {
-                        if (e.target.files && e.target.files.length > 0) {
-                          setFile(e.target.files[0]);
-                          setError(null);
-                        }
-                      }}
+                <Form.Check
+                  inline
+                  type="radio"
+                  label="IBKR Activity Statement"
+                  name="importMethod"
+                  checked={importMethod === 'ibkr'}
+                  onChange={() => setImportMethod('ibkr')}
+                />
+                <Form.Check
+                  inline
+                  type="radio"
+                  label="Manual Entry"
+                  name="importMethod"
+                  checked={importMethod === 'manual'}
+                  onChange={() => setImportMethod('manual')}
+                />
+              </div>
+            </Form.Group>
+
+            {importMethod === 'ibkr' && (
+              <div
+                {...getRootProps()}
+                className={`p-5 border rounded text-center ${isDragActive ? 'bg-light' : ''}`}
+              >
+                <input {...getInputProps()} />
+                {isDragActive ? (
+                  <p>Drop the IBKR activity statement CSV file here...</p>
+                ) : (
+                  <p>Drag and drop an IBKR activity statement CSV file here, or click to select a file</p>
+                )}
+                {file && <p className="mt-2">Selected file: {file.name}</p>}
+              </div>
+            )}
+
+            {importMethod === 'manual' && (
+              <Alert variant="info">
+                Manual entry import will be implemented in a future update.
+              </Alert>
+            )}
+
+            <div className="d-grid gap-2 mt-3">
+              <Button
+                variant="primary"
+                onClick={handleImport}
+                disabled={!file || importing}
+              >
+                {importing ? (
+                  <>
+                    <Spinner
+                      as="span"
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                      className="me-2"
                     />
-                  </label>
-                </div>
-              </div>
+                    Importing...
+                  </>
+                ) : (
+                  'Import'
+                )}
+              </Button>
               
-              {error && (
-                <div className="p-3 bg-red-50 text-red-700 rounded-md border border-red-200">
-                  {error}
-                </div>
+              {/* Add a button to log the file content */}
+              {file && (
+                <Button
+                  variant="outline-secondary"
+                  onClick={logFileContent}
+                  disabled={importing}
+                >
+                  Log File Content
+                </Button>
               )}
-              
-              {isLoading && (
-                <div className="flex items-center justify-center p-4">
-                  <svg className="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  <span className="ml-3 text-gray-700">Processing import...</span>
-                </div>
-              )}
-              
-              <div className="bg-gray-50 p-4 rounded-md">
-                <h3 className="text-sm font-medium text-gray-700 mb-2">Import Information</h3>
-                <ul className="text-xs text-gray-600 space-y-1 list-disc pl-5">
-                  <li>This will import your IBKR account positions and balances</li>
-                  <li>Options positions will be added to your options portfolio</li>
-                  <li>Stock positions will be tracked in your account</li>
-                  <li>Your existing accounts will not be modified</li>
-                  <li>For best results, use an Activity Statement or Portfolio Analyst export</li>
-                </ul>
-              </div>
-              
-              <div className="flex justify-end space-x-3">
-                <button
-                  type="button"
-                  onClick={() => setImportType(null)}
-                  className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={handleImport}
-                  disabled={!file || isLoading}
-                  className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed"
-                >
-                  {isLoading ? 'Importing...' : 'Import Account'}
-                </button>
-              </div>
             </div>
-          </div>
-        ) : (
-          <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-            <h2 className="text-xl font-bold mb-4">Import Successful</h2>
-            
-            <div className="space-y-6">
-              <div className="p-4 bg-green-50 text-green-700 rounded-md border border-green-200">
-                <div className="flex items-center">
-                  <svg
-                    className="w-5 h-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5 13l4 4L19 7"
-                    ></path>
-                  </svg>
-                  <span className="font-medium">Import Successful!</span>
-                </div>
-              </div>
-              
-              <div className="bg-gray-50 p-4 rounded-md">
-                <h3 className="text-sm font-medium text-gray-700 mb-3">Import Summary</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Account Name:</span>
-                    <span className="font-medium">{importSummary.accountName}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Account ID:</span>
-                    <span className="font-medium">{importSummary.accountId}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Total Positions:</span>
-                    <span className="font-medium">{importSummary.totalPositions}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Options Positions:</span>
-                    <span className="font-medium">{importSummary.optionsPositions}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Stock Positions:</span>
-                    <span className="font-medium">{importSummary.stockPositions}</span>
-                  </div>
-                  <div className="flex justify-between text-sm border-t border-gray-200 pt-2 mt-2">
-                    <span className="text-gray-600 font-medium">Account Balance:</span>
-                    <span className="font-medium">${importSummary.balance.toFixed(2)}</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex justify-end space-x-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setFile(null);
-                    setImportSummary(null);
-                  }}
-                  className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-                >
-                  Import Another File
-                </button>
-                <button
-                  type="button"
-                  onClick={handleGoToAccount}
-                  className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
-                >
-                  View Account
-                </button>
-              </div>
-            </div>
-          </div>
-        )
-      ) : (
-        <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-          <h2 className="text-xl font-bold mb-4">Manual Account Entry</h2>
-          <p className="text-gray-600 mb-4">
-            This feature will be available in a future update. Please use the IBKR import option or create an account in the Settings page.
-          </p>
-          <button
-            onClick={() => setImportType(null)}
-            className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-          >
-            Go Back
-          </button>
-        </div>
+          </Form>
+        </Card.Body>
+      </Card>
+
+      {error && (
+        <Alert variant="danger" className="mb-4">
+          {error}
+        </Alert>
       )}
-    </div>
+
+      {importSummary && (
+        <Card className="mb-4">
+          <Card.Header>Import Summary</Card.Header>
+          <Card.Body>
+            <h5>Account Information</h5>
+            <div className="mb-4">
+              <p><strong>Account ID:</strong> {importSummary.accountInfo.accountId}</p>
+              <p><strong>Account Name:</strong> {importSummary.accountInfo.accountName}</p>
+              <p><strong>Account Type:</strong> {importSummary.accountInfo.accountType}</p>
+              <p><strong>Base Currency:</strong> {importSummary.accountInfo.baseCurrency}</p>
+              <p><strong>Balance:</strong> {importSummary.accountInfo.balance.toFixed(2)}</p>
+            </div>
+
+            <h5>Option Trades</h5>
+            <p>Imported {importSummary.optionTrades.length} option trades</p>
+            
+            {importSummary.optionTrades.length > 0 && (
+              <div className="table-responsive">
+                <table className="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>Symbol</th>
+                      <th>Type</th>
+                      <th>Strike</th>
+                      <th>Expiry</th>
+                      <th>Quantity</th>
+                      <th>Premium</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {importSummary.optionTrades.map((trade, index) => (
+                      <tr key={index}>
+                        <td>{trade.symbol}</td>
+                        <td>{trade.putCall}</td>
+                        <td>{trade.strike}</td>
+                        <td>{trade.expiry.toLocaleDateString()}</td>
+                        <td>{trade.quantity}</td>
+                        <td>{trade.premium.toFixed(2)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </Card.Body>
+        </Card>
+      )}
+
+      {debugInfo.length > 0 && (
+        <Card className="mb-4">
+          <Card.Header>Debug Information</Card.Header>
+          <Card.Body>
+            <div style={{ maxHeight: '300px', overflow: 'auto' }}>
+              {debugInfo.map((info, index) => (
+                <div key={index} className="mb-1">
+                  <code>{info}</code>
+                </div>
+              ))}
+            </div>
+          </Card.Body>
+        </Card>
+      )}
+    </Container>
   );
 };
 

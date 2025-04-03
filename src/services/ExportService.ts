@@ -1,5 +1,3 @@
-import { Account } from '../types/account';
-import { OptionTrade, OptionPortfolioStats } from '../types/options';
 import { AccountService } from './AccountService';
 import { OptionService } from './OptionService';
 import { ProjectionService } from './ProjectionService';
@@ -15,7 +13,6 @@ export class ExportService {
    */
   public static exportCapabilities(): string {
     const accounts = AccountService.getAccounts();
-    const timestamp = new Date().toISOString();
     
     let csv = 'Trading Helper Bot - Capabilities Export\n';
     csv += `Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\n\n`;

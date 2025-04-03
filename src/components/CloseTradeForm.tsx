@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { OptionTrade, calculateTradePL } from '../types/options';
+import { OptionTrade } from '../types/options';
 
 interface CloseTradeFormProps {
   trade: OptionTrade;

@@ -1,4 +1,4 @@
-import { IBKRAccount, IBKRPosition, IBKRImportResult, parseIBKROptionSymbol, convertIBKRPositionToTrade } from '../types/ibkr';
+import { IBKRAccount, IBKRPosition, IBKRImportResult, convertIBKRPositionToTrade } from '../types/ibkr';
 import { Account, AccountType } from '../types/account';
 import { OptionTrade, OptionStrategy } from '../types/options';
 import { OptionService } from './OptionService';
