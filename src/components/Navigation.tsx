@@ -8,9 +8,12 @@ const Navigation: React.FC = () => {
   // Navigation items with path and label
   const navItems = [
     { path: '/', label: 'Dashboard' },
+    { path: '/pl-dashboard', label: 'P&L Dashboard' },
     { path: '/options', label: 'Options' },
+    { path: '/options-db', label: 'Options DB' },
     { path: '/futures', label: 'Futures' },
-    { path: '/import', label: 'Import' },
+    { path: '/import/fixed-import', label: 'Fixed Import' },
+    { path: '/import/direct', label: 'Direct Parser' },
     { path: '/settings', label: 'Settings' }
   ];
   
