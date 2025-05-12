@@ -65,28 +65,22 @@ const OptionsTable: React.FC<OptionsTableProps> = ({
   
   // Calculate P&L for a trade
   const calculatePL = useCallback((position: OptionTrade): number => {
-    if (isOpen(position)) {
-      return 0;
-    }
-    
-    // For imported trades, use the realizedPL from notes if available
-    if (position.notes && position.notes.includes('Realized P&L:')) {
-      const plMatch = position.notes.match(/Realized P&L: \$([\d.]+)/);
-      if (plMatch && plMatch[1]) {
-        return parseFloat(plMatch[1]);
-      }
-    }
-    
     // For manually closed trades, calculate based on premium difference
     if (position.closePremium !== undefined) {
-      const premiumDiff = position.closePremium - position.premium;
+      const premiumDiff = position.closePremium - (position.premium || 0);
       const totalPL = premiumDiff * position.quantity;
       return totalPL - (position.commission || 0);
     }
     
-    // Fallback to the calculateTradePL function
-    return calculateTradePL(position);
-  }, [isOpen]);
+    // For open trades, calculate based on current price if available
+    if (position.currentPrice !== undefined) {
+      const priceDiff = position.currentPrice - (position.premium || 0);
+      const totalPL = priceDiff * position.quantity;
+      return totalPL - (position.commission || 0);
+    }
+    
+    return 0;
+  }, []);
   
   // Calculate summary statistics
   const summary = useMemo(() => {
@@ -146,13 +140,13 @@ const OptionsTable: React.FC<OptionsTableProps> = ({
           comparison = a.strike - b.strike;
           break;
         case 'expiry':
-          comparison = a.expiry.getTime() - b.expiry.getTime();
+          comparison = new Date(a.expiry).getTime() - new Date(b.expiry).getTime();
           break;
         case 'quantity':
           comparison = a.quantity - b.quantity;
           break;
         case 'premium':
-          comparison = a.premium - b.premium;
+          comparison = (a.premium || 0) - (b.premium || 0);
           break;
         case 'days':
           comparison = daysUntilExpiration(a) - daysUntilExpiration(b);
@@ -216,6 +210,7 @@ const OptionsTable: React.FC<OptionsTableProps> = ({
               <SortHeader field="strike">Strike</SortHeader>
               <SortHeader field="expiry">Expiry</SortHeader>
               <SortHeader field="quantity">Qty</SortHeader>
+              <th>Proceeds (debug)</th>
               <SortHeader field="premium">Premium</SortHeader>
               {showPL && <SortHeader field="pnl">P&L</SortHeader>}
               <SortHeader field="days">Days</SortHeader>
@@ -248,18 +243,15 @@ const OptionsTable: React.FC<OptionsTableProps> = ({
                     {daysUntilExpiration(position)}d left
                   </div>
                 </td>
-                <td className="py-2 px-4">
-                  <span className={`${
-                    position.quantity > 0 ? 'text-blue-600' : 'text-red-600'
-                  }`}>
+                <td className={`$${position.quantity > 0 ? 'text-blue-600' : 'text-red-600'} py-2 px-4`}>
                     {position.quantity}
-                  </span>
                 </td>
-                <td className="py-2 px-4">${position.premium.toFixed(2)}</td>
+                <td className="py-2 px-4 text-xs text-gray-500">{typeof position.proceeds !== 'undefined' ? String(position.proceeds) : 'n/a'}</td>
+                <td className="py-2 px-4">${(position.premium || 0).toFixed(2)}</td>
                 {showPL && (
                   <td className={`py-2 px-4 font-medium ${
                     calculatePL(position) > 0 ? 'text-green-600' : 
-                    calculatePL(position) < 0 ? 'text-red-600' : ''
+                    calculatePL(position) < 0 ? 'text-red-600' : 'text-gray-600'
                   }`}>
                     ${calculatePL(position).toFixed(2)}
                   </td>

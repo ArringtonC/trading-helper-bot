@@ -8,6 +8,14 @@ interface IBKRImportFormProps {
   onCancel?: () => void;
 }
 
+interface ImportSummary {
+  accountName: string;
+  totalPositions: number;
+  optionsPositions: number;
+  stockPositions: number;
+  completed: boolean;
+}
+
 /**
  * Form component for importing IBKR account data
  */
@@ -15,13 +23,7 @@ const IBKRImportForm: React.FC<IBKRImportFormProps> = ({ onImportComplete, onCan
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [importSummary, setImportSummary] = useState<{
-    accountName: string;
-    totalPositions: number;
-    optionsPositions: number;
-    stockPositions: number;
-    completed: boolean;
-  } | null>(null);
+  const [importSummary, setImportSummary] = useState<ImportSummary | null>(null);
   
   // Handle file selection
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,16 +69,24 @@ const IBKRImportForm: React.FC<IBKRImportFormProps> = ({ onImportComplete, onCan
       const content = await readFileContent(file);
       
       // Parse account data
-      const ibkrAccount = IBKRService.parseActivityStatement(content);
+      const parsedResult = await IBKRService.parseActivityStatement(content);
+      
+      if (parsedResult.errors && parsedResult.errors.length > 0) {
+        throw new Error(`Parsing failed: ${parsedResult.errors.join(', ')}`);
+      }
       
       // Convert to internal account model
-      const account = IBKRService.convertToAccount(ibkrAccount);
+      if (!parsedResult.account) {
+        throw new Error('No account information found in the imported file');
+      }
+      
+      const account = IBKRService.convertToAccount(parsedResult.account);
       
       // Save account to storage
       AccountService.addAccount(account);
       
       // Extract option trades
-      const optionTrades = IBKRService.convertToOptionTrades(ibkrAccount);
+      const optionTrades = IBKRService.convertToOptionTrades(parsedResult);
       
       // Save option trades
       optionTrades.forEach(trade => {
@@ -84,11 +94,12 @@ const IBKRImportForm: React.FC<IBKRImportFormProps> = ({ onImportComplete, onCan
       });
       
       // Set import summary
+      const positionsLength = Array.isArray(parsedResult.positions) ? parsedResult.positions.length : 0;
       setImportSummary({
         accountName: account.name,
-        totalPositions: ibkrAccount.positions.length,
+        totalPositions: positionsLength,
         optionsPositions: optionTrades.length,
-        stockPositions: ibkrAccount.positions.length - optionTrades.length,
+        stockPositions: positionsLength - optionTrades.length,
         completed: true
       });
       
@@ -97,7 +108,7 @@ const IBKRImportForm: React.FC<IBKRImportFormProps> = ({ onImportComplete, onCan
         onImportComplete();
       }
     } catch (err: any) {
-      setError(`Import failed: ${err.message}`);
+      setError(err.message);
       setImportSummary(null);
     } finally {
       setIsLoading(false);
@@ -105,7 +116,7 @@ const IBKRImportForm: React.FC<IBKRImportFormProps> = ({ onImportComplete, onCan
   };
   
   return (
-    <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
+    <div className="bg-white p-6 rounded-lg shadow border border-gray-200" data-testid="import-form">
       <h2 className="text-xl font-bold mb-4">Import IBKR Account</h2>
       
       {!importSummary ? (
@@ -129,6 +140,7 @@ const IBKRImportForm: React.FC<IBKRImportFormProps> = ({ onImportComplete, onCan
                         type="button"
                         onClick={() => setFile(null)}
                         className="mt-2 text-xs text-red-600 hover:text-red-800"
+                        data-testid="remove-file-btn"
                       >
                         Remove file
                       </button>
@@ -163,13 +175,14 @@ const IBKRImportForm: React.FC<IBKRImportFormProps> = ({ onImportComplete, onCan
                   className="hidden"
                   accept=".csv,.xlsx,.xls"
                   onChange={handleFileChange}
+                  data-testid="file-input"
                 />
               </label>
             </div>
           </div>
           
           {error && (
-            <div className="p-3 bg-red-50 text-red-700 rounded-md border border-red-200">
+            <div className="p-3 bg-red-50 text-red-700 rounded-md border border-red-200" data-testid="error-message">
               {error}
             </div>
           )}
@@ -190,7 +203,8 @@ const IBKRImportForm: React.FC<IBKRImportFormProps> = ({ onImportComplete, onCan
               <button
                 type="button"
                 onClick={onCancel}
-                className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                data-testid="cancel-btn"
               >
                 Cancel
               </button>
@@ -199,79 +213,47 @@ const IBKRImportForm: React.FC<IBKRImportFormProps> = ({ onImportComplete, onCan
               type="button"
               onClick={handleImport}
               disabled={!file || isLoading}
-              className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed"
+              className={`px-4 py-2 text-sm font-medium text-white rounded-md ${
+                !file || isLoading
+                  ? 'bg-blue-400 cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700'
+              }`}
+              data-testid="btn-import-trades"
             >
-              {isLoading ? 'Importing...' : 'Import Account'}
+              {isLoading ? 'Importing...' : 'Import'}
             </button>
           </div>
         </div>
       ) : (
-        <div className="space-y-6">
-          <div className="p-4 bg-green-50 text-green-700 rounded-md border border-green-200">
-            <div className="flex items-center">
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 13l4 4L19 7"
-                ></path>
-              </svg>
-              <span className="font-medium">Import Successful!</span>
-            </div>
+        <div className="space-y-4" data-testid="import-summary">
+          <div className="bg-green-50 p-4 rounded-md border border-green-200">
+            <h3 className="text-green-800 font-medium">Import Successful!</h3>
+            <p className="text-green-700 mt-1">
+              Account {importSummary.accountName} has been imported successfully.
+            </p>
           </div>
           
           <div className="bg-gray-50 p-4 rounded-md">
-            <h3 className="text-sm font-medium text-gray-700 mb-3">Import Summary</h3>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Account Name:</span>
-                <span className="font-medium">{importSummary.accountName}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Total Positions:</span>
-                <span className="font-medium">{importSummary.totalPositions}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Options Positions:</span>
-                <span className="font-medium">{importSummary.optionsPositions}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Stock Positions:</span>
-                <span className="font-medium">{importSummary.stockPositions}</span>
-              </div>
-            </div>
+            <h3 className="text-sm font-medium text-gray-700 mb-2">Import Summary</h3>
+            <ul className="text-sm text-gray-600 space-y-2">
+              <li>Total Positions: {importSummary.totalPositions}</li>
+              <li>Options Positions: {importSummary.optionsPositions}</li>
+              <li>Stock Positions: {importSummary.stockPositions}</li>
+            </ul>
           </div>
           
-          <div className="flex justify-end space-x-3">
-            <button
-              type="button"
-              onClick={() => {
-                setFile(null);
-                setImportSummary(null);
-              }}
-              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-            >
-              Import Another File
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                if (onImportComplete) {
-                  onImportComplete();
-                }
-              }}
-              className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
-            >
-              View Account
-            </button>
-          </div>
+          {onCancel && (
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={onCancel}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                data-testid="close-btn"
+              >
+                Close
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

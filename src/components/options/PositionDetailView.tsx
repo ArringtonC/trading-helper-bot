@@ -24,26 +24,27 @@ const PositionDetailView: React.FC<PositionDetailViewProps> = ({
   };
   
   // Calculate P&L if position is closed
-  const calculatePL = (): number | undefined => {
-    if (!trade.closeDate || trade.closePremium === undefined) {
-      return undefined;
+  const calculateEstimatedPL = (): number => {
+    // If premium is undefined, we can't calculate P&L
+    if (trade.premium === undefined) {
+      return 0;
     }
-    
+
     const multiplier = 100; // Standard for equity options
     const openValue = trade.premium * Math.abs(trade.quantity) * multiplier;
-    const closeValue = trade.closePremium * Math.abs(trade.quantity) * multiplier;
+    const closeValue = (trade.closePremium || 0) * Math.abs(trade.quantity) * multiplier;
     
     // For long positions, we want to sell higher than we bought
     if (trade.quantity > 0) {
       return closeValue - openValue - (trade.commission || 0);
-    } 
+    }
     // For short positions, we want to buy back lower than we sold
     else {
       return openValue - closeValue - (trade.commission || 0);
     }
   };
   
-  const pl = calculatePL();
+  const pl = calculateEstimatedPL();
   const days = daysUntilExpiry();
   const isExpired = days === 0 && !trade.closeDate;
   
@@ -113,9 +114,9 @@ const PositionDetailView: React.FC<PositionDetailViewProps> = ({
           <div className="mb-4">
             <div className="text-sm text-gray-500 mb-1">Premium</div>
             <div className="text-lg font-medium">
-              ${trade.premium.toFixed(2)} per share
+              ${(trade.premium || 0).toFixed(2)} per share
               <span className="text-sm ml-2">
-                (${(trade.premium * Math.abs(trade.quantity) * 100).toFixed(2)} total)
+                (${((trade.premium || 0) * Math.abs(trade.quantity) * 100).toFixed(2)} total)
               </span>
             </div>
           </div>
@@ -149,10 +150,12 @@ const PositionDetailView: React.FC<PositionDetailViewProps> = ({
             <div className="mb-4">
               <div className="text-sm text-gray-500 mb-1">Profit/Loss</div>
               <div className={`text-lg font-medium ${pl >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                ${pl.toFixed(2)}
-                <span className="text-sm ml-2">
-                  ({((pl / (trade.premium * Math.abs(trade.quantity) * 100)) * 100).toFixed(1)}%)
-                </span>
+                <div className="text-lg font-bold">
+                  ${pl.toFixed(2)}
+                  <span className="text-sm ml-2">
+                    ({((pl / ((trade.premium || 0) * Math.abs(trade.quantity) * 100)) * 100).toFixed(1)}%)
+                  </span>
+                </div>
               </div>
             </div>
           )}

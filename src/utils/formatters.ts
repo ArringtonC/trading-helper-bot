@@ -18,7 +18,7 @@ export const formatDate = (date: Date): string => {
     month: 'short',
     day: 'numeric'
   });
-};
+}; 
 
 /**
  * Format a number as USD currency
@@ -41,6 +41,7 @@ export const fmtUsd = (value: number): string => {
  */
 export const fmtDate = (value: string): string => {
   const date = new Date(value);
+  if (isNaN(date.getTime())) return '–';
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short',

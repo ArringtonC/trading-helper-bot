@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { OptionPortfolioStats } from '../types/options';
 import { Link } from 'react-router-dom';
 
@@ -11,6 +11,14 @@ interface OptionsSummaryProps {
  * Component to display options portfolio summary for the dashboard
  */
 const OptionsSummary: React.FC<OptionsSummaryProps> = ({ stats, accountId }) => {
+  useEffect(() => {
+    console.log('OptionsSummary received stats:', stats);
+    console.log('Total P&L:', stats.totalPL);
+    console.log('Win Rate:', stats.winRate);
+    console.log('Open Trades:', stats.openTrades);
+    console.log('Closed Trades:', stats.closedTrades);
+  }, [stats]);
+
   return (
     <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
       <div className="flex justify-between items-center mb-4">

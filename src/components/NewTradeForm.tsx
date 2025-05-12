@@ -93,6 +93,7 @@ const NewTradeForm: React.FC<NewTradeFormProps> = ({ onSubmit, onCancel }) => {
       openDate: tradeData.openDate || new Date(),
       expiry: tradeData.expiry || new Date(),
       strategy: tradeData.strategy || OptionStrategy.LONG_CALL,
+      commission: tradeData.commission || 0,
       notes: tradeData.notes
     };
     

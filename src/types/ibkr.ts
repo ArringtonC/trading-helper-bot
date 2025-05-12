@@ -6,40 +6,100 @@ import { OptionTrade, OptionStrategy } from './options';
 export interface IBKRPosition {
   symbol: string;
   quantity: number;
-  marketPrice: number;
+  marketPrice: number; // Close price from IBKR
   marketValue: number;
-  averageCost: number;
+  averageCost: number; // Cost price from IBKR
   unrealizedPL: number;
   realizedPL: number;
+  assetType: 'STOCK' | 'OPTION';
+  currency: string;
+  accountId: string; // Added to link position to account
+  lastUpdated: Date;
+  // Optional fields derived from symbol or Instrument Info
+  putCall?: 'PUT' | 'CALL';
   strike?: number;
   expiry?: Date;
-  putCall?: 'PUT' | 'CALL';
-  assetType: 'STOCK' | 'OPTION' | 'FUTURE' | 'OTHER';
-  currency: string;
-  accountId: string;
-  lastUpdated: Date;
+  multiplier?: number; // Typically 100 for options
+  costBasis?: number; // Needed by parser
+  commission?: number; // Needed by conversion
 }
 
 /**
- * Represents an account imported from IBKR
+ * Represents an account imported from IBKR (matching parser output)
  */
 export interface IBKRAccount {
-  id: string;
-  name: string;
-  type: 'CASH' | 'MARGIN';
-  currency: string;
+  accountId: string;
+  accountName: string;
+  accountType: string;
+  baseCurrency: string;
   balance: number;
-  cash: number;
-  marketValue: number;
-  positions: IBKRPosition[];
-  lastUpdated: Date;
+  marketValue?: number;
+  lastUpdated?: Date;
 }
 
+/**
+ * Represents a trade record from IBKR CSV
+ */
+export interface IBKRTradeRecord {
+  symbol: string;
+  dateTime: string;
+  quantity: number;
+  tradePrice: number;
+  commissionFee: number;
+  assetCategory: string;
+  description: string;
+  code: string;
+  realizedPL: number;
+  mtmPL: number;
+  tradePL: number;
+  openDate?: Date;
+  closeDate?: Date;
+  // Add other potential fields from IBKR trade logs
+  closePrice?: number;
+  proceeds?: number;
+  basis?: number;
+  unrealizedPL?: number;
+  totalPL?: number;
+  cumulativePL?: number;
+  // Add option-specific fields
+  putCall?: 'PUT' | 'CALL';
+  strike?: number;
+  expiry?: Date;
+}
+
+/**
+ * Represents instrument details from IBKR CSV
+ */
+export interface IBKRInstrumentInfo {
+  symbol: string;
+  putCall: 'PUT' | 'CALL';
+  strike: number;
+  expiry: Date;
+  description?: string;
+  assetCategory?: string;
+  underlying?: string;
+  multiplier?: number;
+}
+
+/**
+ * Represents the overall result of parsing an IBKR statement
+ */
 export interface IBKRImportResult {
-  account: IBKRAccount;
-  positions: IBKRPosition[];
-  errors: string[];
-  warnings: string[];
+  success: boolean;
+  error?: string;
+  accountId?: string;
+  accountName?: string;
+  totalTrades?: number;
+  newTrades?: number;
+  updatedTrades?: number;
+  positions?: IBKRPosition[] | number; // Allow both array and number
+  debugLogs?: string[];
+  account?: IBKRAccount;
+  trades?: IBKRTradeRecord[];
+  optionTrades?: OptionTrade[]; // This is for the internal format
+  errors?: string[]; // Added back
+  warnings?: string[]; // Added back
+  cumulativePL?: number;
 }
 
 /**
@@ -93,6 +153,9 @@ export function convertIBKRPositionToTrade(
     return null;
   }
 
+  // Calculate total P&L
+  const totalPL = position.realizedPL + position.unrealizedPL;
+
   return {
     id: `${position.symbol}-${Date.now()}`,
     symbol: optionDetails.underlying,
@@ -104,7 +167,19 @@ export function convertIBKRPositionToTrade(
     openDate: position.lastUpdated,
     strategy: determineOptionStrategy(position),
     commission: 0, // IBKR commission would be in a separate transaction
-    notes: `Imported from IBKR - ${position.symbol}`
+    realizedPL: position.realizedPL,
+    unrealizedPL: position.unrealizedPL,
+    mtmPL: position.unrealizedPL, // Use unrealizedPL as mtmPL for positions
+    notes: [
+      `Imported from IBKR - ${position.symbol}`,
+      `Market Price: $${position.marketPrice.toFixed(2)}`,
+      `Market Value: $${position.marketValue.toFixed(2)}`,
+      `Average Cost: $${position.averageCost.toFixed(2)}`,
+      `Realized P&L: $${position.realizedPL.toFixed(2)}`,
+      `Unrealized P&L: $${position.unrealizedPL.toFixed(2)}`,
+      `Total P&L: $${totalPL.toFixed(2)}`,
+      `Last Updated: ${position.lastUpdated.toLocaleString()}`
+    ].join('\n')
   };
 }
 

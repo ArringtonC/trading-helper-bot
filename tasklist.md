@@ -24,7 +24,9 @@
 - [x] Ensure Debug Panel fetches and displays errors from DB
 - [ ] Optimize import performance (10k rows < 500ms)
 - [ ] Optimize DB query performance (50ms response)
-- [ ] Ensure full Cypress suite runs in <2 minutes 
+- [ ] Ensure full Cypress suite runs in <2 minutes
+- [ ] Update account value to automatically extract from CSV Net Asset Value section
+- [ ] Update PLDashboard to show actual user name instead of "Trader"
 
 ## Recently Completed
 

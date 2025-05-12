@@ -33,7 +33,7 @@ const OptionsAnalysisCard: React.FC<OptionsAnalysisCardProps> = ({ openPositions
     
     // Calculate profit/loss for recent trades
     const profitLoss = recentTrades.reduce((total, trade) => {
-      if (!trade.closeDate || !trade.closePremium) return total;
+      if (!trade.closeDate || !trade.closePremium || trade.premium === undefined) return total;
       
       const multiplier = 100; // Standard option multiplier
       const openValue = trade.premium * Math.abs(trade.quantity) * multiplier;
@@ -51,7 +51,7 @@ const OptionsAnalysisCard: React.FC<OptionsAnalysisCardProps> = ({ openPositions
     
     // Calculate win rate
     const winningTrades = recentTrades.filter(trade => {
-      if (!trade.closeDate || !trade.closePremium) return false;
+      if (!trade.closeDate || !trade.closePremium || trade.premium === undefined) return false;
       
       const multiplier = 100;
       const openValue = trade.premium * Math.abs(trade.quantity) * multiplier;
@@ -104,6 +104,50 @@ const OptionsAnalysisCard: React.FC<OptionsAnalysisCardProps> = ({ openPositions
   };
   
   const metrics = calculateMetrics();
+  
+  const calculatePL = (trade: OptionTrade): number => {
+    // For closed trades
+    if (trade.closeDate && trade.closePremium !== undefined) {
+      // If premium is undefined, we can't calculate P&L
+      if (trade.premium === undefined) {
+        return 0;
+      }
+      
+      const multiplier = 100; // Standard option multiplier
+      const openValue = trade.premium * Math.abs(trade.quantity) * multiplier;
+      const closeValue = trade.closePremium * Math.abs(trade.quantity) * multiplier;
+      
+      // For long positions
+      if (trade.quantity > 0) {
+        return closeValue - openValue - (trade.commission || 0);
+      }
+      // For short positions
+      else {
+        return openValue - closeValue - (trade.commission || 0);
+      }
+    }
+    
+    // For open trades with current price
+    if (trade.currentPrice !== undefined) {
+      // If premium is undefined, we can't calculate P&L
+      if (trade.premium === undefined) {
+        return 0;
+      }
+      
+      const multiplier = 100;
+      const openValue = trade.premium * Math.abs(trade.quantity) * multiplier;
+      const closeValue = trade.currentPrice * Math.abs(trade.quantity) * multiplier;
+      
+      if (trade.quantity > 0) {
+        return closeValue - openValue - (trade.commission || 0);
+      } else {
+        return openValue - closeValue - (trade.commission || 0);
+      }
+    }
+    
+    // If no close price or current price available
+    return 0;
+  };
   
   return (
     <div className="bg-white p-4 rounded-lg shadow border border-gray-200">

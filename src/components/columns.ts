@@ -1,38 +1,85 @@
 // src/components/columns.ts
-import { GridColDef, GridCellParams, GridValueFormatter } from '@mui/x-data-grid';
-import { fmtUsd, fmtDate } from '../utils/formatters';
+import { GridColDef } from '@mui/x-data-grid';
 
-// helper for "–" when value === null || value === undefined
-const dash = (v: unknown) => (v === null || v === undefined ? '–' : v);
+// Robust currency formatter with type‑safety
+const formatCurrency = (value: unknown, decimals = 2): string => {
+  if (value === null || value === undefined) return '$0.00';
+  const numeric = typeof value === 'string' ? parseFloat(value) : Number(value);
+  return Number.isFinite(numeric) ? `$${numeric.toFixed(decimals)}` : '$0.00';
+};
 
-export const TRADE_COLUMNS: GridColDef[] = [
-  { field: 'id',        headerName: 'ID',        type: 'number', width: 70 },
-  { field: 'symbol',    headerName: 'Symbol',                     flex: 1.4 },
-  { field: 'dateTime',  headerName: 'Date / Time',
-    flex: 1.2,
-    valueFormatter: ((value) => dash(fmtDate(value as string))) as GridValueFormatter
+// Data shape for one trade row
+export interface TradeRow {
+  id: string | number;
+  symbol: string;
+  dateTime: string;
+  quantity: number;
+  proceeds: number;
+  basis: number;
+  commissionFee: number;
+  realizedPL: number;
+  unrealizedPL: number;
+  tradePL: number;
+}
+
+// Helper to colour positive vs negative values in the grid
+const profitClass = (params: { value?: any }) =>
+  Number(params.value) >= 0 ? 'positive-value' : 'negative-value';
+
+export const TRADE_COLUMNS: GridColDef<TradeRow>[] = [
+  { field: 'id', headerName: 'ID', width: 70 },
+  { field: 'symbol', headerName: 'Symbol', width: 180 },
+  {
+    field: 'dateTime',
+    headerName: 'Date / Time',
+    width: 180,
+    valueFormatter: (p: { value?: any }) =>
+      new Date(String(p.value ?? '').replace(',', '')).toLocaleString()
   },
-  { field: 'quantity',  headerName: 'Qty',       type: 'number', width: 80 },
-  { field: 'proceeds',  headerName: 'Proceeds',  type: 'number',
-    flex: 1,
-    valueFormatter: ((value) => dash(fmtUsd(value as number))) as GridValueFormatter
+  { field: 'quantity', headerName: 'Qty', width: 90, type: 'number' },
+  {
+    field: 'proceeds',
+    headerName: 'Proceeds',
+    width: 120,
+    type: 'number',
+    valueFormatter: (p: { value?: any }) => formatCurrency(p.value)
   },
-  { field: 'basis',     headerName: 'Basis',     type: 'number',
-    flex: 1,
-    valueFormatter: ((value) => dash(fmtUsd(value as number))) as GridValueFormatter
+  {
+    field: 'basis',
+    headerName: 'Basis',
+    width: 120,
+    type: 'number',
+    valueFormatter: (p: { value?: any }) => formatCurrency(p.value)
   },
-  { field: 'commissionFee', headerName: 'Commission', type: 'number',
-    flex: 1,
-    valueFormatter: ((value) => dash(fmtUsd(value as number))) as GridValueFormatter
+  {
+    field: 'commissionFee',
+    headerName: 'Commission Fee',
+    width: 140,
+    type: 'number',
+    valueFormatter: (p: { value?: any }) => formatCurrency(p.value)
   },
-  { field: 'realizedPL', headerName: 'Realized P&L', type: 'number',
-    flex: 1,
-    cellClassName: (params: GridCellParams) => ((params.value as number) ?? 0) >= 0 ? 'pnl-green' : 'pnl-red',
-    valueFormatter: ((value) => dash(fmtUsd(value as number))) as GridValueFormatter
+  {
+    field: 'realizedPL',
+    headerName: 'Realized P&L',
+    width: 140,
+    type: 'number',
+    valueFormatter: (p: { value?: any }) => formatCurrency(p.value),
+    cellClassName: profitClass
   },
-  { field: 'tradePL',  headerName: 'Trade P&L', type: 'number',
-    flex: 1,
-    cellClassName: (params: GridCellParams) => ((params.value as number) ?? 0) >= 0 ? 'pnl-green' : 'pnl-red',
-    valueFormatter: ((value) => dash(fmtUsd(value as number))) as GridValueFormatter
+  {
+    field: 'unrealizedPL',
+    headerName: 'Unrealized P&L',
+    width: 140,
+    type: 'number',
+    valueFormatter: (p: { value?: any }) => formatCurrency(p.value),
+    cellClassName: profitClass
+  },
+  {
+    field: 'tradePL',
+    headerName: 'Trade P&L',
+    width: 120,
+    type: 'number',
+    valueFormatter: (p: { value?: any }) => formatCurrency(p.value),
+    cellClassName: profitClass
   }
 ]; 

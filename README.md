@@ -117,3 +117,45 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - React and the React team
 - TypeScript team
 - All contributors and users of this project
+
+## Trade Table Sorting
+
+The trade table supports sorting by the following fields:
+
+- `symbol`: Sort by ticker symbol
+- `type`: Sort by option type (PUT/CALL)
+- `strike`: Sort by strike price
+- `expiry`: Sort by expiration date
+- `quantity`: Sort by position size
+- `premium`: Sort by option premium
+- `openDate`: Sort by trade open date
+- `closeDate`: Sort by trade close date
+- `pl`/`pnl`: Sort by profit/loss
+
+Click any column header to sort by that field. Click again to reverse the sort order.
+
+### Sorting Tests
+
+The sorting functionality is thoroughly tested:
+
+1. Unit tests in `src/__tests__/sorting.test.ts`:
+   - Basic sorting functionality
+   - Edge cases (null values, ties)
+   - Performance with large datasets
+
+2. UI tests in `cypress/integration/sorting.spec.ts`:
+   - Column header click behavior
+   - Sort direction toggle
+   - Filtering and grouping interaction
+   - Edge cases (empty lists, data updates)
+
+To run sorting tests specifically:
+
+```bash
+# Run unit tests
+npm test sorting
+
+# Run Cypress sorting tests
+npm run cypress:open
+# Then select sorting.spec.ts
+```

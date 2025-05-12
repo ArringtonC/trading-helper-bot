@@ -13,9 +13,11 @@ export const SAMPLE_TRADES: OptionTrade[] = [
     quantity: 1,
     premium: 3.50,
     openDate: new Date('2023-11-01'),
+    closeDate: new Date('2023-11-15'),
+    closePremium: 5.00,
     strategy: OptionStrategy.LONG_CALL,
     commission: 0.65,
-    notes: 'Realized P&L: $150.00'
+    notes: 'Total P&L: $150.00'
   },
   {
     id: 'MSFT-1',
@@ -26,9 +28,11 @@ export const SAMPLE_TRADES: OptionTrade[] = [
     quantity: -1,
     premium: 2.75,
     openDate: new Date('2023-11-05'),
+    closeDate: new Date('2023-11-20'),
+    closePremium: 0.65,
     strategy: OptionStrategy.SHORT_PUT,
     commission: 0.65,
-    notes: 'Realized P&L: $210.00'
+    notes: 'Total P&L: $210.00'
   },
   {
     id: 'TSLA-1',
@@ -40,7 +44,8 @@ export const SAMPLE_TRADES: OptionTrade[] = [
     premium: 5.20,
     openDate: new Date('2023-11-10'),
     strategy: OptionStrategy.LONG_CALL,
-    commission: 0.65
+    commission: 0.65,
+    notes: 'Unrealized P&L: -$520.00'
   },
   {
     id: 'AMZN-1',
@@ -52,7 +57,8 @@ export const SAMPLE_TRADES: OptionTrade[] = [
     premium: 1.85,
     openDate: new Date('2023-11-15'),
     strategy: OptionStrategy.SHORT_PUT,
-    commission: 0.65
+    commission: 0.65,
+    notes: 'Unrealized P&L: $120.00'
   },
   {
     id: 'NVDA-1',
@@ -64,7 +70,8 @@ export const SAMPLE_TRADES: OptionTrade[] = [
     premium: 8.75,
     openDate: new Date('2023-11-20'),
     strategy: OptionStrategy.LONG_CALL,
-    commission: 0.65
+    commission: 0.65,
+    notes: 'Unrealized P&L: -$875.00'
   }
 ];
 

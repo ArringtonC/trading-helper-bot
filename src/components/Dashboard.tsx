@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import PerformanceSummary from './PerformanceSummary';
+import { Account } from '../types/account';
+import { AccountService } from '../services/AccountService';
 
 const data = [
   { name: 'Jan', value: 400 },
@@ -10,7 +13,64 @@ const data = [
   { name: 'Jun', value: 900 },
 ];
 
-const Dashboard: React.FC = () => {
+const DashboardWidget: React.FC = () => {
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [performanceData, setPerformanceData] = useState({
+    monthToDatePnL: 0,
+    yearToDatePnL: 0,
+    totalPnL: 0
+  });
+
+  // Load account data
+  const loadAccountData = async () => {
+    try {
+      const accounts = await AccountService.getAccounts();
+      setAccounts(accounts);
+      
+      // Extract performance data from accounts if available
+      if (accounts.length > 0) {
+        const mainAccount = accounts[0];
+        setPerformanceData({
+          monthToDatePnL: mainAccount.monthToDatePnL || 0,
+          yearToDatePnL: mainAccount.yearToDatePnL || 0,
+          totalPnL: mainAccount.totalPnL || 0
+        });
+      }
+      
+      console.log('Dashboard loaded accounts:', accounts);
+    } catch (error) {
+      console.error('Error loading account data:', error);
+    }
+  };
+
+  // Load data on component mount
+  useEffect(() => {
+    loadAccountData();
+    
+    // Set up event listener for dashboard refresh
+    const handleRefresh = () => {
+      console.log('Dashboard refresh event received');
+      loadAccountData();
+    };
+    
+    window.addEventListener('dashboard-refresh', handleRefresh);
+    
+    // Check for localStorage flag periodically
+    const checkInterval = setInterval(() => {
+      const refreshFlag = localStorage.getItem('dashboard-refresh-flag');
+      if (refreshFlag === 'true') {
+        console.log('Dashboard refresh flag detected');
+        localStorage.removeItem('dashboard-refresh-flag');
+        loadAccountData();
+      }
+    }, 1000);
+    
+    return () => {
+      window.removeEventListener('dashboard-refresh', handleRefresh);
+      clearInterval(checkInterval);
+    };
+  }, []);
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -27,6 +87,13 @@ const Dashboard: React.FC = () => {
           <p className="text-3xl font-bold text-green-600">+$1,234</p>
         </div>
       </div>
+
+      {/* Performance Summary Component */}
+      <PerformanceSummary 
+        monthToDatePnL={performanceData.monthToDatePnL}
+        yearToDatePnL={performanceData.yearToDatePnL}
+        totalPnL={performanceData.totalPnL}
+      />
 
       <div className="bg-white rounded-lg shadow p-4">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Chart</h3>
@@ -63,4 +130,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard; 
+export default DashboardWidget; 

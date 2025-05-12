@@ -1,24 +1,29 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
-import { Dashboard } from './pages/Dashboard';
 import { PLDashboard } from './pages/PLDashboard';
 import OptionsDB from './pages/OptionsDB';
-import Futures from './pages/Futures';
 import Settings from './pages/Settings';
-import Import from './pages/Import';
 import ImportToDatabase from './pages/ImportToDatabase';
-import DirectIBKRTester from './components/DirectIBKRTester';
+import { ImportDirect } from './pages/ImportDirect';
+import AITradeAnalysis from './pages/AITradeAnalysis';
 import { ToastContainer } from 'react-toastify';
+import { loadSetting, initializeSettings } from './services/SettingsService';
 import 'react-toastify/dist/ReactToastify.css';
+import { WinRateProvider } from './context/WinRateContext';
 
 const App: React.FC = () => {
-  // Initialize sample data when the app starts
-  // useEffect(() => {
-  //   initializeSampleData();
-  // }, []);
+  // Initialize settings on app start
+  useEffect(() => {
+    initializeSettings();
+  }, []);
+
+  // Check feature flags
+  const showImport = loadSetting('showImport') === 'true';
+  const showDirectImport = loadSetting('showDirectImport') === 'true';
 
   return (
+    <WinRateProvider>
     <Router>
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
@@ -32,15 +37,16 @@ const App: React.FC = () => {
         {/* Main Content */}
         <main className="max-w-6xl mx-auto p-4">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/pl-dashboard" element={<PLDashboard />} />
-            <Route path="/options" element={<OptionsDB />} />
-            <Route path="/options-db" element={<OptionsDB />} />
-            <Route path="/futures" element={<Futures />} />
+              <Route path="/" element={<PLDashboard />} />
+              <Route path="/options" element={<OptionsDB />} />
+              <Route path="/analysis" element={<AITradeAnalysis />} />
             <Route path="/settings" element={<Settings />} />
-            <Route path="/import" element={<Import />} />
-            <Route path="/import/fixed-import" element={<ImportToDatabase />} />
-            <Route path="/import/direct" element={<DirectIBKRTester />} />
+              {showImport && (
+                <Route path="/import" element={<ImportToDatabase />} />
+              )}
+              {showDirectImport && (
+                <Route path="/import/direct" element={<ImportDirect />} />
+              )}
           </Routes>
         </main>
         
@@ -48,9 +54,10 @@ const App: React.FC = () => {
         <footer className="bg-gray-100 border-t border-gray-200 p-4 text-center text-gray-500 text-sm">
           <p>Trading Helper Bot - Demo Version</p>
         </footer>
-        <ToastContainer />
+          <ToastContainer />
       </div>
     </Router>
+    </WinRateProvider>
   );
 };
 

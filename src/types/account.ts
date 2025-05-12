@@ -7,7 +7,11 @@ export interface Account {
   type: AccountType;
   balance: number;
   lastUpdated: Date;
+  created: Date;
   monthlyDeposit?: number;
+  monthToDatePnL?: number;
+  yearToDatePnL?: number;
+  totalPnL?: number;
 }
 
 /**
@@ -43,5 +47,6 @@ export const DEMO_ACCOUNT: Account = {
   type: AccountType.CASH,
   balance: 0,
   lastUpdated: new Date(),
+  created: new Date(),
   monthlyDeposit: 100
 }; 

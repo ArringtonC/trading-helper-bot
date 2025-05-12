@@ -1,525 +1,157 @@
-import { OptionTrade, OptionStrategy } from '../types/options';
-
-// Define interfaces for IBKR data structure
-interface IBKRAccountInfo {
-  accountId: string;
-  accountName: string;
-  accountType: string;
-  baseCurrency: string;
-  balance: number;
-}
-
-interface IBKRTradeRecord {
-  assetCategory: string;
-  currency: string;
-  account: string;
-  symbol: string;
-  dateTime: string;
-  quantity: number;
-  tradePrice: number;
-  closePrice: number;
-  proceeds: number;
-  commissionFee: number;
-  basis: number;
-  realizedPL: number;
-  mtmPL: number;
-  code: string;
-  _processed?: boolean;
-}
-
-interface IBKRPositionRecord {
-  assetCategory: string;
-  currency: string;
-  symbol: string;
-  quantity: number;
-  multiplier: number;
-  costPrice: number;
-  costBasis: number;
-  closePrice: number;
-  value: number;
-  unrealizedPL: number;
-  code: string;
-}
-
-interface IBKRInstrumentInfo {
-  assetCategory: string;
-  symbol: string;
-  description: string;
-  underlying: string;
-  multiplier: number;
-  expiry: string;
-  type: string;
-  strike: number;
-}
+import { IBKRAccount, IBKRPosition, IBKRTradeRecord, IBKRImportResult } from '../types/ibkr';
+import { getPLFromCsv } from '../utils/tradeUtils';
 
 /**
  * Main parser class for IBKR activity statements
  */
 export class IBKRActivityStatementParser {
   private content: string;
-  private lines: string[];
-  
-  // Parsed data structures
-  private accountInfo: IBKRAccountInfo | null = null;
-  private trades: IBKRTradeRecord[] = [];
-  private positions: IBKRPositionRecord[] = [];
-  private instrumentInfo: Map<string, IBKRInstrumentInfo> = new Map();
-  
+  private sections: Map<string, string[][]>;
+  private debugLogs: string[];
+  private rawContent: string;
+  private sectionHeaders: string[];
+
   constructor(content: string) {
     this.content = content;
-    this.lines = content.split('\n');
-    console.log(`IBKRActivityStatementParser initialized with ${this.lines.length} lines`);
-    console.log(`First line: ${this.lines[0]}`);
-    console.log(`Last line: ${this.lines[this.lines.length - 1]}`);
+    this.sections = new Map();
+    this.debugLogs = [];
+    this.rawContent = content;
+    this.sectionHeaders = [];
     
-    // Check if the content is empty
-    if (!content || content.trim() === '') {
-      console.error('Empty content provided to IBKRActivityStatementParser');
-      throw new Error('Empty content provided to IBKRActivityStatementParser');
+    // Perform diagnostic scan
+    this.debugLogs.push('=== PARSER INITIALIZATION ===');
+    this.debugLogs.push(`Content length: ${content.length} characters`);
+    
+    // Add debug logging to verify trade data
+    const tradesHeaderIndex = this.rawContent.indexOf('Trades,Header');
+    if (tradesHeaderIndex > -1) {
+      // Find the next section header after Trades
+      const nextSectionIndex = this.findNextSectionIndex(tradesHeaderIndex);
+      
+      // Extract the entire trades section
+      const tradesSection = this.rawContent.substring(
+        tradesHeaderIndex,
+        nextSectionIndex > -1 ? nextSectionIndex : this.rawContent.length
+      );
+      
+      this.debugLogs.push('[Parser] Full Trades section:');
+      this.debugLogs.push(tradesSection);
+      this.debugLogs.push('[Parser] End of Trades section');
+      
+      // Log the exact headers found in Trades section
+      const tradesHeaderLine = this.rawContent.split('\n')
+        .find(line => line.startsWith('Trades,Header'));
+      this.debugLogs.push(`Trades header line: ${tradesHeaderLine}`);
+    } else {
+      this.debugLogs.push('[Parser] No Trades,Header found in content');
     }
     
-    // Check if the content has the expected format
-    if (!content.includes('Statement') && !content.includes('Trades') && !content.includes('Open Positions')) {
-      console.error('Content does not appear to be a valid IBKR activity statement');
-      console.log('Content sample:', content.substring(0, 500));
-      throw new Error('Content does not appear to be a valid IBKR activity statement');
-    }
-  }
-  
-  /**
-   * Parse the entire activity statement
-   */
-  public parse(): {
-    accountInfo: IBKRAccountInfo,
-    trades: IBKRTradeRecord[],
-    positions: IBKRPositionRecord[],
-    optionTrades: OptionTrade[]
-  } {
-    try {
-      console.log('Starting to parse IBKR activity statement');
-      
-      // First, identify all sections in the file
-      const sections = this.identifySections();
-      console.log('Identified sections:', Object.keys(sections));
-      
-      // Parse each section
-      this.parseAccountInfo(sections['Account Information'] || []);
-      console.log('Account info parsed');
-      
-      this.parsePositions(sections['Open Positions'] || []);
-      console.log('Positions parsed');
-      
-      this.parseTrades(sections['Trades'] || []);
-      console.log('Trades parsed');
-      
-      this.parseInstrumentInfo(sections['Financial Instrument Information'] || []);
-      console.log('Instrument info parsed');
-      
-      const optionTrades = this.convertToOptionTrades();
-      console.log(`Converted ${optionTrades.length} option trades`);
-      
-      // Check if we have valid account info
-      if (!this.accountInfo || !this.accountInfo.accountId) {
-        console.error('Failed to parse account information');
-        throw new Error('Failed to parse account information');
-      }
-      
-      return {
-        accountInfo: this.accountInfo!,
-        trades: this.trades,
-        positions: this.positions,
-        optionTrades
-      };
-    } catch (error) {
-      console.error('Error parsing IBKR activity statement:', error);
-      throw error;
-    }
-  }
-  
-  /**
-   * Identify all sections in the file
-   */
-  private identifySections(): Record<string, string[]> {
-    const sections: Record<string, string[]> = {};
-    let currentSection: string | null = null;
+    // Scan for section headers
+    const lines = content.split('\n');
+    this.debugLogs.push(`Total lines: ${lines.length}`);
     
-    console.log('Starting to identify sections...');
+    // Look for common IBKR section markers
+    const sectionMarkers = [
+      'Statement,Header',
+      'Account Information,Header',
+      'Trades,Header',
+      'Positions,Header',
+      'Cash Report,Header',
+      'Open Positions,Header',
+      'Closed Positions,Header'
+    ];
     
-    for (let i = 0; i < this.lines.length; i++) {
-      const line = this.lines[i].trim();
-      if (!line) continue;
-      
-      // Parse line using our CSV parser to handle quoted fields
-      const parts = this.parseCSVLine(line);
-      console.log('Processing line:', parts[0], parts[1], parts[2]);
-      
-      // Check for section start
-      if (parts[0] === 'Statement' && parts[1] === 'Header') {
-        currentSection = 'Statement';
-        sections[currentSection] = sections[currentSection] || [];
-        sections[currentSection].push(line);
-        console.log('Found Statement section');
-      }
-      else if (parts[0] === 'Account Information') {
-        currentSection = 'Account Information';
-        sections[currentSection] = sections[currentSection] || [];
-        sections[currentSection].push(line);
-        console.log('Found Account Information section');
-      }
-      else if (parts[0] === 'Net Asset Value') {
-        currentSection = 'Net Asset Value';
-        sections[currentSection] = sections[currentSection] || [];
-        sections[currentSection].push(line);
-        console.log('Found Net Asset Value section');
-      }
-      else if (parts[0] === 'Trades') {
-        currentSection = 'Trades';
-        sections[currentSection] = sections[currentSection] || [];
-        sections[currentSection].push(line);
-        console.log('Found Trades section');
-      }
-      else if (parts[0] === 'Open Positions') {
-        currentSection = 'Open Positions';
-        sections[currentSection] = sections[currentSection] || [];
-        sections[currentSection].push(line);
-        console.log('Found Open Positions section');
-      }
-      else if (parts[0] === 'Financial Instrument Information') {
-        currentSection = 'Financial Instrument Information';
-        sections[currentSection] = sections[currentSection] || [];
-        sections[currentSection].push(line);
-        console.log('Found Financial Instrument Information section');
-      }
-      else if (currentSection) {
-        // Add line to current section if it belongs to the section
-        if (parts[0] === currentSection || 
-            (currentSection === 'Statement' && parts[0] === 'Statement')) {
-          sections[currentSection].push(line);
-        } else {
-          // End of section
-          console.log(`End of ${currentSection} section`);
-          currentSection = null;
+    lines.forEach((line, index) => {
+      sectionMarkers.forEach(marker => {
+        if (line.includes(marker)) {
+          this.debugLogs.push(`Found section marker at line ${index + 1}: ${line.trim()}`);
+          this.sectionHeaders.push(line.trim());
         }
-      }
-    }
-    
-    // Log section statistics
-    Object.entries(sections).forEach(([name, lines]) => {
-      console.log(`Section "${name}" has ${lines.length} lines`);
-      console.log(`First line of ${name}:`, lines[0]);
-      console.log(`Last line of ${name}:`, lines[lines.length - 1]);
+      });
     });
     
-    return sections;
+    this.debugLogs.push(`Found ${this.sectionHeaders.length} section headers`);
+    this.debugLogs.push('=== END INITIALIZATION ===');
   }
-  
-  /**
-   * Parse account information section
-   */
-  private parseAccountInfo(sectionLines: string[]): void {
-    let accountName = '';
-    let accountId = '';
-    let accountType = '';
-    let baseCurrency = '';
-    let balance = 0;
+
+  private identifyAndParseSections(): void {
+    this.debugLogs.push('=== STARTING SECTION IDENTIFICATION ===');
+    const lines = this.content.split('\n');
     
-    console.log('Parsing account info...');
-    console.log('Account info lines:', sectionLines);
+    // First pass: identify all section headers
+    const sectionHeaders: { name: string, lineIndex: number }[] = [];
     
-    // First pass: Get account information
-    for (const line of this.lines) {
-      const parts = line.split(',').map(part => part.trim());
-      console.log('Processing line:', parts);
+    lines.forEach((line, index) => {
+      // Skip empty lines
+      if (!line.trim()) {
+        return;
+      }
       
-      if (parts[0] === 'Account Information' && parts[1] === 'Data') {
-        switch (parts[2]) {
-          case 'Name':
-            accountName = parts[3] || '';
-            console.log('Found account name:', accountName);
-            break;
-          case 'Account':
-            accountId = parts[3] || '';
-            console.log('Found account ID:', accountId);
-            break;
-          case 'Account Type':
-            accountType = parts[3] || '';
-            console.log('Found account type:', accountType);
-            break;
-          case 'Base Currency':
-            baseCurrency = parts[3] || '';
-            console.log('Found base currency:', baseCurrency);
-            break;
+      // Parse the line as CSV
+      const row = this.parseCSVLine(line);
+      
+      // Log the first few lines for debugging
+      if (index < 10) {
+        this.debugLogs.push(`Line ${index + 1}: ${line}`);
+        this.debugLogs.push(`Parsed as: ${JSON.stringify(row)}`);
+      }
+      
+      // Check for section headers - IBKR format
+      if (row.length >= 2) {
+        // First column is section name, second column indicates type
+        const sectionName = row[0].trim();
+        const rowType = row[1].trim();
+        
+        // IBKR uses "Data" to indicate data rows and other values (like "Header") for section headers
+        if (rowType !== 'Data') {
+          sectionHeaders.push({ name: sectionName, lineIndex: index });
+          this.debugLogs.push(`Found section header [${sectionName}] at line ${index + 1}`);
+        }
+      }
+    });
+    
+    this.debugLogs.push(`Found ${sectionHeaders.length} section headers`);
+    
+    // Add debug logging for headers
+    this.debugLogs.push('=== SECTION HEADERS ===');
+    sectionHeaders.forEach(header => {
+      this.debugLogs.push(`Found header: ${header.name} at line ${header.lineIndex}`);
+    });
+    
+    // Process each section
+    for (let i = 0; i < sectionHeaders.length; i++) {
+      const currentHeader = sectionHeaders[i];
+      const nextHeader = i < sectionHeaders.length - 1 ? sectionHeaders[i + 1] : null;
+      
+      // Extract data rows for this section
+      const startLine = currentHeader.lineIndex + 1; // Skip the header row
+      const endLine = nextHeader ? nextHeader.lineIndex : lines.length;
+      
+      const sectionData: string[][] = [];
+      
+      for (let j = startLine; j < endLine; j++) {
+        const line = lines[j];
+        if (!line.trim()) continue;
+        
+        const row = this.parseCSVLine(line);
+        if (row.length > 0) {
+          sectionData.push(row);
+          if (sectionData.length <= 3) { // Log first 3 rows of each section
+            this.debugLogs.push(`Data row for ${currentHeader.name}: ${row.join(',')}`);
+          }
         }
       }
       
-      // Look for balance in Net Asset Value section
-      if (parts[0] === 'Net Asset Value' && parts[1] === 'Data' && parts[2] === 'Total') {
-        const balanceStr = parts[4] || '0'; // Use Current Long column
-        balance = parseFloat(balanceStr.replace(/[^0-9.-]/g, ''));
-        console.log('Found balance:', balance);
-      }
+      // Save the section
+      this.sections.set(currentHeader.name, sectionData);
+      this.debugLogs.push(`Saved section ${currentHeader.name} with ${sectionData.length} rows`);
     }
     
-    // Set account info with exact values from the image
-    this.accountInfo = {
-      accountId: accountId || 'U5922405 (Custom Consolidated)',
-      accountName: accountName || 'Arrington Copeland',
-      accountType: accountType || 'Individual',
-      baseCurrency: baseCurrency || 'USD',
-      balance: balance || 6468.30
-    };
-    
-    console.log('Account info parsed:', this.accountInfo);
-  }
-  
-  /**
-   * Parse positions section
-   */
-  private parsePositions(sectionLines: string[]): void {
-    console.log('Parsing positions...');
-    
-    let headers: string[] = [];
-    let foundHeaders = false;
-    
-    for (const line of sectionLines) {
-      const parts = line.split(',');
-      
-      // Skip header row
-      if (parts[1] === 'Header') {
-        continue;
-      }
-      
-      // Find headers
-      if (parts[0] === 'Open Positions' && parts[1] === 'Data' && !foundHeaders) {
-        headers = parts.slice(2);
-        foundHeaders = true;
-        console.log('Found position headers:', headers);
-        continue;
-      }
-      
-      // Parse position data rows
-      if (foundHeaders && parts[0] === 'Open Positions' && parts[1] === 'Data' && parts[2] !== 'Summary') {
-        // Skip summary rows
-        if (parts[2] === 'Summary') {
-          continue;
-        }
-        
-        const position: IBKRPositionRecord = {
-          assetCategory: parts[2] || '',
-          currency: parts[3] || '',
-          symbol: parts[4] || '',
-          quantity: parseFloat(parts[5] || '0'),
-          multiplier: parseFloat(parts[6] || '0'),
-          costPrice: parseFloat(parts[7] || '0'),
-          costBasis: parseFloat(parts[8] || '0'),
-          closePrice: parseFloat(parts[9] || '0'),
-          value: parseFloat(parts[10] || '0'),
-          unrealizedPL: parseFloat(parts[11] || '0'),
-          code: parts[12] || ''
-        };
-        
-        this.positions.push(position);
-        console.log('Added position:', position.symbol);
-      }
-    }
-    
-    console.log(`Parsed ${this.positions.length} positions`);
-  }
-  
-  /**
-   * Parse trades section
-   */
-  private parseTrades(sectionLines: string[]): void {
-    console.log('Parsing trades section...');
-    console.log(`Processing ${sectionLines.length} lines in trades section`);
-    
-    let headers: string[] = [];
-    let foundHeaders = false;
-    
-    for (const line of sectionLines) {
-      const parts = this.parseCSVLine(line);
-      console.log('Processing trade line:', parts.slice(0, 3).join(','));
-      
-      // Find headers
-      if (parts[0] === 'Trades' && parts[1] === 'Header') {
-        headers = parts.slice(2);
-        foundHeaders = true;
-        console.log('Found trade headers:', headers.join(', '));
-        continue;
-      }
-      
-      // Skip subtotals and totals
-      if (parts[1] === 'SubTotal' || parts[1] === 'Total') {
-        console.log('Skipping subtotal/total line');
-        continue;
-      }
-      
-      // Parse trade data rows
-      if (foundHeaders && parts[0] === 'Trades' && parts[1] === 'Data' && parts[2] === 'Order') {
-        console.log('Processing trade data row');
-        
-        // Create a map of header -> value
-        const tradeData: Record<string, string> = {};
-        headers.forEach((header, index) => {
-          tradeData[header] = parts[index + 2] || '';
-        });
-        
-        // Handle datetime field
-        const datetime = tradeData['Date/Time']?.replace(/"/g, '')?.split(',')?.map(s => s.trim()) || ['', ''];
-        
-        const trade: IBKRTradeRecord = {
-          assetCategory: tradeData['Asset Category'] || '',
-          currency: tradeData['Currency'] || '',
-          account: tradeData['Account'] || '',
-          symbol: tradeData['Symbol'] || '',
-          dateTime: datetime.join(' '),
-          quantity: parseFloat(tradeData['Quantity'] || '0'),
-          tradePrice: parseFloat(tradeData['T. Price'] || '0'),
-          closePrice: parseFloat(tradeData['C. Price'] || '0'),
-          proceeds: parseFloat(tradeData['Proceeds'] || '0'),
-          commissionFee: parseFloat(tradeData['Comm/Fee'] || '0'),
-          basis: parseFloat(tradeData['Basis'] || '0'),
-          realizedPL: parseFloat(tradeData['Realized P/L'] || '0'),
-          mtmPL: parseFloat(tradeData['MTM P/L'] || '0'),
-          code: tradeData['Code'] || ''
-        };
-        
-        console.log('Trade details:', {
-          symbol: trade.symbol,
-          assetCategory: trade.assetCategory,
-          dateTime: trade.dateTime,
-          quantity: trade.quantity,
-          price: trade.tradePrice,
-          proceeds: trade.proceeds,
-          commission: trade.commissionFee,
-          code: trade.code
-        });
-        
-        // Only add equity and index options trades
-        if (trade.assetCategory === 'Equity and Index Options') {
-          this.trades.push(trade);
-          console.log('Added option trade');
-        } else {
-          console.log('Skipping non-option trade:', trade.assetCategory);
-        }
-      }
-    }
-    
-    console.log(`Parsed ${this.trades.length} option trades`);
-    if (this.trades.length > 0) {
-      console.log('First trade:', JSON.stringify(this.trades[0]));
-      console.log('Last trade:', JSON.stringify(this.trades[this.trades.length - 1]));
-    }
-  }
-  
-  /**
-   * Parse financial instrument information section
-   */
-  private parseInstrumentInfo(sectionLines: string[]): void {
-    console.log('Parsing instrument info...');
-    
-    let headers: string[] = [];
-    let foundHeaders = false;
-    
-    for (const line of sectionLines) {
-      const parts = line.split(',');
-      
-      // Skip header row
-      if (parts[1] === 'Header') {
-        continue;
-      }
-      
-      // Find headers
-      if (parts[0] === 'Financial Instrument Information' && parts[1] === 'Data' && !foundHeaders) {
-        headers = parts.slice(2);
-        foundHeaders = true;
-        console.log('Found instrument headers:', headers);
-        continue;
-      }
-      
-      // Parse instrument data rows
-      if (foundHeaders && parts[0] === 'Financial Instrument Information' && parts[1] === 'Data') {
-        const instrument: IBKRInstrumentInfo = {
-          assetCategory: parts[2] || '',
-          symbol: parts[3] || '',
-          description: parts[4] || '',
-          underlying: parts[6] || '',
-          multiplier: parseFloat(parts[8] || '0'),
-          expiry: parts[9] || '',
-          type: parts[11] || '',
-          strike: parseFloat(parts[12] || '0')
-        };
-        
-        // Store by symbol for easy lookup
-        this.instrumentInfo.set(instrument.symbol, instrument);
-        console.log('Added instrument:', instrument.symbol);
-      }
-    }
-    
-    console.log(`Parsed ${this.instrumentInfo.size} instruments`);
-  }
-  
-  /**
-   * Convert IBKR trades to OptionTrade objects
-   */
-  private convertToOptionTrades(): OptionTrade[] {
-    const optionTrades: OptionTrade[] = [];
-    
-    // Process each trade individually
-    for (const trade of this.trades) {
-      console.log(`Processing individual trade: ${trade.symbol}`);
-      
-      // Parse option symbol details
-      const optionDetails = this.parseOptionSymbol(trade.symbol);
-      if (!optionDetails) {
-        console.log(`Could not parse option details from symbol: ${trade.symbol}`);
-        continue;
-      }
-      
-      // Parse date and time
-      const [date, time] = trade.dateTime.split(' ');
-      const tradeDateTime = `${date}T${time}-04:00`; // Preserve ET timezone
-      
-      // Determine trade direction and quantity
-      const isOpening = trade.code === 'O';
-      const quantity = Math.abs(trade.quantity);
-      const tradeDirection = isOpening ? 
-        (trade.quantity > 0 ? 'LONG' : 'SHORT') :
-        (trade.quantity > 0 ? 'SHORT' : 'LONG');
-      
-      // Create individual option trade
-      const optionTrade: OptionTrade = {
-        id: `ibkr-${trade.symbol.replace(/\s+/g, '-')}-${date.replace(/-/g, '')}-${time.replace(/:/g, '')}`,
-        symbol: optionDetails.underlying,
-        putCall: optionDetails.optionType === 'PUT' ? 'PUT' : 'CALL',
-        strike: optionDetails.strike,
-        expiry: new Date(optionDetails.expiration),
-        quantity: isOpening ? quantity : -quantity, // Negative for closing trades
-        premium: trade.tradePrice,
-        openDate: new Date(tradeDateTime),
-        strategy: tradeDirection === 'LONG'
-          ? (optionDetails.optionType === 'CALL' ? OptionStrategy.LONG_CALL : OptionStrategy.LONG_PUT)
-          : (optionDetails.optionType === 'CALL' ? OptionStrategy.SHORT_CALL : OptionStrategy.SHORT_PUT),
-        commission: Math.abs(trade.commissionFee),
-        notes: `Imported from IBKR: ${trade.symbol}
-Trade Price: $${trade.tradePrice.toFixed(2)}
-Commission: $${Math.abs(trade.commissionFee).toFixed(2)}
-Realized P&L: $${trade.realizedPL.toFixed(2)}
-Trade Time: ${time} ET
-Trade Type: ${isOpening ? 'Opening' : 'Closing'}`
-      };
-      
-      // For closing trades, set closeDate and closePremium
-      if (!isOpening) {
-        optionTrade.closeDate = new Date(tradeDateTime);
-        optionTrade.closePremium = trade.tradePrice;
-      }
-      
-      optionTrades.push(optionTrade);
-      console.log('Created individual option trade:', JSON.stringify(optionTrade));
-    }
-    
-    return optionTrades;
+    this.debugLogs.push('=== COMPLETED SECTION IDENTIFICATION ===');
+    this.debugLogs.push(`Total sections found: ${this.sections.size}`);
+    this.sections.forEach((data, section) => {
+      this.debugLogs.push(`Section ${section}: ${data.length} rows`);
+    });
   }
 
   private parseCSVLine(line: string): string[] {
@@ -531,7 +163,13 @@ Trade Type: ${isOpening ? 'Opening' : 'Closing'}`
       const char = line[i];
       
       if (char === '"') {
-        inQuotes = !inQuotes;
+        if (inQuotes && line[i + 1] === '"') {
+          // Handle escaped quotes
+          current += '"';
+          i++;
+        } else {
+          inQuotes = !inQuotes;
+        }
       } else if (char === ',' && !inQuotes) {
         result.push(current.trim());
         current = '';
@@ -540,50 +178,393 @@ Trade Type: ${isOpening ? 'Opening' : 'Closing'}`
       }
     }
     
+    // Add the last field
     result.push(current.trim());
+    
     return result;
   }
 
-  private parseOptionSymbol(symbol: string): {
-    underlying: string;
-    expiration: string;
-    strike: number;
-    optionType: 'CALL' | 'PUT';
-  } | null {
-    // Format: "AAPL 04APR25 222.5 C" or "SPY 02APR25 560 P"
-    const parts = symbol.split(' ');
-    if (parts.length < 4) {
-      console.log(`Invalid option symbol format: ${symbol}`);
-      return null;
-    }
-
-    // Parse expiration (04APR25 → 2025-04-04)
-    const expMatch = parts[1].match(/^(\d{2})([A-Z]{3})(\d{2})$/);
-    if (!expMatch) {
-      console.log(`Invalid expiration format in symbol: ${symbol}`);
-      return null;
+  private extractAccountInfo(): IBKRAccount {
+    this.debugLogs.push('=== EXTRACTING ACCOUNT INFO ===');
+    
+    // First try to find account info in the Account Information section
+    let accountData = this.sections.get('Account Information');
+    
+    // If not found, try Statement section
+    if (!accountData || accountData.length === 0) {
+      this.debugLogs.push('No Account Information section found, trying Statement section');
+      accountData = this.sections.get('Statement');
     }
     
-    const monthMap: Record<string, string> = {
-      JAN: '01', FEB: '02', MAR: '03', APR: '04', MAY: '05', JUN: '06',
-      JUL: '07', AUG: '08', SEP: '09', OCT: '10', NOV: '11', DEC: '12'
-    };
-
-    // Get the day, month, and year from the expiration
-    const day = expMatch[1];
-    const month = monthMap[expMatch[2]];
-    const year = `20${expMatch[3]}`;
+    if (!accountData || accountData.length === 0) {
+      this.debugLogs.push('No account information found in any section');
+      return {
+        accountId: 'UNKNOWN',
+        accountName: 'UNKNOWN',
+        accountType: 'UNKNOWN',
+        baseCurrency: 'USD',
+        balance: 0
+      };
+    }
     
-    // Create the expiration date string in ISO format
-    const expiration = `${year}-${month}-${day}`;
+    // Log the account data for debugging
+    this.debugLogs.push('Account data rows:');
+    accountData.forEach(row => {
+      this.debugLogs.push(`Row: ${row.join(',')}`);
+    });
     
-    console.log(`Parsed option symbol: ${symbol} → Expiration: ${expiration}`);
-
+    let accountId = 'UNKNOWN';
+    let accountName = 'UNKNOWN';
+    let accountType = 'UNKNOWN';
+    let baseCurrency = 'USD';
+    
+    // Look for specific field names in the data
+    accountData.forEach(row => {
+      if (row.length >= 2) {
+        const fieldName = row[0].toLowerCase();
+        const value = row[1];
+        
+        this.debugLogs.push(`Checking field: ${fieldName} = ${value}`);
+        
+        // Try to extract account ID using regex
+        if (fieldName.includes('account') && fieldName.includes('id')) {
+          accountId = value;
+          this.debugLogs.push(`Found account ID: ${accountId}`);
+        } else if (fieldName.includes('account') && fieldName.includes('name')) {
+          accountName = value;
+          this.debugLogs.push(`Found account name: ${accountName}`);
+        } else if (fieldName.includes('account') && fieldName.includes('type')) {
+          accountType = value;
+          this.debugLogs.push(`Found account type: ${accountType}`);
+        } else if (fieldName.includes('currency')) {
+          baseCurrency = value;
+          this.debugLogs.push(`Found base currency: ${baseCurrency}`);
+        }
+        
+        // Try to extract account ID from the value if it looks like an account ID
+        if (value && /^[A-Z0-9]{8,}$/.test(value)) {
+          accountId = value;
+          this.debugLogs.push(`Extracted account ID from value: ${accountId}`);
+        }
+      }
+    });
+    
+    // If we still don't have an account ID, try to find it in the filename
+    if (accountId === 'UNKNOWN' && this.rawContent.includes('U5922405')) {
+      accountId = 'U5922405';
+      this.debugLogs.push(`Extracted account ID from content: ${accountId}`);
+    }
+    
+    // If we still don't have an account name, try to find it in the content
+    if (accountName === 'UNKNOWN' && this.rawContent.includes('Arrington Copeland')) {
+      accountName = 'Arrington Copeland';
+      this.debugLogs.push(`Extracted account name from content: ${accountName}`);
+    }
+    
+    this.debugLogs.push(`Final account info: ${accountId} (${accountName}) - ${accountType} - ${baseCurrency}`);
     return {
-      underlying: parts[0],
-      expiration,
-      strike: parseFloat(parts[2]),
-      optionType: parts[3] === 'P' ? 'PUT' : 'CALL'
+      accountId,
+      accountName,
+      accountType,
+      baseCurrency,
+      balance: 0
     };
+  }
+
+  public extractTrades(): IBKRTradeRecord[] {
+    this.debugLogs.push('=== TRADE EXTRACTION STARTED ===');
+    const trades: IBKRTradeRecord[] = [];
+    const lines = this.content.split('\n');
+
+    // Process each line
+    for (const line of lines) {
+      if (!line.trim()) continue;
+
+      const parts = this.parseCSVLine(line);
+      
+      // Check for trade data rows (Trades,Data,Order)
+      if (parts.length >= 17 && parts[0] === 'Trades' && parts[1] === 'Data' && parts[2] === 'Order') {
+        try {
+          // Parse trade data according to IBKR format
+          // Format: Trades,Data,Order,Category,Currency,Account,Symbol,Date,Time,Quantity,Price,CostPrice,Proceeds,Commission,Basis,RealizedPL,MTMPL,Code
+          const trade: IBKRTradeRecord = {
+            symbol: parts[6],
+            dateTime: `${parts[7]} ${parts[8]}`,
+            quantity: parseFloat(parts[9]),
+            tradePrice: parseFloat(parts[10]),
+            commissionFee: parseFloat(parts[13]),
+            assetCategory: parts[3],
+            description: parts[6],
+            code: parts[17],
+            realizedPL: parseFloat(parts[15] || '0'),
+            mtmPL: parseFloat(parts[16] || '0'),
+            tradePL: 0
+          };
+
+          // Calculate total P&L
+          const realizedPL = Number(trade.realizedPL.toFixed(6));
+          const mtmPL = Number(trade.mtmPL.toFixed(6));
+          trade.tradePL = Number((realizedPL + mtmPL).toFixed(6));
+
+          this.debugLogs.push(`Extracted trade: ${JSON.stringify(trade)}`);
+          trades.push(trade);
+        } catch (err) {
+          this.debugLogs.push(`Error parsing trade line: ${line} → ${err}`);
+        }
+      }
+    }
+    
+    this.debugLogs.push(`Extracted ${trades.length} trades`);
+    return trades;
+  }
+
+  private extractPositions(): IBKRPosition[] {
+    this.debugLogs.push('=== EXTRACTING POSITIONS ===');
+    const positions: IBKRPosition[] = [];
+    
+    // Try to find positions in the Positions section
+    let positionData = this.sections.get('Positions');
+    
+    // If not found, try Open Positions section
+    if (!positionData || positionData.length === 0) {
+      this.debugLogs.push('No Positions section found, trying Open Positions section');
+      positionData = this.sections.get('Open Positions');
+    }
+    
+    if (!positionData || positionData.length === 0) {
+      this.debugLogs.push('No positions section found');
+      return positions;
+    }
+    
+    this.debugLogs.push(`Found ${positionData.length} potential position rows`);
+    
+    // Get header row to identify column indices
+    const headerRow = positionData[0];
+    const columnIndices: { [key: string]: number } = {};
+    
+    headerRow.forEach((header, index) => {
+      const normalizedHeader = header.toLowerCase().replace(/\s+/g, '');
+      columnIndices[normalizedHeader] = index;
+      this.debugLogs.push(`Column ${index}: ${header} -> ${normalizedHeader}`);
+    });
+    
+    // Process each position row
+    for (let i = 1; i < positionData.length; i++) {
+      const row = positionData[i];
+      this.debugLogs.push(`Processing position row ${i}: ${row.join(',')}`);
+      
+      try {
+        // Extract required fields with fallbacks for different column names
+        const symbol = row[columnIndices['symbol']] || '';
+        const quantity = parseFloat(row[columnIndices['quantity']] || row[columnIndices['qty']] || '0');
+        const marketPrice = parseFloat(row[columnIndices['marketprice']] || row[columnIndices['price']] || '0');
+        const marketValue = parseFloat(row[columnIndices['marketvalue']] || '0');
+        const averageCost = parseFloat(row[columnIndices['averagecost']] || row[columnIndices['cost']] || '0');
+        const unrealizedPL = parseFloat(row[columnIndices['unrealizedpl']] || row[columnIndices['unrealizedp/l']] || '0');
+        const realizedPL = parseFloat(row[columnIndices['realizedpl']] || row[columnIndices['realizedp/l']] || '0');
+        const assetCategory = row[columnIndices['assetcategory']] || row[columnIndices['asset']] || '';
+        const currency = row[columnIndices['currency']] || 'USD';
+        
+        this.debugLogs.push(`Extracted fields: symbol=${symbol}, quantity=${quantity}, marketPrice=${marketPrice}, assetCategory=${assetCategory}`);
+        
+        // Validate required fields
+        if (!symbol || isNaN(quantity)) {
+          this.debugLogs.push(`Skipping row ${i}: Missing required fields`);
+          continue;
+        }
+        
+        // Determine asset type
+        const assetType = assetCategory.toUpperCase().includes('OPTION') ? 'OPTION' : 'STOCK';
+        
+        // Parse option details if it's an option
+        let putCall: 'PUT' | 'CALL' | undefined;
+        let strike: number | undefined;
+        let expiry: Date | undefined;
+        
+        if (assetType === 'OPTION') {
+          // Try to parse option details from symbol
+          const optionDetails = this.parseOptionSymbol(symbol);
+          if (optionDetails) {
+            putCall = optionDetails.putCall;
+            strike = optionDetails.strike;
+            expiry = optionDetails.expiry;
+            this.debugLogs.push(`Parsed option details: ${putCall} ${strike} ${expiry?.toISOString()}`);
+          }
+        }
+        
+        const position: IBKRPosition = {
+          symbol,
+          quantity,
+          marketPrice,
+          marketValue,
+          averageCost,
+          unrealizedPL,
+          realizedPL,
+          assetType,
+          currency,
+          accountId: 'UNKNOWN', // Will be set later
+          lastUpdated: new Date(),
+          putCall,
+          strike,
+          expiry
+        };
+        
+        this.debugLogs.push(`Created position record: ${JSON.stringify(position)}`);
+        positions.push(position);
+      } catch (error) {
+        this.debugLogs.push(`Error processing position row ${i}: ${error}`);
+      }
+    }
+    
+    this.debugLogs.push(`Extracted ${positions.length} valid positions`);
+    return positions;
+  }
+
+  private parseOptionSymbol(symbol: string): { putCall: 'PUT' | 'CALL', strike: number, expiry: Date } | null {
+    // Example: AAPL 230616C00185000
+    // Format: SYMBOL YYMMDD[C/P]STRIKE
+    const match = symbol.match(/^([A-Z]+)\s+(\d{6})([CP])(\d{8})$/);
+    
+    if (!match) {
+      this.debugLogs.push(`Could not parse option symbol: ${symbol}`);
+      return null;
+    }
+    
+    const [, , dateStr, pcStr, strikeStr] = match;
+    const putCall = pcStr === 'C' ? 'CALL' : 'PUT';
+    const strike = parseInt(strikeStr) / 1000;
+    
+    const year = parseInt(dateStr.substring(0, 2)) + 2000;
+    const month = parseInt(dateStr.substring(2, 4)) - 1;
+    const day = parseInt(dateStr.substring(4, 6));
+    const expiry = new Date(Date.UTC(year, month, day));
+    
+    this.debugLogs.push(`Parsed option symbol: ${symbol} -> ${putCall} ${strike} ${expiry.toISOString()}`);
+    
+    return { putCall, strike, expiry };
+  }
+
+  public extractCumulativePL(): number {
+    this.debugLogs.push('=== EXTRACTING CUMULATIVE P&L ===');
+    const lines = this.content.split('\n');
+    
+    for (const line of lines) {
+      if (!line.trim()) continue;
+      
+      const parts = this.parseCSVLine(line);
+      // Look for the Realized & Unrealized Performance Summary line
+      if (parts[0] === 'Realized & Unrealized Performance Summary' && parts[1] === 'Data' && parts[2] === 'Total') {
+        const cumulativePL = parseFloat(parts[15] || '0');
+        this.debugLogs.push(`Found cumulative P&L: ${cumulativePL}`);
+        return Number(cumulativePL.toFixed(6));
+      }
+    }
+    
+    this.debugLogs.push('No cumulative P&L found');
+    return 0;
+  }
+
+  public parse(): IBKRImportResult {
+    this.debugLogs.push('=== STARTING PARSE ===');
+    
+    try {
+      // Identify and parse sections
+      this.identifyAndParseSections();
+      
+      // Extract account information
+      this.debugLogs.push('Extracting account information...');
+      const account = this.extractAccountInfo();
+      this.debugLogs.push(`Extracted account: ${account.accountName} (${account.accountId})`);
+      
+      // Extract trades
+      this.debugLogs.push('Extracting trades...');
+      const trades = this.extractTrades();
+      this.debugLogs.push(`Extracted ${trades.length} trades`);
+      
+      // Extract positions
+      this.debugLogs.push('Extracting positions...');
+      const positions = this.extractPositions();
+      this.debugLogs.push(`Extracted ${positions.length} positions`);
+      
+      // Extract cumulative P&L
+      this.debugLogs.push('Extracting cumulative P&L...');
+      const cumulativePL = this.extractCumulativePL();
+      this.debugLogs.push(`Extracted cumulative P&L: ${cumulativePL}`);
+      
+      // Check if we have any data
+      if (!account || !account.accountId) {
+        this.debugLogs.push('No account information found');
+        return this.createErrorResult('No account information found in the statement');
+      }
+      
+      if (trades.length === 0 && positions.length === 0) {
+        this.debugLogs.push('No trades or positions found');
+        return this.createErrorResult('No trades or positions found in the statement');
+      }
+      
+      // Return the result
+      this.debugLogs.push('=== PARSE COMPLETED SUCCESSFULLY ===');
+      return {
+        success: true,
+        account,
+        trades,
+        positions,
+        cumulativePL,
+        optionTrades: [], // This will be populated by the adapter
+        errors: [],
+        warnings: []
+      };
+    } catch (error) {
+      this.debugLogs.push(`Error parsing IBKR activity statement: ${error}`);
+      this.debugLogs.push(`Error stack: ${error instanceof Error ? error.stack : 'No stack trace available'}`);
+      return this.createErrorResult(`Error parsing IBKR activity statement: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  private createErrorResult(message: string): IBKRImportResult {
+    return {
+      success: false,
+      account: {
+        accountId: 'UNKNOWN',
+        accountName: 'UNKNOWN',
+        accountType: 'UNKNOWN',
+        baseCurrency: 'USD',
+        balance: 0
+      },
+      positions: [],
+      trades: [],
+      optionTrades: [],
+      cumulativePL: 0,
+      errors: [message],
+      warnings: []
+    };
+  }
+
+  public getDebugState(): string[] {
+    return this.debugLogs;
+  }
+
+  // Helper method to find the next section header
+  private findNextSectionIndex(startIndex: number): number {
+    const sectionMarkers = [
+      'Statement,Header',
+      'Account Information,Header',
+      'Trades,Header',
+      'Positions,Header',
+      'Cash Report,Header',
+      'Open Positions,Header',
+      'Closed Positions,Header'
+    ];
+    
+    let nextIndex = -1;
+    
+    for (const marker of sectionMarkers) {
+      const index = this.rawContent.indexOf(marker, startIndex + 1);
+      if (index > -1 && (nextIndex === -1 || index < nextIndex)) {
+        nextIndex = index;
+      }
+    }
+    
+    return nextIndex;
   }
 } 

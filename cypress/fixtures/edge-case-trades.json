@@ -1,0 +1,46 @@
+{
+  "trades": [
+    {
+      "id": "1",
+      "symbol": "SPY",
+      "putCall": "CALL",
+      "strike": 400,
+      "expiry": "2024-12-20",
+      "quantity": 1,
+      "premium": 5.25,
+      "openDate": "2024-01-01",
+      "closeDate": "2024-01-15",
+      "strategy": "LONG_CALL",
+      "commission": 0.65,
+      "tradePL": 100
+    },
+    {
+      "id": "2",
+      "symbol": "AAPL",
+      "putCall": "PUT",
+      "strike": 180,
+      "expiry": "2024-11-15",
+      "quantity": -2,
+      "premium": null,
+      "openDate": "2024-01-02",
+      "closeDate": null,
+      "strategy": "SHORT_PUT",
+      "commission": 0.65,
+      "tradePL": 100
+    },
+    {
+      "id": "3",
+      "symbol": "",
+      "putCall": "CALL",
+      "strike": null,
+      "expiry": null,
+      "quantity": 0,
+      "premium": 0,
+      "openDate": "2024-01-03",
+      "closeDate": null,
+      "strategy": "LONG_CALL",
+      "commission": 0,
+      "tradePL": -50
+    }
+  ]
+} 

@@ -12,9 +12,9 @@ import {
   TooltipItem
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { getSummary, getTrades } from '../services/DatabaseService';
+import { getSummary, getTrades, initDatabase } from '../services/DatabaseService';
 import { fmtUsd } from '../utils/formatters';
-import { Card, Typography, Box } from '@mui/material';
+import { Card, Typography, Box, CircularProgress, useTheme } from '@mui/material';
 
 // Register ChartJS components
 ChartJS.register(
@@ -32,57 +32,100 @@ interface TradeRow {
   tradePL: number;
 }
 
-interface ChartDataset {
-  label: string;
-  data: number[];
-  fill: boolean;
-  tension: number;
-  borderColor: string;
-  backgroundColor: string;
-}
-
 export const PLDashboard: React.FC = () => {
-  const [userName, setUserName] = useState('Trader');  
-  const [balance, setBalance] = useState(0);
+  const theme = useTheme();
+  const [userName] = useState('Trader');
+  const [accountValue, setAccountValue] = useState<number>(6694.75); // Set initial value from CSV
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string>();
   const [chartData, setChartData] = useState<ChartData<'line', number[]>>({
     labels: [],
     datasets: [],
   });
 
   useEffect(() => {
-    // Load account balance from summary
-    const summary = Number(getSummary());
-    setBalance(summary);
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        await initDatabase();
+        
+        // Load trades to build an equity curve
+        const rawTrades = await getTrades();
+        // Map to expected TradeRow shape
+        const trades = rawTrades.map((t: any) => ({
+          ...t,
+          dateTime: t.tradeDate || '',
+          tradePL: t.netAmount || 0,
+        }));
+        
+        if (trades.length) {
+          let running = 0;
+          const byDate: Record<string, number> = {};
+          trades.forEach(({ dateTime, tradePL }) => {
+            const [day] = dateTime.split(','); // TODO: Use proper date parsing
+            running += tradePL;
+            byDate[day] = running;
+          });
 
-    // Load trades to build an equity curve
-    const trades = getTrades();
-    
-    // accumulate tradePL into cumulative series
-    let running = 0;
-    const byDate: Record<string, number> = {};
-    trades.forEach((trade: TradeRow) => {
-      const day = trade.dateTime.split(',')[0]; // e.g. "2025-04-10"
-      running += trade.tradePL;
-      byDate[day] = running;
-    });
+          const labels = Object.keys(byDate);
+          setChartData({
+            labels,
+            datasets: [
+              {
+                label: 'Cumulative P&L',
+                data: labels.map(d => byDate[d]),
+                fill: false,
+                tension: 0.1,
+                borderColor: theme.palette.success.main,
+                backgroundColor: theme.palette.success.light,
+              },
+            ],
+          });
+        }
+      } catch (err: any) {
+        console.error('Error loading dashboard data:', err);
+        setError(err.message || 'Failed to load dashboard data');
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    const labels = Object.keys(byDate);
-    const data = labels.map(d => byDate[d]);
+    loadData();
+  }, [theme.palette.success.main, theme.palette.success.light]);
 
-    setChartData({
-      labels,
-      datasets: [
-        {
-          label: 'Cumulative P&L',
-          data,
-          fill: false,
-          tension: 0.1,
-          borderColor: '#4CAF50',
-          backgroundColor: 'rgba(76, 175, 80, 0.1)',
-        },
-      ],
-    });
-  }, []);
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          height: '100vh',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box textAlign="center" p={4}>
+        <Typography color="error" variant="h6">
+          Oops! Something went wrong.
+        </Typography>
+        <Typography>{error}</Typography>
+      </Box>
+    );
+  }
+
+  if (!chartData.datasets.length) {
+    return (
+      <Box textAlign="center" p={4}>
+        <Typography variant="h6">No trades to display yet.</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ p: 3 }}>
@@ -90,46 +133,48 @@ export const PLDashboard: React.FC = () => {
         Welcome, {userName}!
       </Typography>
 
-      <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 4 }}>
-        <Card sx={{ p: 2, minWidth: 200 }}>
-          <Typography variant="subtitle2">Account Balance</Typography>
-          <Typography variant="h5" sx={{ color: balance >= 0 ? '#4CAF50' : '#f44336' }}>
-            {fmtUsd(balance)}
-          </Typography>
-        </Card>
-      </Box>
+      <Card sx={{ p: 2, mb: 4, maxWidth: 300 }}>
+        <Typography variant="subtitle2">Account Value</Typography>
+        <Typography 
+          variant="h5" 
+          sx={{ color: theme => accountValue >= 0 ? theme.palette.success.main : theme.palette.error.main }}
+        >
+          {fmtUsd(accountValue)}
+        </Typography>
+      </Card>
 
       <Card sx={{ p: 2 }}>
         <Typography variant="subtitle2" gutterBottom>
           P&L Over Time
         </Typography>
-        <Line
-          data={chartData}
-          options={{
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              x: { 
-                title: { display: true, text: 'Date' },
-                grid: { display: false }
+        <Box sx={{ height: 400, position: 'relative' }}>
+          <Line
+            data={chartData}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                x: { 
+                  title: { display: true, text: 'Date' },
+                  grid: { display: false }
+                },
+                y: { 
+                  title: { display: true, text: 'P&L (USD)' },
+                  grid: { color: theme.palette.divider }
+                },
               },
-              y: { 
-                title: { display: true, text: 'P&L (USD)' },
-                grid: { color: 'rgba(0,0,0,0.1)' }
-              },
-            },
-            plugins: { 
-              legend: { display: false },
-              tooltip: {
-                callbacks: {
-                  label: (context: TooltipItem<'line'>) => 
-                    `P&L: ${fmtUsd(context.parsed.y)}`
+              plugins: { 
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: (context: TooltipItem<'line'>) => 
+                      `P&L: ${fmtUsd(context.parsed.y)}`
+                  }
                 }
-              }
-            },
-          }}
-          style={{ height: '400px' }}
-        />
+              },
+            }}
+          />
+        </Box>
       </Card>
     </Box>
   );

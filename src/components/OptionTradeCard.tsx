@@ -39,7 +39,7 @@ export const OptionTradeCard: React.FC<OptionTradeCardProps> = ({ trade, onClose
         </div>
         <div>
           <p className="text-gray-600">Premium</p>
-          <p className="font-medium">${trade.premium.toFixed(2)}</p>
+          <p className="font-medium">${(trade.premium || 0).toFixed(2)}</p>
         </div>
         <div>
           <p className="text-gray-600">Expiry</p>

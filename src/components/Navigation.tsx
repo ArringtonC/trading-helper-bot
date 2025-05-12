@@ -1,19 +1,30 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { loadSetting } from '../services/SettingsService';
 
 const Navigation: React.FC = () => {
   const location = useLocation();
   const currentPath = location.pathname;
   
+  // Check feature flags
+  const showImport = loadSetting('showImport') === 'true';
+  const showDirectImport = loadSetting('showDirectImport') === 'true';
+  
   // Navigation items with path and label
-  const navItems = [
+  const baseNavItems = [
     { path: '/', label: 'Dashboard' },
-    { path: '/pl-dashboard', label: 'P&L Dashboard' },
     { path: '/options', label: 'Options' },
-    { path: '/options-db', label: 'Options DB' },
-    { path: '/futures', label: 'Futures' },
-    { path: '/import/fixed-import', label: 'Fixed Import' },
-    { path: '/import/direct', label: 'Direct Parser' },
+    { path: '/analysis', label: 'AI Analysis' },
+  ];
+
+  const importNavItems = [
+    ...(showImport ? [{ path: '/import', label: 'Import' }] : []),
+    ...(showDirectImport ? [{ path: '/import/direct', label: 'Direct Parser' }] : []),
+  ];
+
+  const navItems = [
+    ...baseNavItems,
+    ...importNavItems,
     { path: '/settings', label: 'Settings' }
   ];
   

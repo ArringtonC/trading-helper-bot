@@ -1,6 +1,7 @@
 import { AccountService } from './AccountService';
 import { OptionService } from './OptionService';
 import { ProjectionService } from './ProjectionService';
+import { OptionTrade, OptionsPortfolio } from '../types/options';
 
 /**
  * Service for exporting account and trading data
@@ -58,7 +59,7 @@ export class ExportService {
       openPositions.forEach(position => {
         const daysToExpiry = Math.max(0, Math.floor((position.expiry.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)));
         
-        csv += `${account.id},${position.symbol},${position.putCall},${position.strike.toFixed(2)},${position.expiry.toLocaleDateString()},${position.quantity},${position.premium.toFixed(2)},${position.openDate.toLocaleDateString()},${daysToExpiry}\n`;
+        csv += `${account.id},${position.symbol},${position.putCall},${position.strike.toFixed(2)},${position.expiry.toLocaleDateString()},${position.quantity},${(position.premium || 0).toFixed(2)},${position.openDate.toLocaleDateString()},${daysToExpiry}\n`;
       });
     });
     
@@ -109,7 +110,7 @@ export class ExportService {
     allTrades.forEach(trade => {
       const pl = OptionService.calculatePL(trade);
       
-      csv += `${trade.id},${trade.symbol},${trade.putCall},${trade.strike.toFixed(2)},${trade.expiry.toLocaleDateString()},${trade.quantity},${trade.premium.toFixed(2)},${trade.openDate.toLocaleDateString()},${trade.closeDate ? trade.closeDate.toLocaleDateString() : ''},${trade.closePremium ? trade.closePremium.toFixed(2) : ''},${pl.toFixed(2)},${trade.strategy || ''},${trade.notes || ''}\n`;
+      csv += `${trade.id},${trade.symbol},${trade.putCall},${trade.strike.toFixed(2)},${trade.expiry.toLocaleDateString()},${trade.quantity},${(trade.premium || 0).toFixed(2)},${trade.openDate.toLocaleDateString()},${trade.closeDate ? trade.closeDate.toLocaleDateString() : ''},${trade.closePremium ? trade.closePremium.toFixed(2) : ''},${pl.toFixed(2)},${trade.strategy || ''},${trade.notes || ''}\n`;
     });
     
     return csv;
@@ -159,4 +160,34 @@ export class ExportService {
     link.click();
     document.body.removeChild(link);
   }
-} 
+}
+
+// Export open positions to CSV
+export const exportOpenPositionsToCSV = (portfolios: Record<string, OptionsPortfolio>): string => {
+  let csv = 'Account,Symbol,Type,Strike,Expiry,Quantity,Premium,OpenDate,DaysToExpiry\n';
+  
+  Object.entries(portfolios).forEach(([accountId, account]) => {
+    account.trades
+      .filter((position: OptionTrade) => !position.closeDate)
+      .forEach((position: OptionTrade) => {
+        const daysToExpiry = Math.max(0, Math.floor((position.expiry.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)));
+        
+        csv += `${account.id},${position.symbol},${position.putCall},${position.strike.toFixed(2)},${position.expiry.toLocaleDateString()},${position.quantity},${(position.premium || 0).toFixed(2)},${position.openDate.toLocaleDateString()},${daysToExpiry}\n`;
+      });
+  });
+  
+  return csv;
+};
+
+// Export trades to CSV
+export const exportTradesToCSV = (trades: OptionTrade[]): string => {
+  let csv = 'ID,Symbol,Type,Strike,Expiry,Quantity,Premium,OpenDate,CloseDate,ClosePremium,P&L,Strategy,Notes\n';
+  
+  trades.forEach(trade => {
+    const pl = OptionService.calculatePL(trade);
+    
+    csv += `${trade.id},${trade.symbol},${trade.putCall},${trade.strike.toFixed(2)},${trade.expiry.toLocaleDateString()},${trade.quantity},${(trade.premium || 0).toFixed(2)},${trade.openDate.toLocaleDateString()},${trade.closeDate ? trade.closeDate.toLocaleDateString() : ''},${trade.closePremium ? trade.closePremium.toFixed(2) : ''},${pl.toFixed(2)},${trade.strategy || ''},${trade.notes || ''}\n`;
+  });
+  
+  return csv;
+}; 

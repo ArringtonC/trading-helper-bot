@@ -2,10 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Account, AccountType } from '../types/account';
 import { AccountService } from '../services/AccountService';
 import ExportCapabilitiesButton from '../components/ExportCapabilitiesButton';
+import { Link } from 'react-router-dom';
+import { Box, Typography, Switch, FormControlLabel, Card, Divider } from '@mui/material';
+import { loadSetting, saveSetting } from '../services/SettingsService';
 
 const Settings: React.FC = () => {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
+  const [showImport, setShowImport] = useState(false);
+  const [showDirectImport, setShowDirectImport] = useState(false);
   
   // Load accounts on component mount
   useEffect(() => {
@@ -15,6 +20,11 @@ const Settings: React.FC = () => {
     if (loadedAccounts.length > 0) {
       setSelectedAccount(loadedAccounts[0]);
     }
+  }, []);
+  
+  useEffect(() => {
+    setShowImport(loadSetting('showImport') === 'true');
+    setShowDirectImport(loadSetting('showDirectImport') === 'true');
   }, []);
   
   // Handle account field updates
@@ -57,7 +67,8 @@ const Settings: React.FC = () => {
       type: AccountType.CASH,
       balance: 0,
       lastUpdated: new Date(),
-      monthlyDeposit: 100
+      monthlyDeposit: 100,
+      created: new Date()
     };
     
     AccountService.addAccount(newAccount);
@@ -83,10 +94,45 @@ const Settings: React.FC = () => {
       setSelectedAccount(updatedAccounts.length > 0 ? updatedAccounts[0] : null);
     }
   };
+
+  const handleToggle = (key: string, value: boolean) => {
+    value
+      ? saveSetting(key, 'true')
+      : saveSetting(key, 'false');
+    if (key === 'showImport') setShowImport(value);
+    if (key === 'showDirectImport') setShowDirectImport(value);
+  };
   
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-6">Settings</h1>
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" gutterBottom>Settings</Typography>
+
+      <Card sx={{ p: 3, mb: 3 }}>
+        <Typography variant="h6" gutterBottom>Feature Toggles</Typography>
+        <Divider sx={{ mb: 2 }} />
+        
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={showImport}
+                onChange={e => handleToggle('showImport', e.target.checked)}
+              />
+            }
+            label="Enable IBKR Import Page"
+          />
+
+          <FormControlLabel
+            control={
+              <Switch
+                checked={showDirectImport}
+                onChange={e => handleToggle('showDirectImport', e.target.checked)}
+              />
+            }
+            label="Enable Direct CSV Import Page"
+          />
+        </Box>
+      </Card>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Account Settings */}
@@ -213,6 +259,41 @@ const Settings: React.FC = () => {
             
             <div className="space-y-6">
               <div>
+                <h3 className="text-sm font-medium text-gray-700 mb-2">Current Version</h3>
+                <p className="text-sm text-gray-600 mb-2">
+                  Version: April 2025 Release
+                </p>
+                <p className="text-sm text-gray-600">
+                  Last Updated: April 30, 2025
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-medium text-gray-700 mb-2">Import Capabilities</h3>
+                <p className="text-sm text-gray-600 mb-2">
+                  The application supports two methods for importing IBKR data:
+                </p>
+                <ul className="text-sm text-gray-600 list-disc pl-5 mb-4">
+                  <li>Fixed Import - For standard IBKR activity statements</li>
+                  <li>Direct Parser - For specialized IBKR CSV formats</li>
+                </ul>
+                <div className="space-y-2">
+                  <Link 
+                    to="/import/fixed-import"
+                    className="block w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-center"
+                  >
+                    Go to Fixed Import
+                  </Link>
+                  <Link 
+                    to="/import/direct"
+                    className="block w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-center"
+                  >
+                    Go to Direct Parser
+                  </Link>
+                </div>
+              </div>
+              
+              <div>
                 <h3 className="text-sm font-medium text-gray-700 mb-2">Capabilities Export</h3>
                 <p className="text-sm text-gray-600 mb-2">
                   Export the current capabilities and configuration of your Trading Helper Bot.
@@ -258,7 +339,7 @@ const Settings: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Box>
   );
 };
 
