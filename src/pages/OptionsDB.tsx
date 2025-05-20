@@ -17,6 +17,12 @@ import { Progress } from "../components/ui/progress";
 import { TradesDataGrid } from '../components/TradesDataGrid';
 import { useToast } from "../components/ui/use-toast";
 import DropZone from '../components/Upload/DropZone';
+import { Position } from '../utils/parsePositionCSV';
+import { ReconciliationResult } from '../services/ReconciliationService';
+import { useTrades } from '../context/TradesContext';
+import { computeRoundTripMetrics } from '../utils/tradeUtils';
+
+console.log('OptionsDB component rendered');
 
 // Helper to safely format numbers for table display
 const formatNumber = (val: any, digits = 2) => {
@@ -55,7 +61,7 @@ export interface FetchedTrade {
 }
 
 const OptionsDB: React.FC = () => {
-  const [trades, setTrades] = useState<FetchedTrade[]>([]);
+  const { trades, setTrades } = useTrades();
   const [cumulativePL, setCumulativePL] = useState<number>(0);
   const [totalPL, setTotalPL] = useState<number>(0);
   const [calculatedWinRate, setCalculatedWinRate] = useState<number>(0);
@@ -79,18 +85,26 @@ const OptionsDB: React.FC = () => {
 
   const [debugLogs, setDebugLogs] = useState<string[]>([]);
 
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
+
+  // State for handleUpload
+  const [uploadedTrades, setUploadedTrades] = useState<NormalizedTradeData[]>([]);
+  const [uploadedPositions, setUploadedPositions] = useState<Position[]>([]);
+  const [uploadSummary, setUploadSummary] = useState<{ trades: number; positions: number; open: number; closed: number; realizedPL: number } | null>(null);
+  const [reconciliationReport, setReconciliationReport] = useState<ReconciliationResult | null>(null);
 
   const fetchAndProcessInitialData = useCallback(async () => {
-      setLoading(true);
+    setLoading(true);
     setIsLoadingTrades(true);
     try {
       await initDatabase();
       const fetchedTrades: FetchedTrade[] = await getTrades();
+      console.log('[DEBUG fetchAndProcessInitialData] Trades loaded from DB:', fetchedTrades);
       setTrades(fetchedTrades || []);
       
       const summary = await getSummary();
       setCumulativePL(Number(summary));
+      console.log('Set cumulativePL in state:', Number(summary));
 
       // P&L and WinRate calculation based on NormalizedTradeData
       // This is a simplified P&L based on netAmount of presumed closing trades.
@@ -153,6 +167,7 @@ const OptionsDB: React.FC = () => {
   }, []);
 
   const handleConfirmAndImport = useCallback(async () => {
+    console.log('handleConfirmAndImport called');
     if (!currentFile) return;
     setUploadStep('processing');
     setProcessingStats({ totalRowsProcessed: 0, successfulRows: 0, errorCount: 0, warningCount: 0, progressPercent: 0, currentStatusMessage: 'Starting import...' });
@@ -183,15 +198,55 @@ const OptionsDB: React.FC = () => {
         if (allStreamedTrades.length > 0) {
           try {
             setProcessingStats(prev => ({ ...prev!, currentStatusMessage: 'Inserting trades into database...' }));
-            const dbResult = await insertNormalizedTrades(allStreamedTrades);
-            setImportedTradesCount(dbResult.successCount);
-            if (dbResult.errors.length > 0) {
-              setFinalErrorMessages(prev => [...prev, ...dbResult.errors.map(e => `DB Insert Error (Trade ID ${e.tradeId || 'N/A'}): ${e.error}`)]);
-            }
-            toast({ title: "Import Successful", description: `${dbResult.successCount} trades imported.` });
+            // Debug: log all netAmount values before calculating cumulativePL
+            console.log('All streamed trades for PL calculation:', allStreamedTrades.map(t => t.netAmount));
+            
+            // Apply robust netAmount calculation for options if needed
+            const tradesWithCalculatedNet = allStreamedTrades.map(trade => {
+                if (trade.assetCategory === 'OPT' && (trade.netAmount === null || trade.netAmount === undefined || isNaN(trade.netAmount))) {
+                    // Apply the robust calculation for options if netAmount is missing or NaN
+                    const quantity = trade.quantity ?? 0;
+                    const tradePrice = trade.tradePrice ?? 0;
+                    const multiplier = trade.multiplier ?? 100; // Default multiplier to 100 for options
+                    const commissionFee = (trade.commission ?? 0) + (trade.fees ?? 0); // Sum commission and fees
+                    
+                    // Calculate netAmount using the formula: (tradePrice * quantity * multiplier) - commissionFee
+                    // Ensure calculations handle potential floating point issues if necessary, or rely on toFixed later.
+                    const calculatedNet = (tradePrice * quantity * multiplier) - commissionFee;
+                    console.log(`Calculating netAmount for option trade ${trade.symbol}: (${tradePrice} * ${quantity} * ${multiplier}) - ${commissionFee} = ${calculatedNet}`);
+                    return { ...trade, netAmount: calculatedNet };
+                } else {
+                    // Use existing netAmount or 0 for other asset categories or if netAmount is already valid
+                     console.log(`Using existing netAmount for trade ${trade.symbol}: ${trade.netAmount}`);
+                    return { ...trade, netAmount: trade.netAmount ?? 0 };
+                }
+            });
+
+            // Calculate cumulativePL from tradesWithCalculatedNet and update summary
+            const calculatedPL = tradesWithCalculatedNet.reduce((sum, t) => sum + (t.netAmount ?? 0), 0);
+            await insertSummary(calculatedPL);
+            console.log('Inserted summary with cumulativePL:', calculatedPL);
+            const summary = await getSummary();
+            console.log('Fetched summary after insert:', summary);
+            setImportedTradesCount(allStreamedTrades.length);
+            toast({ title: "Import Successful", description: `${allStreamedTrades.length} trades imported.` });
             setUploadStep('completed');
-            setProcessingStats(prev => ({ ...prev!, currentStatusMessage: `Import finished. ${dbResult.successCount} trades added.`}));
+            setProcessingStats(prev => ({ ...prev!, currentStatusMessage: `Import finished. ${allStreamedTrades.length} trades added.`}));
             fetchAndProcessInitialData();
+
+            // --- DEBUG: Check trades in DB after insert ---
+            const insertResult = await insertNormalizedTrades(tradesWithCalculatedNet);
+            console.log('insertResult:', insertResult);
+            if (insertResult.successCount > 0) {
+              console.log(`${insertResult.successCount} trades inserted into the database successfully.`);
+              // --- DEBUG: Check trades in DB after insert ---
+              const tradesInDb = await getTrades();
+              console.log('[DEBUG after insert] Trades in DB:', tradesInDb);
+            } else {
+              setUploadStep('completed'); 
+              setProcessingStats(prev => ({ ...prev!, currentStatusMessage: 'Processing complete. No new valid trades to import.'}));
+              toast({ title: "Processing Complete", description: "No new valid trades found to import." });
+            }
           } catch (dbError: any) {
             setUploadStep('error');
             setFinalErrorMessages(prev => [...prev, `Database operation failed: ${dbError.message}`]);
@@ -220,9 +275,15 @@ const OptionsDB: React.FC = () => {
       <h2 className="text-xl font-semibold mb-3">Import Trades CSV</h2>
       {uploadStep === 'idle' && (
         <DropZone
-          onFileUpload={async (fileText) => {
-            await handleUpload(fileText, (debug) => setDebugLogs(prev => [...prev, JSON.stringify(debug)]));
-            fetchAndProcessInitialData();
+          onFileUpload={async (file) => {
+            if (!file) {
+              setError('No file provided by DropZone.');
+              return;
+            }
+            // Set current file and move to previewing step
+            setCurrentFile(file);
+            setUploadStep('previewing'); // <-- Move to previewing after file drop
+            setDebugLogs(prev => [...prev, `File dropped: ${file.name}`]);
           }}
           className="mt-2"
         />
@@ -285,6 +346,31 @@ const OptionsDB: React.FC = () => {
   const openTrades = trades.filter(t => t.openCloseIndicator === 'O' || t.openCloseIndicator === 'N/A' || t.openCloseIndicator === undefined ).length;
   const closedTrades = trades.filter(t => t.openCloseIndicator === 'C').length;
 
+  // --- Round-trip metrics for options dashboard ---
+  const roundTripMetrics = computeRoundTripMetrics(trades as NormalizedTradeData[]);
+
+  // --- Enhanced round-trip summary calculations ---
+  const grossPL = roundTripMetrics.roundTrips.reduce((sum, rt) => {
+    // Gross P&L before fees: (close.tradePrice - open.tradePrice) * multiplier * direction
+    const mult = rt.close.multiplier ?? rt.open.multiplier ?? 100;
+    const direction = rt.open.quantity > 0 ? 1 : -1;
+    const qty = Math.abs(rt.open.quantity);
+    const gross = (rt.close.tradePrice - rt.open.tradePrice) * mult * direction * qty;
+    return sum + gross;
+  }, 0);
+  const totalFees = roundTripMetrics.roundTrips.reduce((sum, rt) => {
+    const openFees = (rt.open.commission ?? 0) + (rt.open.fees ?? 0);
+    const closeFees = (rt.close.commission ?? 0) + (rt.close.fees ?? 0);
+    return sum + openFees + closeFees;
+  }, 0);
+  const netPL = grossPL - totalFees;
+
+  // --- Net Change in Cash: sum of netAmount for all trades (all cash-impacting transactions), sign flipped to match broker statement ---
+  const netChangeInCash = -trades.reduce((sum, t) => sum + (t.netAmount ?? 0), 0);
+  // --- Other Cash Adjustments: sum of netAmount for assetCategory === 'CASH' ---
+  const cashAdjustments = trades.filter(t => t.assetCategory === 'CASH');
+  const cashAdjustmentTotal = cashAdjustments.reduce((sum, t) => sum + (t.netAmount ?? 0), 0);
+
   return (
     <div style={{ padding: 24 }}>
       <div className="flex gap-4 mb-4">
@@ -297,51 +383,107 @@ const OptionsDB: React.FC = () => {
       <h1>Options Dashboard (SQLite)</h1>
       {renderUploadArea()}
       <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
-        <div style={{ background: '#f5f5f5', padding: 16, borderRadius: 8, minWidth: 160 }} data-testid="total-pl">
-          <div style={{ fontWeight: 600 }}>Total P&amp;L</div>
-              <div style={{ fontSize: 24, color: totalPL >= 0 ? 'green' : 'red' }}>${formatNumber(totalPL)}</div>
+        <div style={{ background: '#f5f5f5', padding: 16, borderRadius: 8, minWidth: 160 }} data-testid="net-cash">
+          <div style={{ fontWeight: 600 }}>Net Change in Cash</div>
+          <div style={{ fontSize: 24, color: netChangeInCash >= 0 ? 'green' : 'red' }}>${formatNumber(netChangeInCash)}</div>
         </div>
         <div style={{ background: '#f5f5f5', padding: 16, borderRadius: 8, minWidth: 160 }} data-testid="win-rate">
-          <div style={{ fontWeight: 600 }}>Win Rate</div>
-              <div style={{ fontSize: 24 }}>{formatNumber(calculatedWinRate, 1)}%</div>
+          <div style={{ fontWeight: 600 }}>Win Rate (round-trips)</div>
+          <div style={{ fontSize: 24 }}>{formatNumber(roundTripMetrics.winRate * 100, 1)}%</div>
         </div>
         <div style={{ background: '#f5f5f5', padding: 16, borderRadius: 8, minWidth: 160 }} data-testid="open-trades">
           <div style={{ fontWeight: 600 }}>Open Trades</div>
-          <div style={{ fontSize: 24 }}>{openTrades}</div>
+          <div style={{ fontSize: 24 }}>{roundTripMetrics.openTrades}</div>
         </div>
         <div style={{ background: '#f5f5f5', padding: 16, borderRadius: 8, minWidth: 160 }} data-testid="closed-trades">
           <div style={{ fontWeight: 600 }}>Closed Trades</div>
-          <div style={{ fontSize: 24 }}>{closedTrades}</div>
+          <div style={{ fontSize: 24 }}>{roundTripMetrics.closedTrades}</div>
         </div>
       </div>
-      {/* Debug log section */}
-      <div style={{ background: '#f9fafb', border: '1px solid #eee', borderRadius: 8, padding: 16, marginBottom: 24 }}>
-            <div style={{ fontWeight: 600, marginBottom: 8 }}>Debug Log (Parsed CSV Data)</div>
-            <pre style={{ fontSize: 12, color: '#333', whiteSpace: 'pre-wrap' }}>
-              {debugLogs.join('\n')}
-        </pre>
-      </div>
-      {/* Additional debug dump for sanity check */}
-      <div>
-        <h2>Debug Loaded trades</h2>
-        <pre>{JSON.stringify(trades.slice(0,10), null, 2)}</pre>
-      </div>
-      {/* <button onClick={loadSampleData} style={{ marginBottom: 16 }}>Load Sample Trades</button>
-      <button onClick={handleReset} style={{ marginLeft: 8, marginBottom: 16 }}>Reset Database</button> */}
-      <h2>Cumulative P&amp;L: <span style={{ color: cumulativePL >= 0 ? 'green' : 'red' }}>{formatNumber(cumulativePL)}</span></h2>
-      {/* Debug Info Section */}
-      {trades && (
-        <div style={{ backgroundColor: '#eef', padding: '1em', margin: '1em 0', fontFamily: 'monospace' }}>
-          <h3>🔍 Debug Info</h3>
-          <div><strong>Number of trades loaded:</strong> {trades.length}</div>
-          {trades.length === 0 ? (
-            <div style={{ color: 'red' }}>⚠️ No trades found. Please import trades first.</div>
-          ) : (
-            <pre>{JSON.stringify(trades.slice(0, 5), null, 2)}</pre>
-          )}
+      {/* --- Round-Trip Metrics Section --- */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
+        <div style={{ background: '#e8f5e9', padding: 16, borderRadius: 8, minWidth: 400 }}>
+          <div style={{ fontWeight: 600, marginBottom: 8 }}>Round-Trip Summary</div>
+          <table style={{ width: '100%', fontSize: 15 }}>
+            <tbody>
+              <tr>
+                <td style={{ fontWeight: 600 }}>Net Change in Cash
+                  <span title="Matches your broker statement's cash change (ending cash minus starting cash minus deposits)"> ⓘ</span>
+                </td>
+                <td style={{ color: netChangeInCash >= 0 ? 'green' : 'red', textAlign: 'right' }}>${formatNumber(netChangeInCash)}</td>
+              </tr>
+              <tr>
+                <td style={{ fontWeight: 600 }}>Other Cash Adjustments
+                  <span title="Sum of all non-trade cash flows (fees, interest, etc.) from assetCategory === 'CASH'"> ⓘ</span>
+                </td>
+                <td style={{ color: cashAdjustmentTotal >= 0 ? 'green' : 'red', textAlign: 'right' }}>${formatNumber(cashAdjustmentTotal)}</td>
+              </tr>
+              <tr>
+                <td style={{ fontWeight: 600 }}>Gross P&amp;L (before fees)</td>
+                <td style={{ color: grossPL >= 0 ? 'green' : 'red', textAlign: 'right' }}>${formatNumber(grossPL)}</td>
+              </tr>
+              <tr>
+                <td style={{ fontWeight: 600 }}>Total Commissions &amp; Fees</td>
+                <td style={{ color: totalFees >= 0 ? 'red' : 'green', textAlign: 'right' }}>–${formatNumber(Math.abs(totalFees))}</td>
+              </tr>
+              <tr>
+                <td style={{ fontWeight: 600 }}>Net P&amp;L (after fees)</td>
+                <td style={{ color: netPL >= 0 ? 'green' : 'red', textAlign: 'right' }}>${formatNumber(netPL)}</td>
+              </tr>
+              <tr>
+                <td style={{ fontWeight: 600 }}>Win Rate (round-trips)</td>
+                <td style={{ textAlign: 'right' }}>{formatNumber(roundTripMetrics.winRate * 100, 1)}%</td>
+              </tr>
+              <tr>
+                <td style={{ fontWeight: 600 }}>Total Closed Trades (round-trips)</td>
+                <td style={{ textAlign: 'right' }}>{roundTripMetrics.closedTrades}</td>
+              </tr>
+              <tr>
+                <td style={{ fontWeight: 600 }}>Open Positions</td>
+                <td style={{ textAlign: 'right' }}>{roundTripMetrics.openTrades}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      )}
-            <TradesDataGrid trades={trades} />
+      </div>
+      {/* --- Round-Trip Table --- */}
+      <div style={{ background: '#f9fbe7', border: '1px solid #eee', borderRadius: 8, padding: 16, marginBottom: 24 }}>
+        <div style={{ fontWeight: 600, marginBottom: 8 }}>Round-Trip Table</div>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+          <thead>
+            <tr>
+              <th style={{ textAlign: 'left', borderBottom: '1px solid #ccc' }}>Symbol</th>
+              <th style={{ textAlign: 'left', borderBottom: '1px solid #ccc' }}>Open Date</th>
+              <th style={{ textAlign: 'left', borderBottom: '1px solid #ccc' }}>Close Date</th>
+              <th style={{ textAlign: 'right', borderBottom: '1px solid #ccc' }}>Gross P&amp;L</th>
+              <th style={{ textAlign: 'right', borderBottom: '1px solid #ccc' }}>Fees</th>
+              <th style={{ textAlign: 'right', borderBottom: '1px solid #ccc' }}>Net P&amp;L</th>
+            </tr>
+          </thead>
+          <tbody>
+            {roundTripMetrics.roundTrips.map((rt: any, idx: number) => {
+              const mult = rt.close.multiplier ?? rt.open.multiplier ?? 100;
+              const direction = rt.open.quantity > 0 ? 1 : -1;
+              const qty = Math.abs(rt.open.quantity);
+              const gross = (rt.close.tradePrice - rt.open.tradePrice) * mult * direction * qty;
+              const openFees = (rt.open.commission ?? 0) + (rt.open.fees ?? 0);
+              const closeFees = (rt.close.commission ?? 0) + (rt.close.fees ?? 0);
+              const fees = openFees + closeFees;
+              const net = gross - fees;
+              return (
+                <tr key={idx}>
+                  <td>{rt.open.symbol}</td>
+                  <td>{rt.open.tradeDate}</td>
+                  <td>{rt.close.tradeDate}</td>
+                  <td style={{ color: gross >= 0 ? 'green' : 'red', textAlign: 'right' }}>{formatNumber(gross)}</td>
+                  <td style={{ color: fees >= 0 ? 'red' : 'green', textAlign: 'right' }}>{formatNumber(fees)}</td>
+                  <td style={{ color: net >= 0 ? 'green' : 'red', textAlign: 'right' }}>{formatNumber(net)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
         </>
           )}
       {viewMode === 'positions' && <PositionsTable />}
