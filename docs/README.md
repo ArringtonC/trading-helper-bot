@@ -47,6 +47,7 @@ This directory contains all documentation for the Trading Helper Bot project, or
 - **[security-audit-report.md](deployment/security-audit-report.md)** - Comprehensive security audit report
 
 ### 🏗️ Architecture Documentation (root level)
+- **[TECHNICAL_ARCHITECTURE.md](TECHNICAL_ARCHITECTURE.md)** - **🆕 Complete tech stack & integration overview** ⭐
 - **[dashboard-architecture.md](dashboard-architecture.md)** - Dashboard architecture overview
 - **[dashboard-diagram.mmd](dashboard-diagram.mmd)** - Mermaid diagram for dashboard structure
 - **[unified-dashboard-user-guide.md](unified-dashboard-user-guide.md)** - User guide for unified dashboard
@@ -67,11 +68,13 @@ This directory contains all documentation for the Trading Helper Bot project, or
 
 ### **🎯 New to the App? Start Here!**
 - **[Complete App Overview & Demo](APP_OVERVIEW_AND_DEMO.md)** - Comprehensive walkthrough of all features
+- **[Technical Architecture](TECHNICAL_ARCHITECTURE.md)** - Complete tech stack and integration overview
 
 ### For New Developers
 1. Start with [README_DEV.md](development/README_DEV.md)
-2. Review [IMPLEMENTATION.md](development/IMPLEMENTATION.md)
-3. Check [APP_IMPROVEMENT_PLAN.md](planning/APP_IMPROVEMENT_PLAN.md)
+2. Review [TECHNICAL_ARCHITECTURE.md](TECHNICAL_ARCHITECTURE.md) for tech stack understanding
+3. Review [IMPLEMENTATION.md](development/IMPLEMENTATION.md)
+4. Check [APP_IMPROVEMENT_PLAN.md](planning/APP_IMPROVEMENT_PLAN.md)
 
 ### For Product Management
 1. Review [PRD.md](planning/PRD.md)
