@@ -1,0 +1,27 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+- **Keep `console.log` and other debug logging statements in the codebase during development.**
+  - These logs are valuable for debugging, tracing, and rapid iteration.
+  - Removing them prematurely can slow down troubleshooting and reduce developer visibility.
+- **Only remove or comment out `console.log` and similar debug statements as part of a dedicated production cleanup or release process.**
+  - See [production_cleanup.mdc](mdc:.roo/rules/examples/production_cleanup.mdc) for guidelines on preparing code for production.
+- **Examples:**
+  ```typescript
+  // ✅ DO: Keep logs during development
+  console.log('Fetched trades:', trades);
+
+  // ❌ DON'T: Remove logs before production freeze
+  // (unless they leak sensitive data or cause performance issues)
+  ```
+- **Rationale:**
+  - Debug logs are essential for diagnosing issues, especially in complex data pipelines and UI flows.
+  - Removing them too early can make it harder to trace bugs or understand app state.
+- **Exceptions:**
+  - Remove logs that output sensitive data, or that cause significant performance issues in development.
+  - For production, follow the [production_cleanup.mdc](mdc:.roo/rules/examples/production_cleanup.mdc) rule to ensure all logs are removed or replaced with proper logging infrastructure.
+- **Cross-reference:**
+  - [production_cleanup.mdc](mdc:.roo/rules/examples/production_cleanup.mdc)
+  - [self_improve.mdc](mdc:.cursor/rules/self_improve.mdc)

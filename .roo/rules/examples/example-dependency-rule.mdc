@@ -1,0 +1,43 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Example: Rule Dependencies
+
+This example demonstrates how the `dependencies` field can be used to define an evaluation chain, ensuring a rule is only considered after one or more prerequisite rules have been evaluated.
+
+- **Rule Definitions:**
+  ```typescript
+  const prerequisiteRule: Rule = {
+    id: 'data-validation-complete',
+    name: 'Data Validation',
+    description: 'Ensures input data is valid before proceeding.',
+    type: 'validation',
+    enabled: true,
+    conditions: { field: 'data.isValid', operator: '==', value: true },
+    actions: [{ type: 'notify', parameters: { message: 'Data validation successful' } }],
+    metadata: { version: '1.0', createdBy: 'example', createdAt: '2023-10-27T10:45:00Z' },
+  };
+
+  const dependentRule: Rule = {
+    id: 'perform-calculation',
+    name: 'Perform Calculation Based on Valid Data',
+    description: 'Calculates a value only after data validation is complete.',
+    type: 'calculation',
+    enabled: true,
+    conditions: { field: 'parameters.calculationNeeded', operator: '==', value: true },
+    actions: [/* ... actions that use validated data ... */], // Actions that depend on valid data
+    dependencies: ['data-validation-complete'], // This rule depends on the prerequisite rule
+    metadata: { version: '1.0', createdBy: 'example', createdAt: '2023-10-27T10:46:00Z' },
+  };
+  ```
+
+- **Explanation:**
+  - The `dependentRule` has a `dependencies` array containing the ID of the `prerequisiteRule` (`'data-validation-complete'`).
+  - The Rule Engine Core ([ruleEngineCore.ts](mdc:src/utils/ruleEngine/ruleEngineCore.ts)) will ensure that `prerequisiteRule` is evaluated before `dependentRule`.
+  - If `prerequisiteRule` is disabled or its conditions are not met, the `dependentRule` will be skipped by the engine.
+
+- **Reference:**
+  - See the main [Rule Engine Schema & Guidelines](mdc:.roo/rules/rule-engine.mdc) for more details on the `Rule` structure and dependencies.
+

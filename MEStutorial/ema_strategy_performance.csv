@@ -1,0 +1,5 @@
+Strategy_Type,Win_Rate_Percent,Average_Return_Annual,Maximum_Drawdown,Sharpe_Ratio
+Single EMA (50),45,8.5,15.2,0.65
+EMA Crossover (20/50),52,12.3,18.5,0.78
+EMA Crossover (5/8),48,15.2,25.3,0.82
+Buy and Hold,75,10.0,20.1,0.55

@@ -1,0 +1,59 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Rule Engine Schema & Guidelines
+
+This document outlines the structure and best practices for defining rules used by the dynamic Size-Throttle Rule Engine, as defined in [RuleSchema.ts](mdc:src/types/RuleSchema.ts).
+
+Rules are evaluated based on provided context data and execute predefined actions when their conditions are met. Key fields and considerations are described below.
+
+- **Rule Structure**
+  - Rules are defined using the `Rule` interface in [RuleSchema.ts](mdc:src/types/RuleSchema.ts).
+  - Each rule must have a unique `id`.
+
+- **Key Fields:**
+  - `id`: **Unique identifier** for the rule (string).
+  - `name`: **Human-readable name** for the rule (string).
+  - `description`: **Brief explanation** of what the rule does (string).
+  - `type`: **Categorization** of the rule (e.g., `throttle`, `milestone`, string). Helps in organizing and potentially filtering rules.
+  - `enabled`: **Boolean flag** to activate or deactivate the rule. Only enabled rules are evaluated.
+  - `conditions`: **Defines when the rule applies**. Can be a [SimpleCondition](mdc:src/types/RuleSchema.ts) or a [CompoundCondition](mdc:src/types/RuleSchema.ts) (`and`/`or`). Evaluated against the provided context data.
+    - Refer to the `Operator` type in [RuleSchema.ts](mdc:src/types/RuleSchema.ts) for supported operators.
+  - `actions`: **List of actions** to execute when the conditions are met. Defined using the [Action](mdc:src/types/RuleSchema.ts) interface.
+    - Actions have a `type` (e.g., `reducePositionSize`, `setPositionSize`, `notify`) and `parameters`.
+    - Can include an optional `executeAt` field for scheduled execution.
+  - `metadata`: **Contains rule versioning and authorship information**. Defined using the [RuleMetadata](mdc:src/types/RuleSchema.ts) interface.
+  - `priority` (Optional): **Influences the order of rule evaluation and action execution**. Higher priority rules may be evaluated first or have their actions executed later to potentially override lower priority rules.
+    - **Recommended values**: `high`, `medium`, `low`. Custom string values are allowed.
+    - The exact implementation of how `priority` affects execution order is handled by the Rule Engine Core ([ruleEngineCore.ts](mdc:src/utils/ruleEngine/ruleEngineCore.ts)).
+  - `dependencies` (Optional): **List of rule IDs that must be evaluated (and potentially matched) before this rule is considered**. Helps define an evaluation chain.
+    - Rules with unmet dependencies are skipped by the Rule Engine Core ([ruleEngineCore.ts](mdc:src/utils/ruleEngine/ruleEngineCore.ts)).
+
+- **Examples:**
+  ```typescript
+  // ✅ DO: Example of a rule with priority and dependencies
+  const exampleRule: Rule = {
+    id: 'profit-throttle-high',
+    name: 'Throttle Size on High Profit',
+    description: 'Reduces position size after significant profit is achieved, only after initial setup rules run.',
+    type: 'throttle',
+    enabled: true,
+    conditions: { field: 'account.profit', operator: '>', value: 5000 },
+    actions: [{ type: 'reducePositionSize', parameters: { byPercent: 10 } }],
+    priority: 'high',
+    dependencies: ['initial-setup-complete'],
+    metadata: { version: '1.0', createdBy: 'system', createdAt: '2023-10-27T10:00:00Z' },
+  };
+  
+  // ❌ DON'T: Rule missing key fields or unclear purpose
+  // const badRule = { id: 'r1', enabled: true, conditions: {}, actions: [] }; // Missing name, description, type, metadata
+  ```
+
+- **Maintenance:**
+  - Keep rule definitions consistent with the `Rule` interface.
+  - Clearly document the purpose and expected behavior of each rule.
+  - Use `priority` and `dependencies` to manage complex rule interactions and evaluation order.
+  - Update this documentation as new rule fields or patterns emerge.
+

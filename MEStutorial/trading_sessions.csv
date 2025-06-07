@@ -1,0 +1,6 @@
+Trading_Session,Volume_Percentage,Volatility_Level
+Asian (6PM-2AM),15,Low
+European (2AM-8AM),25,Medium
+US Pre-Market (8AM-9:30AM),10,Medium
+US Regular (9:30AM-4PM),45,High
+US After Hours (4PM-6PM),5,Low

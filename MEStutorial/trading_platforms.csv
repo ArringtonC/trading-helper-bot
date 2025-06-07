@@ -1,0 +1,5 @@
+Platform,Commission_Per_Contract,Margin_Requirements,EMA_Automation,Backtesting_Capability
+NinjaTrader,0.09,$400 min,Excellent,Advanced
+TradeStation,0.35,$500 min,Very Good,Professional
+Interactive Brokers,0.85,"$2,000 min",Good,Good
+Charles Schwab,2.25,"$1,000 min",Basic,Limited

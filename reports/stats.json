@@ -1,0 +1,250 @@
+
+> trading-helper-bot@0.1.0 build
+> react-app-rewired build --profile --json
+
+Creating an optimized production build...
+Compiled with warnings.
+
+[eslint] 
+src/components/Dashboard/NotificationSystem.tsx
+  Line 190:7:  'styles' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+src/components/ImportAnalyze/SecureDragDropUpload.tsx
+  Line 31:11:  Unnecessary escape character: \/                                   no-useless-escape
+  Line 32:5:   Unexpected control character(s) in regular expression: \x00, \x1f  no-control-regex
+
+src/components/TradeTable.tsx
+  Line 1:49:   'useEffect' is defined but never used                @typescript-eslint/no-unused-vars
+  Line 53:10:  'expandedGroups' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  Line 57:9:   'formatDate' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  Line 164:9:  'toggleGroup' is assigned a value but never used     @typescript-eslint/no-unused-vars
+
+src/components/Upload/Upload.tsx
+  Line 4:10:  'NormalizedTradeData' is defined but never used  @typescript-eslint/no-unused-vars
+  Line 5:10:  'Position' is defined but never used             @typescript-eslint/no-unused-vars
+
+src/components/Wizards/GoalSizingWizard.tsx
+  Line 6:3:     'ChevronLeftIcon' is defined but never used                                                                                                                          @typescript-eslint/no-unused-vars
+  Line 7:3:     'ChevronRightIcon' is defined but never used                                                                                                                         @typescript-eslint/no-unused-vars
+  Line 8:3:     'InformationCircleIcon' is defined but never used                                                                                                                    @typescript-eslint/no-unused-vars
+  Line 129:10:  'touched' is assigned a value but never used                                                                                                                         @typescript-eslint/no-unused-vars
+  Line 284:6:   React Hook useEffect has missing dependencies: 'config.capitalObjectiveParameters' and 'config.tradeStatistics'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/Wizards/PositionLimitRecommendations.tsx
+  Line 9:48:  'validateUserPositionLimits' is defined but never used                                                             @typescript-eslint/no-unused-vars
+  Line 88:6:  React Hook useEffect has a missing dependency: 'getUserProfile'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/ui/MarkdownRenderer/MarkdownRenderer.tsx
+  Line 24:13:  Anchors must have content and the content must be accessible by a screen reader  jsx-a11y/anchor-has-content
+
+src/components/visualizations/DecayChart.tsx
+  Line 2:65:   'Legend' is defined but never used                      @typescript-eslint/no-unused-vars
+  Line 39:11:  'totalOriginalTime' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+src/components/visualizations/PayoffChart.tsx
+  Line 2:65:  'Legend' is defined but never used            @typescript-eslint/no-unused-vars
+  Line 68:9:  'yDomain' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+src/context/TutorialContext.tsx
+  Line 2:20:   'TutorialMetadata' is defined but never used                                                                      @typescript-eslint/no-unused-vars
+  Line 180:6:  React Hook useEffect has a missing dependency: 'startTutorial'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/InteractiveAnalytics.tsx
+  Line 10:7:   'dateFmt' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  Line 106:9:  'isAllZeroRow' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  Line 116:9:  'nonZeroSymbols' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+src/pages/OptionsDB.tsx
+  Line 2:62:   'resetDatabase' is defined but never used                     @typescript-eslint/no-unused-vars
+  Line 2:77:   'getAggregatePL' is defined but never used                    @typescript-eslint/no-unused-vars
+  Line 3:10:   'parseTradeCSV' is defined but never used                     @typescript-eslint/no-unused-vars
+  Line 3:25:   'isTradeCSV' is defined but never used                        @typescript-eslint/no-unused-vars
+  Line 3:37:   'isPositionCSV' is defined but never used                     @typescript-eslint/no-unused-vars
+  Line 6:10:   'handleUpload' is defined but never used                      @typescript-eslint/no-unused-vars
+  Line 8:31:   'BrokerType' is defined but never used                        @typescript-eslint/no-unused-vars
+  Line 8:43:   'AssetCategory' is defined but never used                     @typescript-eslint/no-unused-vars
+  Line 8:58:   'PutCall' is defined but never used                           @typescript-eslint/no-unused-vars
+  Line 8:67:   'OpenCloseIndicator' is defined but never used                @typescript-eslint/no-unused-vars
+  Line 9:8:    'CsvDropzone' is defined but never used                       @typescript-eslint/no-unused-vars
+  Line 14:10:  'Terminal' is defined but never used                          @typescript-eslint/no-unused-vars
+  Line 16:10:  'TradesDataGrid' is defined but never used                    @typescript-eslint/no-unused-vars
+  Line 33:7:   'cleanDate' is assigned a value but never used                @typescript-eslint/no-unused-vars
+  Line 74:10:  'cumulativePLFromSummary' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  Line 77:11:  'winRate' is assigned a value but never used                  @typescript-eslint/no-unused-vars
+  Line 83:10:  'previewData' is assigned a value but never used              @typescript-eslint/no-unused-vars
+  Line 86:10:  'processedChunksLog' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  Line 89:10:  'importedTradesCount' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  Line 91:10:  'isLoadingTrades' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  Line 96:10:  'uploadedTrades' is assigned a value but never used           @typescript-eslint/no-unused-vars
+  Line 96:26:  'setUploadedTrades' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  Line 97:10:  'uploadedPositions' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  Line 97:29:  'setUploadedPositions' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  Line 98:10:  'uploadSummary' is assigned a value but never used            @typescript-eslint/no-unused-vars
+  Line 98:25:  'setUploadSummary' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  Line 99:10:  'reconciliationReport' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  Line 99:32:  'setReconciliationReport' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  Line 225:9:  'handleFileDropped' is assigned a value but never used        @typescript-eslint/no-unused-vars
+
+src/pages/PLDashboard.tsx
+  Line 15:10:  'getSummary' is defined but never used                      @typescript-eslint/no-unused-vars
+  Line 33:11:  'TradeRow' is defined but never used                        @typescript-eslint/no-unused-vars
+  Line 40:24:  'setAccountValue' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  Line 52:10:  'ibkrAccountSummary' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  Line 52:30:  'setIbkrAccountSummary' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+src/pages/PositionSizingResults.tsx
+  Line 3:86:   'BarChart' is defined but never used                                                                                  @typescript-eslint/no-unused-vars
+  Line 3:96:   'Bar' is defined but never used                                                                                       @typescript-eslint/no-unused-vars
+  Line 132:6:  React Hook useEffect has a missing dependency: 'calculateStrategy'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/UnifiedDashboard.tsx
+  Line 13:3:   'getTrades' is defined but never used              @typescript-eslint/no-unused-vars
+  Line 93:10:  'pnlSummary' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  Line 94:10:  'isLoadingPnl' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  Line 95:10:  'pnlError' is assigned a value but never used      @typescript-eslint/no-unused-vars
+
+src/services/CsvProcessingService.ts
+  Line 1:29:  'ParseError' is defined but never used    @typescript-eslint/no-unused-vars
+  Line 1:41:  'Parser' is defined but never used        @typescript-eslint/no-unused-vars
+  Line 3:10:  'detectBroker' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/services/DatabaseService.ts
+  Line 393:11:  'skippedDuplicates' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  Line 616:9:   'db' is assigned a value but never used                 @typescript-eslint/no-unused-vars
+
+src/services/FixedIBKRParser.ts
+  Line 1:23:  'IBKRPosition' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/services/IBKRActivityStatementParser.ts
+  Line 2:10:  'getPLFromCsv' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/services/ImportToDatabaseService.ts
+  Line 1:45:   'IBKRPosition' is defined but never used      @typescript-eslint/no-unused-vars
+  Line 7:10:   'refreshDashboard' is defined but never used  @typescript-eslint/no-unused-vars
+  Line 10:11:  'ImportResult' is defined but never used      @typescript-eslint/no-unused-vars
+
+src/services/MarketAnalysisService.ts
+  Line 18:11:  'RegimeConfig' is defined but never used  @typescript-eslint/no-unused-vars
+  Line 130:3:  Unreachable code                          no-unreachable
+
+src/services/OptionService.ts
+  Line 1:57:  'calculateTradePL' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/types/ibkr.ts
+  Line 117:40:  Unnecessary escape character: \.  no-useless-escape
+
+src/utils/handleUpload.ts
+  Line 4:128:   'getDb' is defined but never used               @typescript-eslint/no-unused-vars
+  Line 5:43:    'AssetCategory' is defined but never used       @typescript-eslint/no-unused-vars
+  Line 5:58:    'OpenCloseIndicator' is defined but never used  @typescript-eslint/no-unused-vars
+  Line 197:16:  'readFileContent' is defined but never used     @typescript-eslint/no-unused-vars
+
+src/utils/mapCsvToNormalizedSchema.ts
+  Line 73:7:  'mapToOpenClose' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+src/utils/parseTradeCSV.ts
+  Line 100:20:  Function declared in a loop contains unsafe references to variable(s) 'headerRow'  no-loop-func
+
+src/utils/positionLimitEngine.ts
+  Line 13:3:  'ComprehensiveRecommendation' is defined but never used  @typescript-eslint/no-unused-vars
+  Line 15:3:  'validateUserLimits' is defined but never used           @typescript-eslint/no-unused-vars
+
+src/utils/ruleEngine/conditionEvaluator.ts
+  Line 1:38:  'CompoundCondition' is defined but never used  @typescript-eslint/no-unused-vars
+  Line 1:57:  'Operator' is defined but never used           @typescript-eslint/no-unused-vars
+
+src/utils/tradeUtils.ts
+  Line 2:10:  'IBKRTradeRecord' is defined but never used              @typescript-eslint/no-unused-vars
+  Line 3:10:  'IBKRActivityStatementParser' is defined but never used  @typescript-eslint/no-unused-vars
+
+src/utils/validateNormalizedTrade.ts
+  Line 101:21:  'calculatedNet' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+File sizes after gzip:
+
+  1.42 MB (+93.77 kB)  build/static/js/8096.9d84bec8.chunk.js
+  62.1 kB              build/static/js/react~f323cc50.7b3eb666.js
+  59 kB (+5.85 kB)     build/static/js/react~7607661b.383c0f66.js
+  52.37 kB (+1.65 kB)  build/static/js/vendors-charts~d160e5df.cbcb5277.chunk.js
+  40.04 kB (+1.04 kB)  build/static/js/8086.b1c74a91.js
+  36.6 kB (+259 B)     build/static/js/75.2b3339e6.js
+  34.88 kB (+1.16 kB)  build/static/js/448.bfe45dc5.js
+  30.59 kB (+1.61 kB)  build/static/js/6854.4ca6aac9.chunk.js
+  26.74 kB (+852 B)    build/static/js/9875.a996008f.js
+  24.04 kB (+1.04 kB)  build/static/js/vendors-charts~27545368.38109df6.chunk.js
+  23.9 kB (+230 B)     build/static/js/6300.28ed6d98.js
+  23.22 kB (+860 B)    build/static/js/3803.b22419fc.chunk.js
+  20.45 kB (+934 B)    build/static/js/8100.a2808952.js
+  19.88 kB (+1.07 kB)  build/static/js/2174.c56fbf0a.chunk.js
+  19.11 kB (+310 B)    build/static/js/8309.49cc9831.chunk.js
+  18.15 kB (+834 B)    build/static/js/5525.94d37992.js
+  17.89 kB (+320 B)    build/static/js/vendors-charts~49ceb22a.49233549.chunk.js
+  17.2 kB (+207 B)     build/static/js/page-ai-analysis.f6ebba81.chunk.js
+  15.37 kB (+518 B)    build/static/js/9457.0c177acb.chunk.js
+  15.11 kB (+343 B)    build/static/js/main.92203d18.js
+  15.05 kB (+156 B)    build/static/js/page-import-analyze.26b2a027.chunk.js
+  15.02 kB (+570 B)    build/static/js/4729.0bcdae6e.js
+  14.46 kB (+709 B)    build/static/js/react~ec978db4.6f4012bd.js
+  14.36 kB (+304 B)    build/static/js/page-unified-dashboard.5c27c101.chunk.js
+  14.1 kB (+1.07 kB)   build/static/js/vendors-charts~1d74dfdd.2840d312.chunk.js
+  13.98 kB (+1.46 kB)  build/static/js/7409.fa581eef.js
+  12.91 kB (+569 B)    build/static/js/4265.99447cdd.js
+  12.73 kB (+559 B)    build/static/js/9185.a25150a6.js
+  12.29 kB (+615 B)    build/static/js/vendors-charts~fc70f967.6261bc4b.chunk.js
+  12.27 kB (+462 B)    build/static/js/vendors-charts~b08eb7a4.263c4e34.chunk.js
+  11.82 kB (+165 B)    build/static/js/5719.f5074938.chunk.js
+  11.47 kB (+1.03 kB)  build/static/js/utils~059be3de.d11d9750.chunk.js
+  11.27 kB (+581 B)    build/static/js/2848.e89a8e9e.js
+  10.51 kB (+173 B)    build/static/js/page-options-db.56f0cf8f.chunk.js
+  9.55 kB (+470 B)     build/static/js/781.a26a2e10.js
+  9.47 kB (+103 B)     build/static/js/7488.7cf785b5.js
+  9.33 kB (+167 B)     build/static/js/page-rule-engine.041fcf41.chunk.js
+  9.22 kB (+66 B)      build/static/js/page-import-database.603a4a52.chunk.js
+  8.64 kB (+463 B)     build/static/js/6495.f2ff17c0.js
+  8.44 kB              build/static/css/main.4c6ff245.css
+  8.35 kB (+127 B)     build/static/js/page-pl-dashboard.27c1f8dc.chunk.js
+  8.16 kB (+824 B)     build/static/js/9372.b34f45fd.chunk.js
+  8 kB (+221 B)        build/static/js/2994.5a36fe5a.js
+  7.62 kB (+264 B)     build/static/js/8926.43bd982f.js
+  7.53 kB (+375 B)     build/static/js/6484.f7007430.js
+  7.52 kB (+302 B)     build/static/js/utils~ab957e66.b86643a5.chunk.js
+  7.12 kB (+82 B)      build/static/js/5766.87a05424.chunk.js
+  6.68 kB (+495 B)     build/static/js/4465.2f5cbb9e.js
+  6.61 kB (+407 B)     build/static/js/1019.04b3c95e.js
+  6.38 kB (+102 B)     build/static/js/page-interactive-analytics.6978fefa.chunk.js
+  5.34 kB (+64 B)      build/static/js/page-settings.4f28ea9e.chunk.js
+  5.21 kB (+145 B)     build/static/js/6325.d534d0cd.js
+  4.37 kB (+347 B)     build/static/js/2354.ed837be9.js
+  4.04 kB (+28 B)      build/static/js/4951.c6ba1add.chunk.js
+  3.59 kB (+58 B)      build/static/js/page-strategy-visualizer.788bd486.chunk.js
+  3.5 kB (+44 B)       build/static/js/page-position-sizing.e3152096.chunk.js
+  3.37 kB              build/static/css/304.535de1d7.css
+  3.33 kB (-821 B)     build/static/js/react~e5bca7e4.2a6b732b.js
+  2.78 kB (+195 B)     build/static/js/537.e1425348.chunk.js
+  2.77 kB (+256 B)     build/static/js/icons~efdee510.34beec04.chunk.js
+  2.65 kB (+22 B)      build/static/js/2488.fed3526b.chunk.js
+  2.55 kB (+57 B)      build/static/js/page-import-direct.a8497b91.chunk.js
+  1.65 kB (+29 B)      build/static/js/page-home.35e2ad66.chunk.js
+  455 B (+13 B)        build/static/js/icons~75dae332.9ec0e4ad.chunk.js
+  353 B                build/static/css/page-unified-dashboard.62388393.chunk.css
+
+The bundle size is significantly larger than recommended.
+Consider reducing it with code splitting: https://goo.gl/9VhYWB
+You can also analyze the project dependencies: https://goo.gl/LeUzfb
+
+The project was built assuming it is hosted at /.
+You can control this with the homepage field in your package.json.
+
+The build folder is ready to be deployed.
+You may serve it with a static server:
+
+  npm install -g serve
+  serve -s build
+
+Find out more about deployment here:
+
+  https://cra.link/deployment
+

@@ -1,0 +1,575 @@
+﻿Statement,Header,Field Name,Field Value
+Statement,Data,BrokerName,Interactive Brokers LLC
+Statement,Data,BrokerAddress,"Two Pickwick Plaza, Greenwich, CT 06830"
+Statement,Data,Title,Activity Statement
+Statement,Data,Period,"February 18, 2025 - May 19, 2025"
+Statement,Data,WhenGenerated,"2025-05-20, 01:33:25 EDT"
+Disclaimer,Header,Field Name,Field Value
+Disclaimer,Data,Disclaimer,"This combined statement of your securities and/or commodities accounts at Interactive Brokers LLC (“IB”) and your digital asset (cryptocurrency) account at Paxos Trust Company (“Paxos”) is being provided solely for your convenience and may include assets that may not be held by Interactive Brokers LLC. This summary statement does not replace any other statement(s) you may receive from other financial institutions that hold your assets. IB is not party to any transactions in digital assets, and does not custody digital assets on your behalf.  Paxos is your counterparty to any transactions in digital assets, and any positions in digital assets are custodied solely with Paxos and held in an account in your name outside of IB.  Paxos is a New York Limited Trust Company and is regulated by the New York State Department of Financial Services. Although IB is a member of SIPC, digital assets held with Paxos are not protected by SIPC. For your convenience, IB provides consolidated trade confirmations and account statements for the activity in your Paxos account and your IB brokerage account.  Positions held at, and activity occurring in, your Paxos account can be identified in each section under the heading “Assets Held at Paxos”, “Trades Executed at Paxos”, or in line items labeled “at Paxos”. None of the other information or footnotes in this document apply in any way to the digital asset portions of this document.  Please review the “Paxos Exchange Terms and Conditions”, the “Supplement to Interactive Brokers LLC Client Agreement in Connection with Trading Digital Assets with Paxos Trust Company Through IB's Platform” and the “Disclosure of Risks of Trading Digital Assets” for additional information."
+Account Information,Header,Field Name,Field Value
+Account Information,Data,Name,Arrington Copeland
+Account Information,Data,Account,U5922405 (Custom Consolidated)
+Account Information,Data,Accounts Included,"U5922405, U5922405-P (Paxos: 7e225005-0fba-4b90-8b78-3606083e6ba4)"
+Account Information,Data,Account Type,Individual
+Account Information,Data,Customer Type,Individual
+Account Information,Data,Account Capabilities,Cash
+Account Information,Data,Base Currency,USD
+Net Asset Value,Header,Asset Class,Prior Total,Current Long,Current Short,Current Total,Change
+Net Asset Value,Data,Cash ,5.6754,6094.244778,0,6094.244778,6088.569378
+Net Asset Value,Data,Total,5.6754,6094.244778,0,6094.244778,6088.569378
+Net Asset Value,Header,Time Weighted Rate of Return
+Net Asset Value,Data,26.574667626%
+Change in Combined NAV,Header,Field Name,Field Value
+Change in NAV,Data,Starting Value,5.6754
+Change in NAV,Data,Mark-to-Market,1167.999916
+Change in NAV,Data,Deposits & Withdrawals,5062
+Change in NAV,Data,Other Fees,-2.75
+Change in NAV,Data,Commissions,-138.680622
+Change in NAV,Data,Ending Value,6094.244778
+Mark-to-Market Performance Summary,Header,Asset Category,Symbol,Prior Quantity,Current Quantity,Prior Price,Current Price,Mark-to-Market P/L Position,Mark-to-Market P/L Transaction,Mark-to-Market P/L Commissions,Mark-to-Market P/L Other,Mark-to-Market P/L Total,Code
+Mark-to-Market Performance Summary,Data,Equity and Index Options,AAPL 28MAR25 222.5 C,0,0,--,--,0,122,-4.2421324,0,117.7578676,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,AAPL 04APR25 222.5 C,0,0,--,--,0,227,-6.3178842,0,220.6821158,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,AAPL 11APR25 190 C,0,0,--,--,0,57,-2.125072,0,54.874928,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,AAPL 17APR25 200 P,0,0,--,--,0,66,-2.1264898,0,63.8735102,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,AAPL 02MAY25 200 P,0,0,--,--,-107,39,-2.1199082,0,-70.1199082,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,AMZN 16MAY25 205 C,0,0,--,--,-106.72,-22.28,-2.11869,0,-131.11869,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,NFLX 25APR25 900 P,0,0,--,--,0,101,-2.118825,0,98.881175,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,NFLX 09MAY25 1185 C,0,0,--,--,0,46,-2.1228044,0,43.8771956,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,NFLX 16MAY25 1200 C,0,0,--,--,0,71,-2.11869,0,68.88131,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 12MAR25 560 P,0,0,--,--,399.79,-264.79,-2.5144578,0,132.4855422,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 19MAR25 569 C,0,0,--,--,-47.5,287.5,-3.352188,0,236.647812,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 21MAR25 560 P,0,0,--,--,-49.5,223.5,-2.4541242,0,171.5458758,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 24MAR25 566 C,0,0,--,--,654.17,-262.17,-2.5906294,0,389.4093706,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 28MAR25 563 P,0,0,--,--,-31,106,-2.1020114,0,72.8979886,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 31MAR25 570 C,0,0,--,--,-12.5,-69.5,-1.15665,0,-83.15665,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 02APR25 546 P,0,0,--,--,0,90,-3.7125864,0,86.2874136,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 02APR25 560 P,0,0,--,--,0,58,-1.9309874,0,56.0690126,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 04APR25 532 P,0,0,--,--,0,48,-1.9312098,0,46.0687902,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 07APR25 530 C,0,0,--,--,-89.5,208.5,-2.625489,0,116.374511,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 07APR25 544 C,0,0,--,--,0,-38,-2.118541,0,-40.118541,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 08APR25 440 P,0,0,--,--,-21.83,-102.17,-1.05725,0,-125.05725,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 09APR25 540 C,0,0,--,--,854.08,-981.08,-2.5673178,0,-129.5673178,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 10APR25 523 C,0,0,--,--,0,1,-2.1214044,0,-1.1214044,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 11APR25 500 P,0,0,--,--,0,68,-2.122155,0,65.877845,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 11APR25 518 C,0,0,--,--,0,239,-2.1332472,0,236.8667528,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 11APR25 543 C,0,0,--,--,-95,4,-1.05725,0,-92.05725,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 15APR25 528 P,0,0,--,--,0,48,-1.9341546,0,46.0658454,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 16APR25 530 P,0,0,--,--,0,61,-2.4917658,0,58.5082342,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 16APR25 545 C,0,0,--,--,-145.049084,-165.950916,-4.1852472,0,-315.1852472,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 17APR25 520 P,0,0,--,--,0,28,-3.872086,0,24.127914,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 17APR25 527 P,0,0,--,--,0,28,-1.629514,0,26.370486,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 21APR25 508 P,0,0,--,--,0,28,-2.3800978,0,25.6199022,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 21APR25 520 P,0,0,--,--,425.5,-371.5,-2.0833504,0,51.9166496,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 23APR25 516 P,0,0,--,--,0,82,-2.4528778,0,79.5471222,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 24APR25 530 P,0,0,--,--,-191,-123,-2.4245,0,-316.4245,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 24APR25 535 P,0,0,--,--,0,-63,-1.15725,0,-64.15725,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 28APR25 558 C,0,0,--,--,-93,-89,-1.3945,0,-183.3945,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 29APR25 555 C,0,0,--,--,-108.5,59.5,-2.428402,0,-51.428402,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 29APR25 565 C,0,0,--,--,-16.5,-22.5,-1.55175,0,-40.55175,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 29APR25 570 C,0,0,--,--,-32.5,-19.5,-6.41425,0,-58.41425,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 02MAY25 552 P,0,0,--,--,0,64,-2.6141666,0,61.3858334,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 05MAY25 558 P,0,0,--,--,0,-12,-2.5226098,0,-14.5226098,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 05MAY25 560 P,0,0,--,--,-77.5,73.5,-2.0307194,0,-6.0307194,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 06MAY25 560 P,0,0,--,--,0,-107,-4.3519114,0,-111.3519114,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 07MAY25 564 C,0,0,--,--,0,73,-2.4338886,0,70.5661114,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 08MAY25 553 P,0,0,--,--,-53,-51,-4.0331346,0,-108.0331346,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 08MAY25 560 P,0,0,--,--,0,49,-1.7647762,0,47.2352238,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 08MAY25 570 C,0,0,--,--,0,5,-2.5722186,0,2.4277814,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 08MAY25 571 C,0,0,--,--,0,-65,-1.50795,0,-66.50795,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 09MAY25 560 P,0,0,--,--,0,137,-4.3858074,0,132.6141926,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 09MAY25 570 C,0,0,--,--,-72.5,-47.5,-3.186364,0,-123.186364,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 19MAY25 591 C,0,0,--,--,0,115,-1.62869,0,113.37131,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 20MAY25 595 C,0,0,--,--,0,41,-2.25869,0,38.74131,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,SPY 20MAY25 596 C,0,0,--,--,0,88,-1.90869,0,86.09131,
+Mark-to-Market Performance Summary,Data,Equity and Index Options,TSLA 17APR25 235 P,0,0,--,--,0,19,-2.123265,0,16.876735,
+Mark-to-Market Performance Summary,Data,Total,,,,,,983.440916,184.559084,-138.680622,0,1029.319378,
+Mark-to-Market Performance Summary,Data,Forex,USD,5.6754,6094.244778,1.0000,1.0000,0,0,0,0,0,
+Mark-to-Market Performance Summary,Data,Total,,,,,,0,0,0,0,0,
+Mark-to-Market Performance Summary,Data,Total (All Assets),,,,,,983.440916,184.559084,-138.680622,0,1029.319378,
+Mark-to-Market Performance Summary,Data,Other Fees,,,,,,,,,,-2.75,
+Total P/L for Statement Period,,,,,,,,,,,,1026.569378,
+Realized & Unrealized Performance Summary,Header,Asset Category,Symbol,Cost Adj.,Realized S/T Profit,Realized S/T Loss,Realized L/T Profit,Realized L/T Loss,Realized Total,Unrealized S/T Profit,Unrealized S/T Loss,Unrealized L/T Profit,Unrealized L/T Loss,Unrealized Total,Total,Code
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,AAPL 28MAR25 222.5 C,0,117.7578676,0,0,0,117.7578676,0,0,0,0,0,117.7578676,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,AAPL 04APR25 222.5 C,0,220.6821158,0,0,0,220.6821158,0,0,0,0,0,220.6821158,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,AAPL 11APR25 190 C,0,54.874928,0,0,0,54.874928,0,0,0,0,0,54.874928,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,AAPL 17APR25 200 P,0,63.8735102,0,0,0,63.8735102,0,0,0,0,0,63.8735102,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,AAPL 02MAY25 200 P,0,0,-70.1199082,0,0,-70.1199082,0,0,0,0,0,-70.1199082,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,AMZN 16MAY25 205 C,0,0,-131.11869,0,0,-131.11869,0,0,0,0,0,-131.11869,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,NFLX 25APR25 900 P,0,98.881175,0,0,0,98.881175,0,0,0,0,0,98.881175,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,NFLX 09MAY25 1185 C,0,43.8771956,0,0,0,43.8771956,0,0,0,0,0,43.8771956,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,NFLX 16MAY25 1200 C,0,68.88131,0,0,0,68.88131,0,0,0,0,0,68.88131,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 12MAR25 560 P,0,132.4855422,0,0,0,132.4855422,0,0,0,0,0,132.4855422,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 19MAR25 569 C,0,236.647812,0,0,0,236.647812,0,0,0,0,0,236.647812,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 21MAR25 560 P,0,171.5458758,0,0,0,171.5458758,0,0,0,0,0,171.5458758,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 24MAR25 566 C,0,389.4093706,0,0,0,389.4093706,0,0,0,0,0,389.4093706,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 28MAR25 563 P,0,72.8979886,0,0,0,72.8979886,0,0,0,0,0,72.8979886,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 31MAR25 570 C,0,0,-83.15665,0,0,-83.15665,0,0,0,0,0,-83.15665,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 02APR25 546 P,0,86.2874136,0,0,0,86.2874136,0,0,0,0,0,86.2874136,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 02APR25 560 P,0,56.0690126,0,0,0,56.0690126,0,0,0,0,0,56.0690126,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 04APR25 532 P,0,46.0687902,0,0,0,46.0687902,0,0,0,0,0,46.0687902,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 07APR25 530 C,0,116.374511,0,0,0,116.374511,0,0,0,0,0,116.374511,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 07APR25 544 C,0,0,-40.118541,0,0,-40.118541,0,0,0,0,0,-40.118541,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 08APR25 440 P,0,0,-125.05725,0,0,-125.05725,0,0,0,0,0,-125.05725,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 09APR25 540 C,0,0,-129.5673178,0,0,-129.5673178,0,0,0,0,0,-129.5673178,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 10APR25 523 C,0,0,-1.1214044,0,0,-1.1214044,0,0,0,0,0,-1.1214044,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 11APR25 500 P,0,65.877845,0,0,0,65.877845,0,0,0,0,0,65.877845,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 11APR25 518 C,0,236.8667528,0,0,0,236.8667528,0,0,0,0,0,236.8667528,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 11APR25 543 C,0,0,-92.05725,0,0,-92.05725,0,0,0,0,0,-92.05725,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 15APR25 528 P,0,46.0658454,0,0,0,46.0658454,0,0,0,0,0,46.0658454,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 16APR25 530 P,0,58.5082342,0,0,0,58.5082342,0,0,0,0,0,58.5082342,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 16APR25 545 C,0,0,-315.1852472,0,0,-315.1852472,0,0,0,0,0,-315.1852472,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 17APR25 520 P,0,24.127914,0,0,0,24.127914,0,0,0,0,0,24.127914,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 17APR25 527 P,0,26.370486,0,0,0,26.370486,0,0,0,0,0,26.370486,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 21APR25 508 P,0,25.6199022,0,0,0,25.6199022,0,0,0,0,0,25.6199022,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 21APR25 520 P,0,51.9166496,0,0,0,51.9166496,0,0,0,0,0,51.9166496,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 23APR25 516 P,0,79.5471222,0,0,0,79.5471222,0,0,0,0,0,79.5471222,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 24APR25 530 P,0,0,-316.4245,0,0,-316.4245,0,0,0,0,0,-316.4245,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 24APR25 535 P,0,0,-64.15725,0,0,-64.15725,0,0,0,0,0,-64.15725,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 28APR25 558 C,0,0,-183.3945,0,0,-183.3945,0,0,0,0,0,-183.3945,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 29APR25 555 C,0,0,-51.428402,0,0,-51.428402,0,0,0,0,0,-51.428402,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 29APR25 565 C,0,0,-40.55175,0,0,-40.55175,0,0,0,0,0,-40.55175,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 29APR25 570 C,0,0,-58.41425,0,0,-58.41425,0,0,0,0,0,-58.41425,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 02MAY25 552 P,0,61.3858334,0,0,0,61.3858334,0,0,0,0,0,61.3858334,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 05MAY25 558 P,0,0,-14.5226098,0,0,-14.5226098,0,0,0,0,0,-14.5226098,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 05MAY25 560 P,0,0,-6.0307194,0,0,-6.0307194,0,0,0,0,0,-6.0307194,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 06MAY25 560 P,0,0,-111.3519114,0,0,-111.3519114,0,0,0,0,0,-111.3519114,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 07MAY25 564 C,0,70.5661114,0,0,0,70.5661114,0,0,0,0,0,70.5661114,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 08MAY25 553 P,0,22.8759724,-130.909107,0,0,-108.0331346,0,0,0,0,0,-108.0331346,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 08MAY25 560 P,0,47.2352238,0,0,0,47.2352238,0,0,0,0,0,47.2352238,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 08MAY25 570 C,0,2.4277814,0,0,0,2.4277814,0,0,0,0,0,2.4277814,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 08MAY25 571 C,0,0,-66.50795,0,0,-66.50795,0,0,0,0,0,-66.50795,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 09MAY25 560 P,0,132.6141926,0,0,0,132.6141926,0,0,0,0,0,132.6141926,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 09MAY25 570 C,0,0,-123.186364,0,0,-123.186364,0,0,0,0,0,-123.186364,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 19MAY25 591 C,0,113.37131,0,0,0,113.37131,0,0,0,0,0,113.37131,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 20MAY25 595 C,0,38.74131,0,0,0,38.74131,0,0,0,0,0,38.74131,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,SPY 20MAY25 596 C,0,86.09131,0,0,0,86.09131,0,0,0,0,0,86.09131,
+Realized & Unrealized Performance Summary,Data,Equity and Index Options,TSLA 17APR25 235 P,0,16.876735,0,0,0,16.876735,0,0,0,0,0,16.876735,
+Realized & Unrealized Performance Summary,Data,Total,,0,3183.7009502,-2154.3815722,0,0,1029.319378,0,0,0,0,0,1029.319378,
+Realized & Unrealized Performance Summary,Data,Total (All Assets),,0,3183.7009502,-2154.3815722,0,0,1029.319378,0,0,0,0,0,1029.319378,
+Notes,This statement uses wash sales P/L for realized and unrealized P/L calculations.
+Month & Year to Date Performance Summary,Header,Asset Category,Symbol,Description,Mark-to-Market MTD,Mark-to-Market YTD,Realized S/T MTD,Realized S/T YTD,Realized L/T MTD,Realized L/T YTD
+Month & Year to Date Performance Summary,Data,Equity and Index Options,AAPL  250328C00222500,AAPL 28MAR25 222.5 C,0,117.7578676,0,117.7578676,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,AAPL  250404C00222500,AAPL 04APR25 222.5 C,0,220.6821158,0,220.6821158,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,AAPL  250411C00190000,AAPL 11APR25 190 C,0,54.874928,0,54.874928,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,AAPL  250417P00200000,AAPL 17APR25 200 P,0,63.8735102,0,63.8735102,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,AAPL  250502P00200000,AAPL 02MAY25 200 P,-39.0626582,-70.1199082,-70.1199082,-70.1199082,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,AMZN  250516C00205000,AMZN 16MAY25 205 C,-131.11869,-131.11869,-131.11869,-131.11869,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,NFLX  250425P00900000,NFLX 25APR25 900 P,0,98.881175,0,98.881175,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,NFLX  250509C01185000,NFLX 09MAY25 1185 C,43.8771956,43.8771956,43.8771956,43.8771956,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,NFLX  250516C01200000,NFLX 16MAY25 1200 C,68.88131,68.88131,68.88131,68.88131,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250312P00560000,SPY 12MAR25 560 P,0,132.4855422,0,132.4855422,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250319C00569000,SPY 19MAR25 569 C,0,236.647812,0,236.647812,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250321P00560000,SPY 21MAR25 560 P,0,171.5458758,0,171.5458758,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250324C00566000,SPY 24MAR25 566 C,0,389.4093706,0,389.4093706,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250328P00563000,SPY 28MAR25 563 P,0,72.8979886,0,72.8979886,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250331C00570000,SPY 31MAR25 570 C,0,-83.15665,0,-83.15665,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250402P00546000,SPY 02APR25 546 P,0,86.2874136,0,86.2874136,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250402P00560000,SPY 02APR25 560 P,0,56.0690126,0,56.0690126,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250404P00532000,SPY 04APR25 532 P,0,46.0687902,0,46.0687902,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250407C00530000,SPY 07APR25 530 C,0,116.374511,0,116.374511,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250407C00544000,SPY 07APR25 544 C,0,-40.118541,0,-40.118541,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250408P00440000,SPY 08APR25 440 P,0,-125.05725,0,-125.05725,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250409C00540000,SPY 09APR25 540 C,0,-129.5673178,0,-129.5673178,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250410C00523000,SPY 10APR25 523 C,0,-1.1214044,0,-1.1214044,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250411P00500000,SPY 11APR25 500 P,0,65.877845,0,65.877845,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250411C00518000,SPY 11APR25 518 C,0,236.8667528,0,236.8667528,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250411C00543000,SPY 11APR25 543 C,0,-92.05725,0,-92.05725,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250415P00528000,SPY 15APR25 528 P,0,46.0658454,0,46.0658454,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250416P00530000,SPY 16APR25 530 P,0,58.5082342,0,58.5082342,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250416C00545000,SPY 16APR25 545 C,0,-315.1852472,0,-315.1852472,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250417P00520000,SPY 17APR25 520 P,0,24.127914,0,24.127914,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250417P00527000,SPY 17APR25 527 P,0,26.370486,0,26.370486,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250421P00508000,SPY 21APR25 508 P,0,25.6199022,0,25.6199022,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250421P00520000,SPY 21APR25 520 P,0,51.9166496,0,51.9166496,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250423P00516000,SPY 23APR25 516 P,0,79.5471222,0,79.5471222,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250424P00530000,SPY 24APR25 530 P,0,-316.4245,0,-316.4245,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250424P00535000,SPY 24APR25 535 P,0,-64.15725,0,-64.15725,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250428C00558000,SPY 28APR25 558 C,0,-183.3945,0,-183.3945,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250429C00555000,SPY 29APR25 555 C,0,-51.428402,0,-51.428402,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250429C00565000,SPY 29APR25 565 C,0,-40.55175,0,-40.55175,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250429C00570000,SPY 29APR25 570 C,0,-58.41425,0,-58.41425,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250502P00552000,SPY 02MAY25 552 P,61.3858334,61.3858334,61.3858334,61.3858334,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250505P00558000,SPY 05MAY25 558 P,-14.5226098,-14.5226098,-14.5226098,-14.5226098,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250505P00560000,SPY 05MAY25 560 P,-6.0307194,-6.0307194,-6.0307194,-6.0307194,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250506P00560000,SPY 06MAY25 560 P,-111.3519114,-111.3519114,-111.3519114,-111.3519114,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250507C00564000,SPY 07MAY25 564 C,70.5661114,70.5661114,70.5661114,70.5661114,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250508P00553000,SPY 08MAY25 553 P,-108.0331346,-108.0331346,-108.0331346,-108.0331346,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250508P00560000,SPY 08MAY25 560 P,47.2352238,47.2352238,47.2352238,47.2352238,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250508C00570000,SPY 08MAY25 570 C,2.4277814,2.4277814,2.4277814,2.4277814,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250508C00571000,SPY 08MAY25 571 C,-66.50795,-66.50795,-66.50795,-66.50795,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250509P00560000,SPY 09MAY25 560 P,132.6141926,132.6141926,132.6141926,132.6141926,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250509C00570000,SPY 09MAY25 570 C,-123.186364,-123.186364,-123.186364,-123.186364,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250519C00591000,SPY 19MAY25 591 C,113.37131,113.37131,113.37131,113.37131,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250520C00595000,SPY 20MAY25 595 C,38.74131,38.74131,38.74131,38.74131,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,SPY   250520C00596000,SPY 20MAY25 596 C,86.09131,86.09131,86.09131,86.09131,0,0
+Month & Year to Date Performance Summary,Data,Equity and Index Options,TSLA  250417P00235000,TSLA 17APR25 235 P,0,16.876735,0,16.876735,0,0
+Month & Year to Date Performance Summary,Data,Total,,,65.3775408,1029.319378,34.3202908,1029.319378,0,0
+Month & Year to Date Performance Summary,Data,Total (All Assets),,,65.3775408,1029.319378,34.3202908,1029.319378,0,0
+Cash Report,Header,Currency Summary,Currency,Total,Securities,Futures,Paxos,Month to Date,Year to Date,
+Cash Report,Data,Starting Cash,Base Currency Summary,5.6754,5.3754,0.3,0,,,
+Cash Report,Data,Commissions,Base Currency Summary,-138.680622,-138.680622,0,0,-44.6224592,-138.680622,
+Cash Report,Data,Deposits,Base Currency Summary,5062,5062,0,0,0,5062,
+Cash Report,Data,Trades (Sales),Base Currency Summary,9662,9662,0,0,2886,9662,
+Cash Report,Data,Trades (Purchase),Base Currency Summary,-8494,-8494,0,0,-2669,-8494,
+Cash Report,Data,Other Fees,Base Currency Summary,-2.75,-2.75,0,0,0,-2.75,
+Cash Report,Data,Ending Cash,Base Currency Summary,6094.244778,6093.944778,0.3,0,,,
+Cash Report,Data,Ending Settled Cash,Base Currency Summary,5965.244778,5964.944778,0.3,0,,,
+Trades,Header,DataDiscriminator,Asset Category,Currency,Account,Symbol,Date/Time,Quantity,T. Price,C. Price,Proceeds,Comm/Fee,Basis,Realized P/L,MTM P/L,Code
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AAPL 28MAR25 222.5 C,"2025-03-27, 10:30:15",1,1.22,2.0966,-122,-1.05665,123.05665,0,87.66,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AAPL 28MAR25 222.5 C,"2025-03-27, 12:43:04",-1,2.23,2.0966,223,-1.0656394,-123.05665,98.877711,13.34,C
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AAPL 28MAR25 222.5 C,"2025-03-28, 09:42:35",1,1.14,0,-114,-1.05665,115.05665,0,-114,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AAPL 28MAR25 222.5 C,"2025-03-28, 09:52:53",-1,1.35,0,135,-1.063193,-115.05665,18.880157,135,C
+Trades,SubTotal,,Equity and Index Options,USD,AAPL 28MAR25 222.5 C,,,0,,,122,-4.2421324,0,117.757868,122,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AAPL 04APR25 222.5 C,"2025-03-31, 09:34:17",1,1.54,3.15,-154,-0.99665,154.99665,0,161,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AAPL 04APR25 222.5 C,"2025-03-31, 15:18:10",-1,2.74,3.15,274,-1.0695572,-154.99665,117.933793,-41,C
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AAPL 04APR25 222.5 C,"2025-04-02, 09:33:41",1,2.52,3.451,-252,-1.05725,253.05725,0,93.1,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AAPL 04APR25 222.5 C,"2025-04-02, 09:33:57",1,2.56,3.451,-256,-1.05725,257.05725,0,89.1,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AAPL 04APR25 222.5 C,"2025-04-02, 09:43:16",-1,2.87,3.451,287,-1.0680186,-253.05725,32.874731,-58.1,C
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AAPL 04APR25 222.5 C,"2025-04-02, 10:04:02",-1,3.28,3.451,328,-1.0691584,-257.05725,69.873592,-17.1,C
+Trades,SubTotal,,Equity and Index Options,USD,AAPL 04APR25 222.5 C,,,0,,,227,-6.3178842,0,220.682116,227,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AAPL 11APR25 190 C,"2025-04-09, 09:37:35",1,1.33,11.1439,-133,-1.05725,134.05725,0,981.39,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AAPL 11APR25 190 C,"2025-04-09, 13:10:51",-1,1.9,11.1439,190,-1.067822,-134.05725,54.874928,-924.39,C
+Trades,SubTotal,,Equity and Index Options,USD,AAPL 11APR25 190 C,,,0,,,57,-2.125072,0,54.874928,57,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AAPL 17APR25 200 P,"2025-04-14, 09:31:55",1,1.75,3.2672,-175,-1.05725,176.05725,0,151.72,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AAPL 17APR25 200 P,"2025-04-14, 09:53:36",-1,2.41,3.2672,241,-1.0692398,-176.05725,63.87351,-85.72,C
+Trades,SubTotal,,Equity and Index Options,USD,AAPL 17APR25 200 P,,,0,,,66,-2.1264898,0,63.87351,66,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AAPL 02MAY25 200 P,"2025-04-30, 11:15:12",1,1.37,1.07,-137,-1.05725,138.05725,0,-30,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AAPL 02MAY25 200 P,"2025-05-02, 09:32:34",-1,0.69,0,69,-1.0626582,-138.05725,-70.119908,69,C
+Trades,SubTotal,,Equity and Index Options,USD,AAPL 02MAY25 200 P,,,0,,,-68,-2.1199082,0,-70.119908,39,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AMZN 16MAY25 205 C,"2025-05-15, 11:40:06",1,1.84,1.6572,-184,-1.05795,185.05795,0,-18.28,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,AMZN 16MAY25 205 C,"2025-05-16, 13:10:16",-1,0.55,0.59,55,-1.06074,-185.05795,-131.11869,-4,C
+Trades,SubTotal,,Equity and Index Options,USD,AMZN 16MAY25 205 C,,,0,,,-129,-2.11869,0,-131.11869,-22.28,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,NFLX 25APR25 900 P,"2025-04-21, 09:55:39",1,2.24,2.05,-224,-1.04725,225.04725,0,-19,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,NFLX 25APR25 900 P,"2025-04-21, 10:08:13",-1,3.25,2.05,325,-1.071575,-225.04725,98.881175,120,C
+Trades,SubTotal,,Equity and Index Options,USD,NFLX 25APR25 900 P,,,0,,,101,-2.118825,0,98.881175,101,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,NFLX 09MAY25 1185 C,"2025-05-08, 11:07:01",1,1.02,0.5381,-102,-1.05795,103.05795,0,-48.19,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,NFLX 09MAY25 1185 C,"2025-05-08, 11:27:47",-1,1.48,0.5381,148,-1.0648544,-103.05795,43.877196,94.19,C
+Trades,SubTotal,,Equity and Index Options,USD,NFLX 09MAY25 1185 C,,,0,,,46,-2.1228044,0,43.877196,46,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,NFLX 16MAY25 1200 C,"2025-05-15, 09:41:49",1,1.65,1.935,-165,-1.05795,166.05795,0,28.5,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,NFLX 16MAY25 1200 C,"2025-05-15, 11:16:04",-1,2.36,1.935,236,-1.06074,-166.05795,68.88131,42.5,C
+Trades,SubTotal,,Equity and Index Options,USD,NFLX 16MAY25 1200 C,,,0,,,71,-2.11869,0,68.88131,71,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 12MAR25 560 P,"2025-03-07, 14:02:00",1,1.66,1.34,-166,-1.44665,167.44665,0,-32,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 12MAR25 560 P,"2025-03-10, 09:31:25",-1,3.01,5.3379,301,-1.0678078,-167.44665,132.485542,-232.79,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 12MAR25 560 P,,,0,,,135,-2.5144578,0,132.485542,-264.79,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 19MAR25 569 C,"2025-03-18, 11:29:32",1,0.8,0.475,-80,-1.05665,81.05665,0,-32.5,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 19MAR25 569 C,"2025-03-19, 11:20:56",1,0.4,0,-40,-0.86665,40.86665,0,-40,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 19MAR25 569 C,"2025-03-19, 15:09:26",-2,1.8,0,360,-1.428888,-121.9233,236.647812,360,C;P
+Trades,SubTotal,,Equity and Index Options,USD,SPY 19MAR25 569 C,,,0,,,240,-3.352188,0,236.647812,287.5,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 21MAR25 560 P,"2025-03-19, 15:18:47",1,1.15,1.69,-115,-1.05665,116.05665,0,54,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 21MAR25 560 P,"2025-03-20, 09:31:49",-1,2.89,1.195,289,-1.3974742,-116.05665,171.545876,169.5,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 21MAR25 560 P,,,0,,,174,-2.4541242,0,171.545876,223.5,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 24MAR25 566 C,"2025-03-21, 09:42:47",1,1.31,1.5383,-131,-1.05665,132.05665,0,22.83,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 24MAR25 566 C,"2025-03-24, 09:30:00",-1,5.23,8.08,523,-1.5339794,-132.05665,389.409371,-285,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 24MAR25 566 C,,,0,,,392,-2.5906294,0,389.409371,-262.17,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 28MAR25 563 P,"2025-03-26, 14:29:10",1,1.38,1.27,-138,-1.03665,139.03665,0,-11,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 28MAR25 563 P,"2025-03-27, 09:44:10",-1,2.13,0.96,213,-1.0653614,-139.03665,72.897989,117,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 28MAR25 563 P,,,0,,,75,-2.1020114,0,72.897989,106,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 31MAR25 570 C,"2025-03-28, 10:24:45",1,0.82,0.125,-82,-1.15665,83.15665,0,-69.5,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 31MAR25 570 C,"2025-03-31, 16:20:00",-1,0,0,0,0,-83.15665,-83.15665,0,C;Ep
+Trades,SubTotal,,Equity and Index Options,USD,SPY 31MAR25 570 C,,,0,,,-82,-1.15665,0,-83.15665,-69.5,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 02APR25 546 P,"2025-04-01, 09:51:13",2,0.99,0.285,-198,-1.0345,199.0345,0,-141,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 02APR25 546 P,"2025-04-01, 10:06:28",-1,1.3,0.285,130,-1.163654,-99.51725,29.319096,101.5,C
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 02APR25 546 P,"2025-04-01, 10:10:25",-1,1.58,0.285,158,-1.5144324,-99.51725,56.968318,129.5,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 02APR25 546 P,,,0,,,90,-3.7125864,0,86.287414,90,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 02APR25 560 P,"2025-04-02, 13:33:26",1,0.75,0,-75,-0.86725,75.86725,0,-75,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 02APR25 560 P,"2025-04-02, 14:20:16",-1,1.33,0,133,-1.0637374,-75.86725,56.069013,133,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 02APR25 560 P,,,0,,,58,-1.9309874,0,56.069013,58,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 04APR25 532 P,"2025-04-03, 12:37:45",1,0.93,2.19,-93,-0.86725,93.86725,0,126,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 04APR25 532 P,"2025-04-03, 14:15:30",-1,1.41,2.19,141,-1.0639598,-93.86725,46.06879,-78,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 04APR25 532 P,,,0,,,48,-1.9312098,0,46.06879,48,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 07APR25 530 C,"2025-04-04, 16:11:26",1,0.86,0.895,-86,-1.55725,87.55725,0,3.5,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 07APR25 530 C,"2025-04-07, 10:14:33",-1,2.05,0,205,-1.068239,-87.55725,116.374511,205,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 07APR25 530 C,,,0,,,119,-2.625489,0,116.374511,208.5,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 07APR25 544 C,"2025-04-04, 09:41:05",1,0.83,0.1199,-83,-1.05725,84.05725,0,-71.01,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 07APR25 544 C,"2025-04-04, 10:45:12",-1,0.45,0.1199,45,-1.061291,-84.05725,-40.118541,33.01,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 07APR25 544 C,,,0,,,-38,-2.118541,0,-40.118541,-38,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 08APR25 440 P,"2025-04-07, 11:34:37",1,1.24,0.2183,-124,-1.05725,125.05725,0,-102.17,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 08APR25 440 P,"2025-04-08, 16:20:00",-1,0,0,0,0,-125.05725,-125.05725,0,C;Ep
+Trades,SubTotal,,Equity and Index Options,USD,SPY 08APR25 440 P,,,0,,,-124,-1.05725,0,-125.05725,-102.17,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 09APR25 540 C,"2025-04-08, 09:35:35",1,1.28,0.0792,-128,-1.05725,129.05725,0,-120.08,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 09APR25 540 C,"2025-04-09, 13:11:23",-1,0.01,8.62,1,-1.5100678,-129.05725,-129.567318,-861,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 09APR25 540 C,,,0,,,-127,-2.5673178,0,-129.567318,-981.08,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 10APR25 523 C,"2025-04-09, 12:34:43",1,1.47,26.3956,-147,-1.05725,148.05725,0,2492.56,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 10APR25 523 C,"2025-04-09, 13:10:35",-1,1.48,26.3956,148,-1.0641544,-148.05725,-1.121404,-2491.56,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 10APR25 523 C,,,0,,,1,-2.1214044,0,-1.121404,1,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 11APR25 518 C,"2025-04-07, 09:43:17",1,3.35,7.92,-335,-1.05725,336.05725,0,457,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 11APR25 518 C,"2025-04-07, 09:58:57",-1,5.74,7.92,574,-1.0759972,-336.05725,236.866753,-218,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 11APR25 518 C,,,0,,,239,-2.1332472,0,236.866753,239,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 11APR25 543 C,"2025-04-10, 12:20:53",1,0.91,0.95,-91,-1.05725,92.05725,0,4,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 11APR25 543 C,"2025-04-11, 16:20:00",-1,0,0,0,0,-92.05725,-92.05725,0,C;Ep
+Trades,SubTotal,,Equity and Index Options,USD,SPY 11APR25 543 C,,,0,,,-91,-1.05725,0,-92.05725,4,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 11APR25 500 P,"2025-04-10, 09:33:52",1,1.07,0.9741,-107,-1.05725,108.05725,0,-9.59,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 11APR25 500 P,"2025-04-10, 11:24:53",-1,1.75,0.9741,175,-1.064905,-108.05725,65.877845,77.59,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 11APR25 500 P,,,0,,,68,-2.122155,0,65.877845,68,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 15APR25 528 P,"2025-04-14, 10:58:57",1,1.09,0.925,-109,-0.86725,109.86725,0,-16.5,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 15APR25 528 P,"2025-04-14, 11:34:08",-1,1.57,0.925,157,-1.0669046,-109.86725,46.065845,64.5,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 15APR25 528 P,,,0,,,48,-1.9341546,0,46.065845,48,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 16APR25 545 C,"2025-04-15, 09:37:50",1,2.39,0.73,-239,-1.05725,240.05725,0,-166,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 16APR25 545 C,"2025-04-15, 15:01:07",1,0.96,0.73,-96,-0.86725,96.86725,0,-23,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 16APR25 545 C,"2025-04-16, 09:45:22",-1,0.15,0.004755,15,-1.390457,-240.05725,0,14.5245,C
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 16APR25 545 C,"2025-04-16, 09:53:57",-1,0.09,0.004755,9,-0.8702902,-323.314957,-315.185247,8.5245,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 16APR25 545 C,,,0,,,-311,-4.1852472,-226.447707,-315.185247,-165.951,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 16APR25 530 P,"2025-04-15, 10:14:46",1,1,1.05,-100,-1.03725,101.03725,0,5,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 16APR25 530 P,"2025-04-15, 10:20:55",-1,1.61,1.05,161,-1.4545158,-101.03725,58.508234,56,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 16APR25 530 P,,,0,,,61,-2.4917658,0,58.508234,61,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 17APR25 520 P,"2025-04-16, 09:40:31",2,1.21,2.31819,-242,-1.4145,243.4145,0,221.638,O;P
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 17APR25 520 P,"2025-04-16, 10:06:40",-1,1.37,2.31819,137,-1.3938486,-122.05725,13.548901,-94.819,C
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 17APR25 520 P,"2025-04-16, 13:32:14",-1,1.33,2.31819,133,-1.0637374,-121.35725,10.579013,-98.819,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 17APR25 520 P,,,0,,,28,-3.872086,0,24.127914,28,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 17APR25 527 P,"2025-04-17, 14:59:15",1,0.52,0.59,-52,-0.86725,52.86725,0,7,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 17APR25 527 P,"2025-04-17, 15:12:28",-1,0.8,0.59,80,-0.762264,-52.86725,26.370486,21,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 17APR25 527 P,,,0,,,28,-1.629514,0,26.370486,28,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 21APR25 508 P,"2025-04-21, 12:21:54",1,0.73,0,-73,-0.86725,73.86725,0,-73,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 21APR25 508 P,"2025-04-21, 13:13:52",-1,1.01,0,101,-1.5128478,-73.86725,25.619902,101,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 21APR25 508 P,,,0,,,28,-2.3800978,0,25.619902,28,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 21APR25 520 P,"2025-04-17, 13:16:57",1,1.64,1.865,-164,-1.03725,165.03725,0,22.5,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 21APR25 520 P,"2025-04-21, 09:30:01",-1,2.18,6.12,218,-1.0461004,-165.03725,51.91665,-394,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 21APR25 520 P,,,0,,,54,-2.0833504,0,51.91665,-371.5,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 23APR25 516 P,"2025-04-22, 11:52:46",1,1.19,0.815,-119,-1.38725,120.38725,0,-37.5,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 23APR25 516 P,"2025-04-22, 14:00:35",-1,2.01,0.815,201,-1.0656278,-120.38725,79.547122,119.5,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 23APR25 516 P,,,0,,,82,-2.4528778,0,79.547122,82,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 24APR25 530 P,"2025-04-23, 12:47:59",1,2.09,1.91,-209,-1.03725,210.03725,0,-18,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 24APR25 530 P,"2025-04-24, 09:35:08",1,1.05,0,-105,-1.38725,106.38725,0,-105,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 24APR25 530 P,"2025-04-24, 16:20:00",-2,0,0,0,0,-316.4245,-316.4245,0,C;Ep
+Trades,SubTotal,,Equity and Index Options,USD,SPY 24APR25 530 P,,,0,,,-314,-2.4245,0,-316.4245,-123,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 24APR25 535 P,"2025-04-24, 10:36:30",1,0.63,0,-63,-1.15725,64.15725,0,-63,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 24APR25 535 P,"2025-04-24, 16:20:00",-1,0,0,0,0,-64.15725,-64.15725,0,C;Ep
+Trades,SubTotal,,Equity and Index Options,USD,SPY 24APR25 535 P,,,0,,,-63,-1.15725,0,-64.15725,-63,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 28APR25 558 C,"2025-04-25, 09:36:34",2,0.91,0.465,-182,-1.3945,183.3945,0,-89,O;P
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 28APR25 558 C,"2025-04-28, 16:20:00",-2,0,0,0,0,-183.3945,-183.3945,0,C;Ep
+Trades,SubTotal,,Equity and Index Options,USD,SPY 28APR25 558 C,,,0,,,-182,-1.3945,0,-183.3945,-89,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 29APR25 555 C,"2025-04-28, 11:42:17",1,0.89,1.085,-89,-1.03725,90.03725,0,19.5,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 29APR25 555 C,"2025-04-29, 15:53:20",-1,0.4,0,40,-1.391152,-90.03725,-51.428402,40,C;L
+Trades,SubTotal,,Equity and Index Options,USD,SPY 29APR25 555 C,,,0,,,-49,-2.428402,0,-51.428402,59.5,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 29APR25 565 C,"2025-04-28, 10:39:12",3,0.13,0.055,-39,-1.55175,40.55175,0,-22.5,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 29APR25 565 C,"2025-04-29, 16:20:00",-3,0,0,0,0,-40.55175,-40.55175,0,C;Ep
+Trades,SubTotal,,Equity and Index Options,USD,SPY 29APR25 565 C,,,0,,,-39,-1.55175,0,-40.55175,-22.5,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 29APR25 570 C,"2025-04-28, 10:36:02",3,0.04,0.025,-12,-2.34175,14.34175,0,-4.5,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 29APR25 570 C,"2025-04-28, 10:38:10",10,0.04,0.025,-40,-4.0725,44.0725,0,-15,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 29APR25 570 C,"2025-04-29, 16:20:00",-13,0,0,0,0,-58.41425,-58.41425,0,C;Ep
+Trades,SubTotal,,Equity and Index Options,USD,SPY 29APR25 570 C,,,0,,,-52,-6.41425,0,-58.41425,-19.5,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 02MAY25 552 P,"2025-05-01, 10:35:06",1,1.33,1.615,-133,-1.54795,134.54795,0,28.5,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 02MAY25 552 P,"2025-05-01, 16:05:24",-1,1.97,1.615,197,-1.0662166,-134.54795,61.385833,35.5,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 02MAY25 552 P,,,0,,,64,-2.6141666,0,61.385833,64,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 05MAY25 558 P,"2025-05-02, 09:39:22",1,1.53,0.56,-153,-1.05795,154.05795,0,-97,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 05MAY25 558 P,"2025-05-02, 10:03:12",-1,1.41,0.56,141,-1.4646598,-154.05795,-14.52261,85,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 05MAY25 558 P,,,0,,,-12,-2.5226098,0,-14.52261,-12,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 05MAY25 560 P,"2025-05-02, 16:11:54",1,0.77,0.775,-77,-1.15795,78.15795,0,0.5,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 05MAY25 560 P,"2025-05-05, 09:57:39",-1,0.73,0,73,-0.8727694,-78.15795,-6.030719,73,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 05MAY25 560 P,,,0,,,-4,-2.0307194,0,-6.030719,73.5,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 06MAY25 560 P,"2025-05-05, 10:23:32",1,1.61,1.165,-161,-1.54795,162.54795,0,-44.5,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 06MAY25 560 P,"2025-05-05, 10:42:12",-1,1.23,1.165,123,-0.8741594,-162.54795,-40.422109,6.5,C
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 06MAY25 560 P,"2025-05-06, 11:53:08",1,1.09,1.2,-109,-0.86795,109.86795,40.422109,11,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 06MAY25 560 P,"2025-05-06, 15:57:57",-1,0.4,1.2,40,-1.061852,-150.290059,-111.351911,-80,C;L
+Trades,SubTotal,,Equity and Index Options,USD,SPY 06MAY25 560 P,,,0,,,-107,-4.3519114,-40.422109,-111.351911,-107,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 07MAY25 564 C,"2025-05-06, 09:56:12",1,1.14,1.035,-114,-1.38795,115.38795,0,-10.5,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 07MAY25 564 C,"2025-05-06, 10:41:19",-1,1.87,1.035,187,-1.0459386,-115.38795,70.566111,83.5,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 07MAY25 564 C,,,0,,,73,-2.4338886,0,70.566111,73,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 08MAY25 570 C,"2025-05-08, 10:43:44",1,0.32,0,-32,-1.06045,33.06045,0,-32,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 08MAY25 570 C,"2025-05-08, 11:27:55",-1,0.37,0,37,-1.5117686,-33.06045,2.427781,37,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 08MAY25 570 C,,,0,,,5,-2.5722186,0,2.427781,5,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 08MAY25 571 C,"2025-05-08, 12:13:44",1,0.65,0,-65,-1.50795,66.50795,0,-65,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 08MAY25 571 C,"2025-05-08, 16:20:00",-1,0,0,0,0,-66.50795,-66.50795,0,C;Ep
+Trades,SubTotal,,Equity and Index Options,USD,SPY 08MAY25 571 C,,,0,,,-65,-1.50795,0,-66.50795,-65,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 08MAY25 553 P,"2025-05-07, 09:37:10",1,1.67,0.53,-167,-1.05795,168.05795,0,-114,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 08MAY25 553 P,"2025-05-07, 14:46:10",1,1.44,0.53,-144,-1.03795,145.03795,0,-91,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 08MAY25 553 P,"2025-05-07, 14:49:14",-1,1.92,0.53,192,-1.0660776,-168.05795,22.875972,139,C
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 08MAY25 553 P,"2025-05-08, 10:18:12",-1,0.15,0,15,-0.871157,-145.03795,-130.909107,15,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 08MAY25 553 P,,,0,,,-104,-4.0331346,0,-108.033135,-51,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 08MAY25 560 P,"2025-05-08, 09:37:21",1,0.8,0,-80,-0.69795,80.69795,0,-80,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 08MAY25 560 P,"2025-05-08, 10:13:40",-1,1.29,0,129,-1.0668262,-80.69795,47.235224,129,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 08MAY25 560 P,,,0,,,49,-1.7647762,0,47.235224,49,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 09MAY25 570 C,"2025-05-08, 10:43:44",1,1.05,0.725,-105,-1.06045,106.06045,0,-32.5,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 09MAY25 570 C,"2025-05-08, 10:59:34",-1,0.8,0.725,80,-1.065464,-106.06045,-27.125914,7.5,C
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 09MAY25 570 C,"2025-05-08, 15:54:54",1,0.95,0.725,-95,-1.06045,96.06045,27.125914,-22.5,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 09MAY25 570 C,"2025-05-09, 16:20:00",-1,0,0,0,0,-123.186364,-123.186364,0,C;Ep
+Trades,SubTotal,,Equity and Index Options,USD,SPY 09MAY25 570 C,,,0,,,-120,-3.186364,-27.125914,-123.186364,-47.5,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 09MAY25 560 P,"2025-05-08, 09:37:01",1,1.73,0.96,-173,-1.54795,174.54795,0,-77,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 09MAY25 560 P,"2025-05-08, 09:37:21",1,1.73,0.96,-173,-0.69795,173.69795,0,-77,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 09MAY25 560 P,"2025-05-08, 10:13:40",-1,2.4,0.96,240,-1.069912,-174.54795,64.382138,144,C
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 09MAY25 560 P,"2025-05-08, 10:13:47",-1,2.43,0.96,243,-1.0699954,-173.69795,68.232055,147,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 09MAY25 560 P,,,0,,,137,-4.3858074,0,132.614193,137,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 19MAY25 591 C,"2025-05-16, 10:29:20",1,2.3,4.1503,-230,-0.86795,230.86795,0,185.03,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 19MAY25 591 C,"2025-05-16, 13:18:09",-1,3.45,4.1503,345,-0.76074,-230.86795,113.37131,-70.03,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 19MAY25 591 C,,,0,,,115,-1.62869,0,113.37131,115,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 20MAY25 595 C,"2025-05-19, 09:50:38",1,1.05,1.8169,-105,-0.86795,105.86795,0,76.69,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 20MAY25 595 C,"2025-05-19, 10:10:37",-1,1.46,1.8169,146,-1.39074,-105.86795,38.74131,-35.69,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 20MAY25 595 C,,,0,,,41,-2.25869,0,38.74131,41,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 20MAY25 596 C,"2025-05-19, 11:54:26",1,1.02,1.4262,-102,-1.03795,103.03795,0,40.62,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,SPY 20MAY25 596 C,"2025-05-19, 13:09:09",-1,1.9,1.4262,190,-0.87074,-103.03795,86.09131,47.38,C
+Trades,SubTotal,,Equity and Index Options,USD,SPY 20MAY25 596 C,,,0,,,88,-1.90869,0,86.09131,88,
+Trades,Data,Order,Equity and Index Options,USD,U5922405,TSLA 17APR25 235 P,"2025-04-17, 09:42:36",1,1.06,0,-106,-1.05975,107.05975,0,-106,O
+Trades,Data,Order,Equity and Index Options,USD,U5922405,TSLA 17APR25 235 P,"2025-04-17, 10:32:08",-1,1.25,0,125,-1.063515,-107.05975,16.876735,125,C
+Trades,SubTotal,,Equity and Index Options,USD,TSLA 17APR25 235 P,,,0,,,19,-2.123265,0,16.876735,19,
+Trades,Total,,Equity and Index Options,USD,,,,,,,1168,-138.680622,-293.99573,1029.31938,184.559, 
+Deposits & Withdrawals,Header,Currency,Account,Settle Date,Description,Amount
+Deposits & Withdrawals,Data,USD,U5922405,2025-03-03,Electronic Fund Transfer,3200
+Deposits & Withdrawals,Data,USD,U5922405,2025-03-17,"Adjustment: Deposit Advance (First 103.62 of 1,862.00 Deposit)",103.62
+Deposits & Withdrawals,Data,USD,U5922405,2025-03-17,"Cancellation (First 103.62 of 1,862.00 Deposit)",-103.62
+Deposits & Withdrawals,Data,USD,U5922405,2025-03-17,Electronic Fund Transfer,1862
+Deposits & Withdrawals,Data,Total,,,,5062
+Fees,Header,Subtitle,Currency,Account,Date,Description,Amount
+Fees,Data,Other Fees,USD,U5922405,2025-04-18,a******14:CME Level I Non-Professional for Apr 2025,-1.25
+Fees,Data,Other Fees,USD,U5922405,2025-04-18,A******14:OPRA NP L1 for Apr 2025,-1.5
+Fees,Data,Other Fees,USD,U5922405,2025-05-02,a******14:CME Level I Non-Professional for Apr 2025,1.25
+Fees,Data,Other Fees,USD,U5922405,2025-05-02,a******14:CME Level I Non-Professional for May 2025,-1.25
+Fees,Data,Other Fees,USD,U5922405,2025-05-02,A******14:OPRA NP L1 for Apr 2025,1.5
+Fees,Data,Other Fees,USD,U5922405,2025-05-02,A******14:OPRA NP L1 for May 2025,-1.5
+Fees,Data,Total,,,,,-2.75
+Fees,Notes,"Market data is provided by Global Financial Information Services (GmbH). Your local broker collects amounts owed for fees and tax for such data on behalf of Global Financial Information Services (GmbH). Note, you are responsible for any applicable taxes relating to the provision of these services."
+Financial Instrument Information,Header,Asset Category,Symbol,Description,Conid,Underlying,Listing Exch,Multiplier,Expiry,Delivery Month,Type,Strike,Code
+Financial Instrument Information,Data,Equity and Index Options,AAPL  250328C00222500,AAPL 28MAR25 222.5 C,767288575,AAPL,CBOE,100,2025-03-28,2025-03,C,222.5,
+Financial Instrument Information,Data,Equity and Index Options,AAPL  250404C00222500,AAPL 04APR25 222.5 C,768827701,AAPL,CBOE,100,2025-04-04,2025-04,C,222.5,
+Financial Instrument Information,Data,Equity and Index Options,AAPL  250411C00190000,AAPL 11APR25 190 C,764757721,AAPL,CBOE,100,2025-04-11,2025-04,C,190,
+Financial Instrument Information,Data,Equity and Index Options,AAPL  250417P00200000,AAPL 17APR25 200 P,722769057,AAPL,CBOE,100,2025-04-17,2025-04,P,200,
+Financial Instrument Information,Data,Equity and Index Options,AAPL  250502P00200000,AAPL 02MAY25 200 P,768196232,AAPL,CBOE,100,2025-05-02,2025-05,P,200,
+Financial Instrument Information,Data,Equity and Index Options,AMZN  250516C00205000,AMZN 16MAY25 205 C,743796580,AMZN,CBOE,100,2025-05-16,2025-05,C,205,
+Financial Instrument Information,Data,Equity and Index Options,NFLX  250425P00900000,NFLX 25APR25 900 P,766994706,NFLX,CBOE,100,2025-04-25,2025-04,P,900,
+Financial Instrument Information,Data,Equity and Index Options,NFLX  250509C01185000,NFLX 09MAY25 1185 C,781024215,NFLX,CBOE,100,2025-05-09,2025-05,C,1185,
+Financial Instrument Information,Data,Equity and Index Options,NFLX  250516C01200000,NFLX 16MAY25 1200 C,754453875,NFLX,CBOE,100,2025-05-16,2025-05,C,1200,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250312P00560000,SPY 12MAR25 560 P,764880952,SPY,CBOE,100,2025-03-12,2025-03,P,560,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250319C00569000,SPY 19MAR25 569 C,766262902,SPY,CBOE,100,2025-03-19,2025-03,C,569,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250321P00560000,SPY 21MAR25 560 P,600928880,SPY,CBOE,100,2025-03-21,2025-03,P,560,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250324C00566000,SPY 24MAR25 566 C,767337611,SPY,CBOE,100,2025-03-24,2025-03,C,566,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250328P00563000,SPY 28MAR25 563 P,767342347,SPY,CBOE,100,2025-03-28,2025-03,P,563,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250331C00570000,SPY 31MAR25 570 C,693204214,SPY,CBOE,100,2025-03-31,2025-03,C,570,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250402P00546000,SPY 02APR25 546 P,770260558,SPY,CBOE,100,2025-04-02,2025-04,P,546,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250402P00560000,SPY 02APR25 560 P,769408701,SPY,CBOE,100,2025-04-02,2025-04,P,560,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250404P00532000,SPY 04APR25 532 P,771361670,SPY,CBOE,100,2025-04-04,2025-04,P,532,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250407C00530000,SPY 07APR25 530 C,771361994,SPY,CBOE,100,2025-04-07,2025-04,C,530,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250407C00544000,SPY 07APR25 544 C,772837984,SPY,CBOE,100,2025-04-07,2025-04,C,544,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250408P00440000,SPY 08APR25 440 P,772730506,SPY,CBOE,100,2025-04-08,2025-04,P,440,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250409C00540000,SPY 09APR25 540 C,771866703,SPY,CBOE,100,2025-04-09,2025-04,C,540,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250410C00523000,SPY 10APR25 523 C,773236925,SPY,CBOE,100,2025-04-10,2025-04,C,523,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250411C00518000,SPY 11APR25 518 C,773239514,SPY,CBOE,100,2025-04-11,2025-04,C,518,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250411C00543000,SPY 11APR25 543 C,767009988,SPY,CBOE,100,2025-04-11,2025-04,C,543,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250411P00500000,SPY 11APR25 500 P,765337770,SPY,CBOE,100,2025-04-11,2025-04,P,500,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250415P00528000,SPY 15APR25 528 P,773505416,SPY,CBOE,100,2025-04-15,2025-04,P,528,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250416C00545000,SPY 16APR25 545 C,773512358,SPY,CBOE,100,2025-04-16,2025-04,C,545,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250416P00530000,SPY 16APR25 530 P,773241721,SPY,CBOE,100,2025-04-16,2025-04,P,530,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250417P00520000,SPY 17APR25 520 P,712239494,SPY,CBOE,100,2025-04-17,2025-04,P,520,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250417P00527000,SPY 17APR25 527 P,767343397,SPY,CBOE,100,2025-04-17,2025-04,P,527,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250421P00508000,SPY 21APR25 508 P,774364954,SPY,CBOE,100,2025-04-21,2025-04,P,508,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250421P00520000,SPY 21APR25 520 P,774365659,SPY,CBOE,100,2025-04-21,2025-04,P,520,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250423P00516000,SPY 23APR25 516 P,775557334,SPY,CBOE,100,2025-04-23,2025-04,P,516,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250424P00530000,SPY 24APR25 530 P,776458520,SPY,CBOE,100,2025-04-24,2025-04,P,530,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250424P00535000,SPY 24APR25 535 P,776458674,SPY,CBOE,100,2025-04-24,2025-04,P,535,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250428C00558000,SPY 28APR25 558 C,777428019,SPY,CBOE,100,2025-04-28,2025-04,C,558,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250429C00555000,SPY 29APR25 555 C,777429145,SPY,CBOE,100,2025-04-29,2025-04,C,555,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250429C00565000,SPY 29APR25 565 C,777429162,SPY,CBOE,100,2025-04-29,2025-04,C,565,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250429C00570000,SPY 29APR25 570 C,777429167,SPY,CBOE,100,2025-04-29,2025-04,C,570,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250502P00552000,SPY 02MAY25 552 P,768336130,SPY,CBOE,100,2025-05-02,2025-05,P,552,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250505P00558000,SPY 05MAY25 558 P,780737635,SPY,CBOE,100,2025-05-05,2025-05,P,558,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250505P00560000,SPY 05MAY25 560 P,778940721,SPY,CBOE,100,2025-05-05,2025-05,P,560,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250506P00560000,SPY 06MAY25 560 P,779222142,SPY,CBOE,100,2025-05-06,2025-05,P,560,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250507C00564000,SPY 07MAY25 564 C,779975619,SPY,CBOE,100,2025-05-07,2025-05,C,564,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250508C00570000,SPY 08MAY25 570 C,779981828,SPY,CBOE,100,2025-05-08,2025-05,C,570,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250508C00571000,SPY 08MAY25 571 C,780181015,SPY,CBOE,100,2025-05-08,2025-05,C,571,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250508P00553000,SPY 08MAY25 553 P,780183515,SPY,CBOE,100,2025-05-08,2025-05,P,553,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250508P00560000,SPY 08MAY25 560 P,779983273,SPY,CBOE,100,2025-05-08,2025-05,P,560,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250509C00570000,SPY 09MAY25 570 C,771879000,SPY,CBOE,100,2025-05-09,2025-05,C,570,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250509P00560000,SPY 09MAY25 560 P,771880758,SPY,CBOE,100,2025-05-09,2025-05,P,560,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250519C00591000,SPY 19MAY25 591 C,782287928,SPY,CBOE,100,2025-05-19,2025-05,C,591,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250520C00595000,SPY 20MAY25 595 C,782288615,SPY,CBOE,100,2025-05-20,2025-05,C,595,
+Financial Instrument Information,Data,Equity and Index Options,SPY   250520C00596000,SPY 20MAY25 596 C,782402169,SPY,CBOE,100,2025-05-20,2025-05,C,596,
+Financial Instrument Information,Data,Equity and Index Options,TSLA  250417P00235000,TSLA 17APR25 235 P,725508589,TSLA,CBOE,100,2025-04-17,2025-04,P,235,
+Codes,Header,Code,Meaning,Code (Cont.),Meaning (Cont.)
+Codes,Data,A,Assignment
+Codes,Data,ADR,ADR Fee Accrual
+Codes,Data,AEx,Automatic exercise for dividend-related recommendation.
+Codes,Data,AFx,AutoFX conversion resulting from trading
+Codes,Data,Adj,Adjustment
+Codes,Data,Al,Allocation
+Codes,Data,Aw,Away Trade
+Codes,Data,B,Automatic Buy-in
+Codes,Data,Bo,Direct Borrow
+Codes,Data,C,Closing Trade
+Codes,Data,CD,Cash Delivery
+Codes,Data,CP,Complex Position
+Codes,Data,Ca,Cancelled
+Codes,Data,Co,Corrected Trade
+Codes,Data,Cx,Part or all of this transaction was a Crossing executed as dual agent by IB for two IB customers
+Codes,Data,DT,Discounted Trade
+Codes,Data,De,Delivery or Conversion Action
+Codes,Data,ETF,ETF Creation/Redemption
+Codes,Data,Ep,Resulted from an Expired Position
+Codes,Data,Ex,Exercise
+Codes,Data,FP,The fractional portion of this trade was executed against IB or an affiliate.
+Codes,Data,FPA,The fractional portion of this trade was executed against IB or an affiliate. IB acted as agent for the whole share portion of this trade.
+Codes,Data,G,Trade in Guaranteed Account Segment
+Codes,Data,GEA,Exercise or Assignment resulting from offsetting positions
+Codes,Data,HC,Highest Cost tax basis election
+Codes,Data,HFI,Investment Transferred to Hedge Fund
+Codes,Data,HFR,Redemption from Hedge Fund
+Codes,Data,I,Internal Transfer
+Codes,Data,IA,The transaction was executed against IB or an affiliate
+Codes,Data,IM,A portion of the order was executed against IB or an affiliate; IB acted as agent on a portion.
+Codes,Data,INV,Investment Transfer from Investor
+Codes,Data,IPO,This transaction was executed as part of an IPO in which IB was a member of the selling group and is classified as a Principal trade.
+Codes,Data,L,Ordered by IB (Margin Violation)
+Codes,Data,LD,Adjusted by Loss Disallowed from Wash Sale
+Codes,Data,LF,Liquidation of fractional position by IB
+Codes,Data,LI,"Last In, First Out (LIFO) tax basis election"
+Codes,Data,LT,Long Term P/L
+Codes,Data,Lo,Direct Loan
+Codes,Data,M,Entered manually by IB
+Codes,Data,MEx,Manual exercise for dividend-related recommendation.
+Codes,Data,ML,Maximize Losses tax basis election
+Codes,Data,MLG,Maximize Long Term Gain tax basis election
+Codes,Data,MLL,Maximize Long Term Loss tax basis election
+Codes,Data,MSG,Maximize Short Term Gain tax basis election
+Codes,Data,MSL,Maximize Short Term Loss tax basis election
+Codes,Data,O,Opening Trade
+Codes,Data,Off,Yes and No contracts offset to $1.00 cash settlement
+Codes,Data,P,Partial Execution
+Codes,Data,PE,Perpetual Investment
+Codes,Data,PI,Price Improvement
+Codes,Data,PTA,Post Trade Allocation
+Codes,Data,Po,Interest or Dividend Accrual Posting
+Codes,Data,Pr,Part or all of this transaction was executed by the Exchange as a Crossing by IB against an IB affiliate and is therefore classified as a Principal and not an agency trade
+Codes,Data,R,Dividend Reinvestment
+Codes,Data,RED,Redemption to Investor
+Codes,Data,RI,Recurring Investment
+Codes,Data,RP,"IB acted as agent for the fractional share portion of this trade, which was executed by an IB affiliate as riskless principal."
+Codes,Data,RPA,IB acted as agent for both the fractional share portion and the whole share portion of this trade; the fractional share portion was executed by an IB Affiliate as riskless principal.
+Codes,Data,Rb,Rebill
+Codes,Data,Re,Interest or Dividend Accrual Reversal
+Codes,Data,Ri,Reimbursement
+Codes,Data,S0,Contract settled to zero value
+Codes,Data,S1,Contract settled to $1.00
+Codes,Data,SF,Trade is subject to IBKR Lite Surcharge Fee if volume of such trades exceeds 10% of the total monthly Lite trade volume
+Codes,Data,SI,This order was solicited by Interactive Brokers
+Codes,Data,SL,Specific Lot tax basis election
+Codes,Data,SO,This order was marked as solicited by your Introducing Broker
+Codes,Data,SS,Customer designated this trade for shortened settlement and so is subject to execution at prices above the prevailing market
+Codes,Data,ST,Short Term P/L
+Codes,Data,T,Transfer
+Codes,Data,Un,Unvested shares from stock grant
+Codes,Data,XCH,Mutual Fund Exchange Transaction
+Notes/Legal Notes,Header,Type,Note
+Notes/Legal Notes,Data,Notes,"Stock exchange transactions generally settle on the trade date plus one business day (T+1). Options, futures and US open-end mutual fund transactions also settle on trade date plus one business day. Some exchanges and other transaction types may have longer or shorter settlement periods. Ending settled cash reflects the cash that has actually settled."
+Notes/Legal Notes,Data,Notes,Initial and maintenance margin requirements are available within the Account Window of the Trader Workstation.
+Notes/Legal Notes,Data,Notes,"Interactive Brokers LLC receives compensation from fund companies in connection with the purchase and holding of fund shares by customers of Interactive Brokers LLC. Such compensation includes, but is not limited to, Rule 12b-1 fees that are paid out of the funds assets. The source and amount of any remuneration received by Interactive Brokers LLC in connection with a transaction will be furnished upon written request of the customer.  IB may share a portion of the compensation received from fund companies with your independent advisor or introducing broker."
+Notes/Legal Notes,Data,Notes,"Quantities preceded by a ""-"" sign indicate sell transactions. Other transactions are purchases. "
+Notes/Legal Notes,Data,Notes,"IB acts as agent in executing the fractional share portion of your order. In certain circumstances, IB routes the fractional portion of your order to an affiliate, which may execute the fractional portion of the order as principal. In such circumstances, this is indicated by the codes associated with the trade. If an IB affiliate acts as principal in executing any fractional share portion of your order, the order will be executed at the price displayed for the opposite side of the NBBO from your order (the offer if you are buying and the bid if you are selling) at the time of execution. If an IB affiliate is acting as riskless principal in connection with filling the fractional share portion of your order, the affiliate will execute the fractional share portion of your order at the price it receives for the execution of the whole share."
+Notes/Legal Notes,Data,Notes,"In case of partial executions, commissions are charged on the total quantity executed on the original order. The commission is displayed on the first partial execution only."
+Notes/Legal Notes,Data,Notes,Trade execution times are displayed in Eastern Time.
+Notes/Legal Notes,Data,Notes,Applicable regulatory fees for your transactions are available on the IB website at www.interactivebrokers.com/en/accounts/fees/exchangeAndRegulatoryFees.php.
+Notes/Legal Notes,Data,Notes,"Borrow Fee Rate represents the cost to borrow stock expressed in percent per annum. It is applied to the collateral value on the stock borrow contract and is separate from any interest earned on credit cash balances. Similarly, Loan Fee Rate represents the benefit to lend stock. A positive rate indicates a cost to the borrower/benefit to the lender and a negative rate indicates a benefit to the borrower/cost to the lender. In general, the fee rates for hard-to-borrow stocks are higher than for normal availability stocks."
+Notes/Legal Notes,Data,Notes,Interest Rate on Customer Collateral represents the interest paid on the collateral posted to the customer's account and received from lending stock.  A positive rate indicates a benefit to the lender.
+Notes/Legal Notes,Data,Notes,"The closing prices on this Activity Statement are indicative and may come from third-party sources. Interactive Brokers does not warrant the accuracy of the prices provided by third-party sources. Due to time zone differences, certain non-US mutual funds may deliver closing prices after the Activity Statement has been produced and the closing prices for such funds will reflect the previous day's price."
+Notes/Legal Notes,Data,Notes,All Market Data and Research services are provided through Global Financial Information Services (GmbH).
+Notes/Legal Notes,Data,Notes,"Market data is provided by Global Financial Information Services (GmbH). Your local broker collects amounts owed for fees and tax for such data on behalf of Global Financial Information Services (GmbH). Note, you are responsible for any applicable taxes relating to the provision of these services."
+Notes/Legal Notes,Data,Mutual Fund Notes,"All purchase and sales of mutual funds are calculated against the published NAV (Net Asset Value) of the underlying fund and is displayed on this confirmation as the ""C. Price"" (Closing Price). Due to any fees charged by a fund and/or any share rounding, the net price you pay may vary from the published NAV and is shown on this confirmation as the ""T. Price"" (Trade Price)."
+Notes/Legal Notes,Data,Fixed Income Notes,"Call features for bonds or preferred stocks may affect the yield. For zero coupon, compound interest and multiplier securities, there are no periodic payments and securities may be callable below maturity value without notice to holder unless registered. For asset-backed securities, the actual yield may vary depending on the speed at which the underlying note is pre-paid. For additional information regarding bond yield, please contact the IB Help Desk at: ibkr.com/help. If this debt security is unrated by a nationally recognized statistical rating organization, it may pose a high risk of default. You should consult an independent advisor to determine whether unrated bonds are appropriate for your portfolio in light of your goals and your financial circumstances. Fees charged by bond trading centers are included in the cost of bond transactions."
+Notes/Legal Notes,Data,Legal Notes,"Please promptly report any inaccuracy or discrepancy in this statement, or in your account. Contact the IB Customer Service Department in writing using the form available on the IB website. You may also contact IB by phone, but if you report an error by phone, you should re-confirm such oral communication in writing in order to protect your rights, including rights under the Securities Investor Protection Act (SIPA). Contact information for customer service at Paxos is provided below.Interactive Brokers:Interactive Brokers LLC, www.interactivebrokers.com, 877-442-2757 (U.S.)Interactive Brokers (UK) (Ltd), www.interactivebrokers.co.uk, 00800-42-276537 (Intl)Interactive Brokers Canada Inc., www.interactivebrokers.ca, 877-745-4222 (Can.)Paxos:Paxos Trust Company, www.paxos.com, help.paxos.com"
+Notes/Legal Notes,Data,Legal Notes,"Unless otherwise noted, Interactive Brokers acted as agent in the execution of the above transactions. For those exchanges where IB is not a direct clearing member or custodian, IB may use one of the following clearing agents or sub-custodians: Interactive Brokers Australia Pty Limited; Interactive Brokers Canada Inc.; Interactive Brokers Hong Kong Limited; Interactive Brokers Ireland, Limited; Interactive Brokers Securities Japan, Inc.; Interactive Brokers (U.K.) Limited; IBKR Financial Services AG; ABN Amro Clearing Singapore Pte. Ltd.; BBVA Bancomer, S.A.; BNP Securities Services, Milan Branch; BMO Harris Bank N.A.; Citibank Europe plc; Skandinaviska Enskilda Banken AB (including select branches)."
+Notes/Legal Notes,Data,Legal Notes,"IB acts as agent or riskless principal in foreign currency exchange transactions and as riskless principal in spot precious metals transactions.  Such transactions are executed against an IB affiliate or a third party, which acts as principal in such transactions and may have a long or short position and may have profited or lost in connection with the transaction.  Foreign currency exchange and spot precious metals transactions executed by Customer through IB are not regulated or overseen by the SEC or the CFTC."
+Notes/Legal Notes,Data,Legal Notes,"IB accepts liquidity rebates or other order flow payments from Alternative Trading Systems, market makers and exchanges for certain orders in stocks. IB receives payment for some option orders pursuant to exchange-mandated marketing fee programs or other arrangements. The source and nature of any compensation received by IB in connection with any transaction is available upon written request of the customer. For further information, check the IB website and the Order Routing and Payment for Order Flow Disclosure provided when you opened your account and annually or visit ibkr.com/help.  "
+Notes/Legal Notes,Data,Legal Notes,"For security futures trades, if not already indicated on this statement, information about the time of any transaction, the identity of the counterparty to the transaction, and whether IB is acting as agent or principal, as agent for the counterparty, as agent for both parties to the contract, or as principal, and if acting as principal, whether the transaction was a block transaction or an exchange for physicals transaction, will be available upon written request of the customer."
+Notes/Legal Notes,Data,Legal Notes,Customer is requested to promptly advise Interactive Brokers of any material change in Customers investment objectives.
+Notes/Legal Notes,Data,Legal Notes,"A financial statement of Interactive Brokers LLC is available for your personal inspection at www.interactivebrokers.com or at its offices, or a copy of it will be mailed upon your written request."
+Notes/Legal Notes,Data,Legal Notes,"For trades executed on the ASX market, the ASX 24 market and the Cboe Australia market, this confirmation is issued subject to: (i) the Applicable Laws, the directions, decisions and requirements of the relevant market operator, the operating rules of the relevant market, the clearing rules and where relevant, the relevant settlement rules, (ii) the customs and usages of the relevant financial market, and (iii) the correction of errors and omissions. Trades in Cash Market Products (as that term is defined in the relevant ASIC market integrity rules) on ASX market and Cboe Australia are cleared by BNP Paribas, ARBN 149 440 291, AFSL 402467, who is a participant of ASX Clear Pty Ltd and ASX Settlement Pty Ltd. Trades in Derivative Products on ASX and all products on ASX 24 are cleared by Interactive Brokers Australia (“IBA”) as a participant of ASX Clear Pty Ltd and ASX Clear (Futures) Pty Ltd. If your transaction was a crossing transaction, IBA may have either acted on behalf of (i) both the buyer and seller of this transaction, or (ii) on behalf of the buyer or seller on one side of the transaction and acted as Principal on the other side. Under the Corporations Act 2001, where IBA enters into an exchange traded derivative on a customer's behalf, IBA is regarded as having issued the derivative to the customer."
+Notes/Legal Notes,Data,Legal Notes,"For All Options Trades Executed on the Stock Exchange of Hong Kong (""SEHK""): (a) Options can involve a high degree of risk and may not be suitable for every investor. Investors should ensure they understand those risks before participating in the options market. (b) All options contracts executed on the SEHK were executed by Interactive Brokers Hong Kong Limited on behalf of Interactive Brokers LLC. (c) In the event of a default committed by Interactive Brokers LLC resulting in the client suffering any pecuniary loss, the client shall have a right to claim under the Investor Compensation Fund established under the Hong Kong Securities and Futures Ordinance, subject to the terms of the Investor Compensation Fund from time to time. (d) All Exchange Traded Options Business made for or on behalf of a client shall be subject to the relevant provisions of the constitution, Rules of The Stock Exchange of Hong Kong Limited (""SEHK Rules""), regulations, the Articles, customs and usages of SEHK, the Options Trading Rules, the Clearing Rules of SEOCH, the CCASS Rules and the laws of Hong Kong, which shall be binding on both Interactive Brokers LLC and the client."
+Notes/Legal Notes,Data,Legal Notes,"Interactive Brokers LLC is a SIPC member. Deposits held away from Interactive Brokers LLC may not qualify under SIPC protection. Also, futures and options on futures are not covered by SIPC."
+Notes/Legal Notes,Data,,Interactive Brokers LLC is a SIPC Member

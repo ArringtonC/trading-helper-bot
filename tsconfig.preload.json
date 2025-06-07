@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "es2019", // Electron supports modern JS
+    "module": "commonjs", // Preload scripts use CommonJS
+    "outDir": "./public", // Output the .js file to the public directory
+    "rootDir": "./public", // Specify root directory to correctly place output
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true, // Skip checking all .d.ts files from dependencies
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "noEmitOnError": true, // Don't emit .js if there are errors
+    "lib": ["esnext"], // Minimal libs for Node.js-like environment
+    "types": ["node"], // Only include Node.js types
+    "typeRoots": ["./node_modules/@types"] // Only look for types in the standard @types folder, combined with the specific "types" array above.
+  },
+  "include": [
+    "public/preload.ts" // Only compile this file with these settings
+  ],
+  "exclude": [
+    "node_modules/@types/jest", // Explicitly exclude problematic type directories
+    "node_modules/@types/mocha",
+    "node_modules/@types/chai",
+    "node_modules/@types/cypress", // If you have @types/cypress
+    "node_modules/@types/react-bootstrap", // Given previous errors
+    "src", // Exclude the main React app source
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "cypress"
+  ]
+} 

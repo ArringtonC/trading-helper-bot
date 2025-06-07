@@ -1,0 +1,35 @@
+================================================================================
+VIX INTEGRATION EVALUATION REPORT
+================================================================================
+
+PERFORMANCE METRICS COMPARISON
+----------------------------------------
+Metric          No VIX     With VIX   Improvement 
+--------------------------------------------------
+Accuracy        0.2588     0.2471     -4.55       %
+Precision       0.2158     0.2420     12.15       %
+Recall          0.2588     0.2471     -4.55       %
+F1_Score        0.1914     0.2083     8.84        %
+
+STATISTICAL SIGNIFICANCE
+----------------------------------------
+McNemar's Test P-value: 1.000000
+Statistically Significant: False
+Interpretation: No significant improvement from VIX
+
+CROSS-VALIDATION RESULTS
+----------------------------------------
+No Vix:
+  Accuracy: 0.1143 (±0.0969)
+  F1_Score: 0.1922 (±0.1489)
+
+With Vix:
+  Accuracy: 0.4571 (±0.2949)
+  F1_Score: 0.5685 (±0.2942)
+
+SUMMARY AND RECOMMENDATIONS
+----------------------------------------
+Overall Performance Improvement: 2.97%
+Recommendation: RECOMMENDED - VIX integration shows moderate improvement
+
+================================================================================

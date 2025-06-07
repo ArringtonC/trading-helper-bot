@@ -1,0 +1,44 @@
+{
+  "../components/ImportAnalyze/DebugSection.tsx": [],
+  "../components/ImportAnalyze/EnhancedTradesTable.tsx": [
+    "../components/ui/AccessibleTable/index.ts"
+  ],
+  "../components/ImportAnalyze/RuleEvaluationControls.tsx": [],
+  "../components/ImportAnalyze/SecureDragDropUpload.tsx": [],
+  "../components/ui/AccessibleTable/AccessibleTable.tsx": [],
+  "../components/ui/AccessibleTable/index.ts": [
+    "../components/ui/AccessibleTable/AccessibleTable.tsx"
+  ],
+  "../hooks/useMLRecommendations.ts": [
+    "../services/HMMService.ts"
+  ],
+  "../hooks/usePersistentState.ts": [],
+  "../hooks/useRuleEngine.ts": [],
+  "../services/HMMService.ts": [],
+  "../services/IBKRActivityStatementParser.ts": [
+    "../types/ibkr.ts",
+    "../types/options.ts",
+    "../utils/tradeUtils.ts"
+  ],
+  "../types/ibkr.ts": [
+    "../types/options.ts"
+  ],
+  "../types/options.ts": [],
+  "../types/trade.ts": [],
+  "../utils/tradeUtils.ts": [
+    "../services/IBKRActivityStatementParser.ts",
+    "../types/ibkr.ts",
+    "../types/options.ts",
+    "../types/trade.ts"
+  ],
+  "ImportAnalyze.tsx": [
+    "../components/ImportAnalyze/DebugSection.tsx",
+    "../components/ImportAnalyze/EnhancedTradesTable.tsx",
+    "../components/ImportAnalyze/RuleEvaluationControls.tsx",
+    "../components/ImportAnalyze/SecureDragDropUpload.tsx",
+    "../hooks/useMLRecommendations.ts",
+    "../hooks/usePersistentState.ts",
+    "../hooks/useRuleEngine.ts",
+    "../services/IBKRActivityStatementParser.ts"
+  ]
+}

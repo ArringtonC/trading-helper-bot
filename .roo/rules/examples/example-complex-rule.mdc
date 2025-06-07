@@ -1,0 +1,79 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Example: Complex Rule
+
+This example demonstrates a rule that combines multiple features of the Rule Engine, including complex conditions, multiple actions, priority, and dependencies.
+
+- **Rule Definitions:**
+  ```typescript
+  const marketOpenRule: Rule = {
+    id: 'market-is-open',
+    name: 'Check Market Status',
+    description: 'Checks if the market is currently open.',
+    type: 'validation',
+    enabled: true,
+    conditions: { field: 'market.status', operator: '==', value: 'open' },
+    actions: [/* potentially a logging action */],
+    metadata: { version: '1.0', createdBy: 'example', createdAt: '2023-10-27T11:00:00Z' },
+  };
+
+  const highVolatilityRule: Rule = {
+    id: 'high-volatility-detected',
+    name: 'High Volatility Alert',
+    description: 'Triggers an alert if volatility is high and market is open.',
+    type: 'alert',
+    enabled: true,
+    conditions: {
+      and: [
+        { field: 'market.volatilityIndex', operator: '>', value: 30 },
+        { field: 'sentiment.overall', operator: '>=', value: 0.7 }, // Assuming a sentiment score
+      ]
+    },
+    actions: [
+      { type: 'notify', parameters: { message: 'High volatility detected with positive sentiment.' } },
+      { type: 'log', parameters: { level: 'warn', message: 'Volatility and sentiment conditions met.' } }, // Assuming a log action type
+    ],
+    dependencies: ['market-is-open'], // Only check volatility if market is open
+    priority: 'high', // High priority for immediate attention
+    metadata: { version: '1.0', createdBy: 'example', createdAt: '2023-10-27T11:01:00Z' },
+  };
+  ```
+
+- **Explanation:**
+  - The `highVolatilityRule` depends on the `market-is-open` rule, ensuring it's only evaluated when the market is confirmed to be open.
+  - It uses a compound `AND` condition to check for both high volatility (`market.volatilityIndex > 30`) and positive market sentiment (`sentiment.overall >= 0.7`).
+  - If both conditions are met and the `market-is-open` dependency was satisfied, the rule triggers two actions: a user notification and a log entry.
+  - The `high` priority suggests this rule's actions should be handled with urgency, potentially overriding or being processed after lower priority rules.
+
+- **Context Data Example:**
+  ```typescript
+  const evaluationContext = {
+    market: {
+      status: 'open',
+      volatilityIndex: 35,
+    },
+    sentiment: {
+      overall: 0.8,
+      // ... other sentiment data
+    },
+    // ... other relevant context data (account info, trade details, etc.)
+  };
+  
+  const actionContext = {
+      notify: (message: string) => console.log(`Notification: ${message}`),
+      log: (level: string, message: string) => console.log(`[${level.toUpperCase()}] ${message}`),
+      // ... other available actions
+  }
+
+  // Example of how you might evaluate this rule:
+  // await evaluateAndExecuteRules([marketOpenRule, highVolatilityRule], evaluationContext, actionContext);
+  ```
+
+- **References:**
+  - [Rule Engine Schema & Guidelines](mdc:.roo/rules/rule-engine.mdc)
+  - [Example: Rule Priority](mdc:.roo/rules/examples/example-priority-rule.mdc)
+  - [Example: Rule Dependencies](mdc:.roo/rules/examples/example-dependency-rule.mdc)
+

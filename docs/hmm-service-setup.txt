@@ -1,0 +1,27 @@
+# HMM Service Setup & Troubleshooting
+
+To use ML-powered trade analysis, you must start the Python backend service:
+
+## Start the Service
+
+1. Open a terminal in your project root.
+2. Run:
+   cd hmm-service && python3 app.py
+3. Wait for:
+   * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+4. Refresh the AI Analysis page in your app.
+
+## Troubleshooting
+- If you see 'Failed to fetch' or 'Not Running' in the UI, the backend is not running.
+- Make sure Python 3 is installed (`python3 --version`).
+- If you get a port error, make sure nothing else is using port 5000.
+- If you see CORS errors, ensure `flask_cors` is installed and enabled in `app.py`.
+- For advanced debugging, check the backend logs in the terminal.
+
+## Automation (Advanced)
+- For full automation, consider a Node/Electron backend that can spawn Python processes (requires extra setup and permissions). 
+ 
+ 
+ 
+ 
+ 

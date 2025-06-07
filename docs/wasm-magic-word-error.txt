@@ -1,0 +1,22 @@
+How to fix "WebAssembly.instantiate(): expected magic word 00 61 73 6d, found 3c 21 44 4f" error:
+
+1. Ensure the correct WASM file is present in the public directory:
+   - Copy the WASM file:
+     cp node_modules/sql.js/dist/sql-wasm.wasm public/sqljs-wasm.wasm
+
+2. Make sure your code requests the correct path (e.g., /sqljs-wasm.wasm).
+
+3. Add middleware in config-overrides.js to set the correct MIME type:
+   (see config-overrides.js for example)
+
+4. Restart the dev server.
+
+5. Test by visiting http://localhost:3000/sqljs-wasm.wasm in your browser.
+   - You should see a binary download, not HTML.
+
+If you still see the error, the file is missing or the path is wrong. 
+ 
+ 
+ 
+ 
+ 

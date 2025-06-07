@@ -1,0 +1,44 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Example: Rule Priority
+
+This example demonstrates how the `priority` field can be used to influence the order of rule evaluation or action execution within the Rule Engine.
+
+- **Rule Definition:**
+  ```typescript
+  const lowPriorityRule: Rule = {
+    id: 'example-low-priority',
+    name: 'Low Priority Action',
+    description: 'This rule performs an action with low priority.',
+    type: 'example',
+    enabled: true,
+    conditions: { field: 'status', operator: '==', value: 'active' },
+    actions: [{ type: 'notify', parameters: { message: 'Low priority action triggered' } }],
+    priority: 'low', // Explicitly setting low priority
+    metadata: { version: '1.0', createdBy: 'example', createdAt: '2023-10-27T10:30:00Z' },
+  };
+  
+  const highPriorityRule: Rule = {
+    id: 'example-high-priority',
+    name: 'High Priority Action',
+    description: 'This rule performs an action with high priority.',
+    type: 'example',
+    enabled: true,
+    conditions: { field: 'status', operator: '==', value: 'active' },
+    actions: [{ type: 'notify', parameters: { message: 'High priority action triggered' } }],
+    priority: 'high', // Explicitly setting high priority
+    metadata: { version: '1.0', createdBy: 'example', createdAt: '2023-10-27T10:31:00Z' },
+  };
+  ```
+
+- **Explanation:**
+  - When the `status` is `active`, both `lowPriorityRule` and `highPriorityRule` will match their conditions.
+  - The Rule Engine Core ([ruleEngineCore.ts](mdc:src/utils/ruleEngine/ruleEngineCore.ts)) should process these rules based on their `priority` field.
+  - **Note:** The exact behavior (whether evaluation order or action execution order is affected) depends on the Rule Engine's implementation. The intention is for `high` priority actions to potentially override or happen after `low` priority actions if there's a conflict or specific sequencing is desired.
+
+- **Reference:**
+  - See the main [Rule Engine Schema & Guidelines](mdc:.roo/rules/rule-engine.mdc) for more details on the `Rule` structure.
+

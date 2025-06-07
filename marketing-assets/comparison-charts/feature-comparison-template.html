@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Helper Bot - Feature Comparison</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        
+        .comparison-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+        }
+        
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 0;
+        }
+        
+        .table-header {
+            background: #f8fafc;
+            padding: 1.5rem 1rem;
+            font-weight: 600;
+            border-bottom: 2px solid #e2e8f0;
+            text-align: center;
+        }
+        
+        .table-header.feature-col {
+            text-align: left;
+            background: #f1f5f9;
+        }
+        
+        .table-header.trading-helper {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            color: #1e40af;
+            position: relative;
+        }
+        
+        .table-header.trading-helper::after {
+            content: "⭐ RECOMMENDED";
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            background: #059669;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        
+        .feature-row {
+            display: contents;
+        }
+        
+        .feature-cell {
+            padding: 1.5rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .feature-name {
+            text-align: left;
+            justify-content: flex-start;
+            font-weight: 500;
+            background: #fafafa;
+        }
+        
+        .check-yes {
+            color: #059669;
+            font-size: 1.5rem;
+        }
+        
+        .check-no {
+            color: #dc2626;
+            font-size: 1.5rem;
+        }
+        
+        .check-partial {
+            color: #d97706;
+            font-size: 1.5rem;
+        }
+        
+        .feature-highlight {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            font-weight: 600;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .rating-stars {
+            color: #fbbf24;
+            margin-left: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="comparison-container">
+        <div class="header">
+            <h1>Trading Helper Bot</h1>
+            <p>Institutional-grade insight in minutes, not hours</p>
+        </div>
+        
+        <div class="comparison-table">
+            <!-- Header Row -->
+            <div class="table-header feature-col">Features</div>
+            <div class="table-header trading-helper">Trading Helper Bot</div>
+            <div class="table-header">Competitor A</div>
+            <div class="table-header">Competitor B</div>
+            
+            <!-- Multi-Broker Support -->
+            <div class="feature-row">
+                <div class="feature-cell feature-name">Multi-Broker CSV Import</div>
+                <div class="feature-cell feature-highlight">
+                    <span class="check-yes">✓</span>
+                    <span class="rating-stars">★★★★★</span>
+                </div>
+                <div class="feature-cell">
+                    <span class="check-partial">◐</span>
+                </div>
+                <div class="feature-cell">
+                    <span class="check-no">✗</span>
+                </div>
+            </div>
+            
+            <!-- Experience-Level Adaptation -->
+            <div class="feature-row">
+                <div class="feature-cell feature-name">Experience-Level Adaptive UI</div>
+                <div class="feature-cell feature-highlight">
+                    <span class="check-yes">✓</span>
+                    <span class="rating-stars">★★★★★</span>
+                </div>
+                <div class="feature-cell">
+                    <span class="check-no">✗</span>
+                </div>
+                <div class="feature-cell">
+                    <span class="check-no">✗</span>
+                </div>
+            </div>
+            
+            <!-- Strategy Visualization -->
+            <div class="feature-row">
+                <div class="feature-cell feature-name">Options Strategy Visualizer</div>
+                <div class="feature-cell feature-highlight">
+                    <span class="check-yes">✓</span>
+                    <span class="rating-stars">★★★★★</span>
+                </div>
+                <div class="feature-cell">
+                    <span class="check-yes">✓</span>
+                </div>
+                <div class="feature-cell">
+                    <span class="check-partial">◐</span>
+                </div>
+            </div>
+            
+            <!-- Risk Management -->
+            <div class="feature-row">
+                <div class="feature-cell feature-name">Comprehensive Risk Monitoring</div>
+                <div class="feature-cell feature-highlight">
+                    <span class="check-yes">✓</span>
+                    <span class="rating-stars">★★★★★</span>
+                </div>
+                <div class="feature-cell">
+                    <span class="check-partial">◐</span>
+                </div>
+                <div class="feature-cell">
+                    <span class="check-yes">✓</span>
+                </div>
+            </div>
+            
+            <!-- Goal-Based Sizing -->
+            <div class="feature-row">
+                <div class="feature-cell feature-name">Goal-Based Position Sizing</div>
+                <div class="feature-cell feature-highlight">
+                    <span class="check-yes">✓</span>
+                    <span class="rating-stars">★★★★★</span>
+                </div>
+                <div class="feature-cell">
+                    <span class="check-no">✗</span>
+                </div>
+                <div class="feature-cell">
+                    <span class="check-no">✗</span>
+                </div>
+            </div>
+            
+            <!-- Educational Content -->
+            <div class="feature-row">
+                <div class="feature-cell feature-name">Educational Trading Tips</div>
+                <div class="feature-cell feature-highlight">
+                    <span class="check-yes">✓</span>
+                    <span class="rating-stars">★★★★★</span>
+                </div>
+                <div class="feature-cell">
+                    <span class="check-no">✗</span>
+                </div>
+                <div class="feature-cell">
+                    <span class="check-partial">◐</span>
+                </div>
+            </div>
+            
+            <!-- Reconciliation -->
+            <div class="feature-row">
+                <div class="feature-cell feature-name">Multi-Source Reconciliation</div>
+                <div class="feature-cell feature-highlight">
+                    <span class="check-yes">✓</span>
+                    <span class="rating-stars">★★★★★</span>
+                </div>
+                <div class="feature-cell">
+                    <span class="check-no">✗</span>
+                </div>
+                <div class="feature-cell">
+                    <span class="check-no">✗</span>
+                </div>
+            </div>
+            
+            <!-- Real-time Updates -->
+            <div class="feature-row">
+                <div class="feature-cell feature-name">Real-time Portfolio Updates</div>
+                <div class="feature-cell feature-highlight">
+                    <span class="check-yes">✓</span>
+                    <span class="rating-stars">★★★★★</span>
+                </div>
+                <div class="feature-cell">
+                    <span class="check-yes">✓</span>
+                </div>
+                <div class="feature-cell">
+                    <span class="check-yes">✓</span>
+                </div>
+            </div>
+            
+            <!-- Price -->
+            <div class="feature-row">
+                <div class="feature-cell feature-name"><strong>Price</strong></div>
+                <div class="feature-cell feature-highlight">
+                    <strong>Free</strong>
+                </div>
+                <div class="feature-cell">
+                    <strong>$29/month</strong>
+                </div>
+                <div class="feature-cell">
+                    <strong>$49/month</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cta-section">
+            <h2 style="margin-bottom: 1rem; color: #1e293b;">Ready to Transform Your Trading?</h2>
+            <p style="margin-bottom: 2rem; color: #64748b; font-size: 1.125rem;">Join thousands of traders who've simplified their workflow with institutional-grade tools.</p>
+            <button class="cta-button">Start Trading Smarter Today →</button>
+        </div>
+    </div>
+</body>
+</html> 

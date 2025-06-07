@@ -1,0 +1,87 @@
+# Trading Helper Bot - Netlify Deployment Configuration
+# TLS 1.3 and Security Hardening
+
+[build]
+  publish = "build"
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "18"
+  GENERATE_SOURCEMAP = "false"
+  REACT_APP_BUILD_TARGET = "production"
+
+# Security Headers with TLS 1.3 Enforcement
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Enforce HTTPS with HSTS (2 years + preload)
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    
+    # Content Security Policy (Financial App Security)
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.iex.cloud https://cloud.iexapis.com; font-src 'self'; frame-ancestors 'none'; form-action 'self'; base-uri 'self'"
+    
+    # Security Headers
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+    
+    # Force modern TLS
+    X-TLS-Min-Version = "1.3"
+    
+    # Cache Control for Security
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Pragma = "no-cache"
+    Expires = "0"
+
+# Static assets with long-term caching
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+
+# API routes security
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Content-Security-Policy = "default-src 'none'"
+
+# Force HTTPS redirects
+[[redirects]]
+  from = "http://trading-helper-bot.netlify.app/*"
+  to = "https://trading-helper-bot.netlify.app/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "https://trading-helper-bot.netlify.app/:splat"
+  status = 301
+  force = true
+  conditions = {Scheme = ["http"]}
+
+# SPA routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Block sensitive files
+[[headers]]
+  for = "/.env"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+    
+[[redirects]]
+  from = "/.env"
+  to = "/404"
+  status = 404
+
+[[redirects]]
+  from = "/.env.*"
+  to = "/404"
+  status = 404 

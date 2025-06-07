@@ -1,0 +1,38 @@
+# Enhanced Data Ingestion Pipeline Requirements
+# Core dependencies for high-performance data pipeline
+
+# Apache Kafka for streaming
+kafka-python==2.0.2
+
+# PostgreSQL adapter with connection pooling
+psycopg2-binary==2.9.7
+
+# Async support
+asyncio-mqtt==0.13.0
+
+# Data processing (already may be present)
+pandas>=1.5.0
+numpy>=1.24.0
+yfinance>=0.2.18
+
+# Monitoring and metrics
+prometheus-client==0.17.1
+
+# Configuration management
+pydantic>=2.0.0
+python-dotenv==1.0.0
+
+# Logging enhancement
+structlog==23.1.0
+
+# Optional: Redis for caching/queue fallback
+redis>=4.5.0
+
+# Optional: Additional data sources
+alpha-vantage==2.3.1
+finnhub-python==2.4.19
+quandl==3.7.0
+
+# Development/testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0 

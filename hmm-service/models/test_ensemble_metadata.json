@@ -1,0 +1,25 @@
+{
+  "ensemble_weights": {
+    "rf": 0.5,
+    "gb": 0.5
+  },
+  "prediction_horizon": 1,
+  "training_history": [
+    {
+      "timestamp": "2025-05-24T10:09:32.608884",
+      "hyperparams": {
+        "rf_n_estimators": 100,
+        "rf_max_depth": 10,
+        "rf_min_samples_split": 5,
+        "rf_min_samples_leaf": 2,
+        "rf_max_features": "sqrt",
+        "gb_n_estimators": 100,
+        "gb_max_depth": 6,
+        "gb_learning_rate": 0.1,
+        "gb_subsample": 0.8,
+        "gb_min_samples_split": 5
+      },
+      "performance": {
+        "random_forest": {
+          "accuracy": 0.5104166666666666,
+          "predictions": 
