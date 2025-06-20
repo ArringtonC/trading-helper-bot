@@ -172,29 +172,29 @@ describe('Position Sizing Best Practices Database', () => {
 
   describe('EXPERIENCE_LEVEL_ADJUSTMENTS', () => {
     it('should have adjustments for all experience levels', () => {
-      const expectedLevels = ['beginner', 'intermediate', 'advanced'];
+      const expectedLevels = ['learning', 'import', 'broker'];
       
       expectedLevels.forEach(level => {
         expect(EXPERIENCE_LEVEL_ADJUSTMENTS).toHaveProperty(level);
       });
     });
 
-    it('should have progressive increases from beginner to advanced', () => {
-      const { beginner, intermediate, advanced } = EXPERIENCE_LEVEL_ADJUSTMENTS;
+    it('should have progressive increases from learning to broker', () => {
+      const { learning, import: importLevel, broker } = EXPERIENCE_LEVEL_ADJUSTMENTS;
       
-      expect(beginner.maxPositionMultiplier).toBeLessThan(intermediate.maxPositionMultiplier);
-      expect(intermediate.maxPositionMultiplier).toBeLessThan(advanced.maxPositionMultiplier);
+      expect(learning.maxPositionMultiplier).toBeLessThan(importLevel.maxPositionMultiplier);
+      expect(importLevel.maxPositionMultiplier).toBeLessThan(broker.maxPositionMultiplier);
       
-      expect(beginner.riskMultiplier).toBeLessThan(intermediate.riskMultiplier);
-      expect(intermediate.riskMultiplier).toBeLessThan(advanced.riskMultiplier);
+      expect(learning.riskMultiplier).toBeLessThan(importLevel.riskMultiplier);
+      expect(importLevel.riskMultiplier).toBeLessThan(broker.riskMultiplier);
     });
 
-    it('should have conservative settings for beginners', () => {
-      const beginnerSettings = EXPERIENCE_LEVEL_ADJUSTMENTS.beginner;
+    it('should have conservative settings for learning level', () => {
+      const learningSettings = EXPERIENCE_LEVEL_ADJUSTMENTS.learning;
       
-      expect(beginnerSettings.maxPositionMultiplier).toBeLessThan(1.0);
-      expect(beginnerSettings.maxExposureMultiplier).toBeLessThan(1.0);
-      expect(beginnerSettings.riskMultiplier).toBeLessThan(1.0);
+      expect(learningSettings.maxPositionMultiplier).toBeLessThan(1.0);
+      expect(learningSettings.maxExposureMultiplier).toBeLessThan(1.0);
+      expect(learningSettings.riskMultiplier).toBeLessThan(1.0);
     });
   });
 
@@ -225,11 +225,11 @@ describe('Position Sizing Best Practices Database', () => {
     });
 
     it('should filter by experience level correctly', () => {
-      const beginnerRules = getBestPracticesFor({ experienceLevel: 'beginner' });
+      const learningRules = getBestPracticesFor({ experienceLevel: 'learning' });
       
-      beginnerRules.forEach(rule => {
+      learningRules.forEach(rule => {
         if (rule.applicableFor.experienceLevels) {
-          expect(rule.applicableFor.experienceLevels).toContain('beginner');
+          expect(rule.applicableFor.experienceLevels).toContain('learning');
         }
       });
     });
@@ -237,12 +237,12 @@ describe('Position Sizing Best Practices Database', () => {
     it('should handle multiple criteria correctly', () => {
       const specificRules = getBestPracticesFor({
         assetClass: 'crypto',
-        experienceLevel: 'beginner'
+        experienceLevel: 'learning'
       });
       
       specificRules.forEach(rule => {
         let matchesAsset = !rule.applicableFor.assetClasses || rule.applicableFor.assetClasses.includes('crypto');
-        let matchesExperience = !rule.applicableFor.experienceLevels || rule.applicableFor.experienceLevels.includes('beginner');
+        let matchesExperience = !rule.applicableFor.experienceLevels || rule.applicableFor.experienceLevels.includes('learning');
         
         expect(matchesAsset && matchesExperience).toBe(true);
       });

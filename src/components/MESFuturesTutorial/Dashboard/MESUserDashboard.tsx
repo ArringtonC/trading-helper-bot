@@ -6,7 +6,7 @@ interface MESUserDashboardProps {
   virtualPortfolio: VirtualPortfolio;
   learningProgress: TutorialProgress;
   achievements: Achievement[];
-  onTabChange: (tab: string) => void;
+  onTabChange: (tab: 'dashboard' | 'learn' | 'practice' | 'community' | 'settings' | 'analysis') => void;
   onUpdateProfile: (updates: Partial<UserProfile>) => void;
 }
 

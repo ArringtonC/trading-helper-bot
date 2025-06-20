@@ -16,7 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/Badge';
 import { LineChartWrapper, AreaChartWrapper } from '../visualizations/ChartComponents';
-import { Line, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Legend, Cell } from 'recharts';
+import { Line, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Legend } from 'recharts';
 
 // Types for volatility data
 interface VolatilityData {
@@ -154,7 +154,7 @@ export const VolatilityDashboard: React.FC<VolatilityDashboardProps> = ({
     } finally {
       setIsLoading(false);
     }
-  }, [selectedSymbol, settings.timeFrame]);
+  }, []);
 
   // Setup real-time updates
   useEffect(() => {

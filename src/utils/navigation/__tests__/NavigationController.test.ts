@@ -11,7 +11,7 @@ describe('NavigationController', () => {
 
   describe('Beginner Level', () => {
     beforeEach(() => {
-      controller = new NavigationController('beginner');
+      controller = new NavigationController('learning');
     });
 
     test('should show only beginner-appropriate navigation items', () => {
@@ -44,7 +44,7 @@ describe('NavigationController', () => {
 
     test('should return correct user level stats', () => {
       const stats = controller.getUserLevelStats();
-      expect(stats.level).toBe('beginner');
+      expect(stats.level).toBe('learning');
       expect(stats.configOptions).toBe(3);
       expect(stats.maxConfigOptions).toBe(3);
       expect(stats.availableFeatures).toBeGreaterThan(0);
@@ -53,7 +53,7 @@ describe('NavigationController', () => {
 
   describe('Intermediate Level', () => {
     beforeEach(() => {
-      controller = new NavigationController('intermediate');
+      controller = new NavigationController('import');
     });
 
     test('should show beginner and intermediate navigation items', () => {
@@ -89,7 +89,7 @@ describe('NavigationController', () => {
 
   describe('Advanced Level', () => {
     beforeEach(() => {
-      controller = new NavigationController('advanced');
+      controller = new NavigationController('broker');
     });
 
     test('should show all navigation items', () => {
@@ -120,7 +120,7 @@ describe('NavigationController', () => {
 
   describe('Navigation Organization', () => {
     beforeEach(() => {
-      controller = new NavigationController('advanced');
+      controller = new NavigationController('broker');
     });
 
     test('should organize navigation by categories', () => {
@@ -153,7 +153,7 @@ describe('NavigationController', () => {
 
   describe('Feature Visibility', () => {
     beforeEach(() => {
-      controller = new NavigationController('intermediate');
+      controller = new NavigationController('import');
     });
 
     test('should correctly determine feature visibility', () => {
@@ -174,13 +174,13 @@ describe('NavigationController', () => {
 
   describe('Onboarding Flow', () => {
     test('should initialize onboarding flow for beginners', () => {
-      controller = new NavigationController('beginner');
+      controller = new NavigationController('learning');
       const flow = controller.initializeOnboardingFlow();
       
       expect(flow.step).toBe(1);
       expect(flow.totalSteps).toBe(4);
       expect(flow.currentPage).toBe('/');
-      expect(flow.userLevel).toBe('beginner');
+      expect(flow.userLevel).toBe('learning');
       expect(flow.recommendedNext).toContain('/tutorial');
       expect(flow.recommendedNext).toContain('/');
       expect(flow.recommendedNext).toContain('/visualizer');
@@ -189,7 +189,7 @@ describe('NavigationController', () => {
     });
 
     test('should initialize onboarding flow for intermediate users', () => {
-      controller = new NavigationController('intermediate');
+      controller = new NavigationController('import');
       const flow = controller.initializeOnboardingFlow();
       
       expect(flow.totalSteps).toBe(6);
@@ -197,7 +197,7 @@ describe('NavigationController', () => {
     });
 
     test('should prioritize visualizer during onboarding', () => {
-      controller = new NavigationController('intermediate');
+      controller = new NavigationController('import');
       controller.initializeOnboardingFlow();
       
       // Should prioritize visualizer during early onboarding steps
@@ -207,14 +207,14 @@ describe('NavigationController', () => {
 
   describe('User Level Management', () => {
     beforeEach(() => {
-      controller = new NavigationController('beginner');
+      controller = new NavigationController('learning');
     });
 
     test('should update user level and reset onboarding', () => {
       const initialFlow = controller.initializeOnboardingFlow();
-      expect(initialFlow.userLevel).toBe('beginner');
+      expect(initialFlow.userLevel).toBe('learning');
       
-      controller.setUserLevel('advanced');
+      controller.setUserLevel('broker');
       
       // Should have more features available after level change
       const items = controller.getNavigationItems();
@@ -223,7 +223,7 @@ describe('NavigationController', () => {
 
     test('should provide configuration limits information', () => {
       const limits = controller.getConfigurationLimits();
-      expect(limits.level).toBe('beginner');
+      expect(limits.level).toBe('learning');
       expect(limits.current).toBe(3);
       expect(limits.max).toBe(3);
     });
@@ -231,7 +231,7 @@ describe('NavigationController', () => {
 
   describe('Priority and Sorting', () => {
     beforeEach(() => {
-      controller = new NavigationController('advanced');
+      controller = new NavigationController('broker');
     });
 
     test('should sort navigation items by priority', () => {

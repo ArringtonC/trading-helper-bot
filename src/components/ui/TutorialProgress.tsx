@@ -1,5 +1,4 @@
 import React from 'react';
-import { TutorialProgress as TutorialProgressType } from '../../types/Tutorial';
 
 interface TutorialProgressProps {
   currentStep: number;

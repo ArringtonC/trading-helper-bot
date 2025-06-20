@@ -8,7 +8,6 @@
 
 import { 
   PriceData, 
-  GapEvent, 
   GapStatistics,
   PositionGapRisk,
   WeekendGapAnalysis,
@@ -27,7 +26,8 @@ import {
   calculateMean
 } from '../utils/gapAnalysis';
 
-import { calculateCurrentVolatilityRegime, VolatilityRegime } from './MarketAnalysisService';
+import { VolatilityRegime } from './MarketAnalysisService';
+import { VolatilityAnalysisService, VolatilitySnapshot } from './VolatilityAnalysisService';
 
 /**
  * Main service class for weekend gap risk analysis
@@ -394,10 +394,6 @@ export class WeekendGapRiskService {
    */
   private calculatePortfolioMetrics(positions: PositionGapRisk[]) {
     const totalValue = positions.reduce((sum, pos) => sum + pos.positionValue, 0);
-    const weightedRisks = positions.map(pos => ({
-      weight: pos.positionValue / totalValue,
-      risk: pos.gapRisk.riskScore
-    }));
 
     // Calculate concentration risk (HHI of position weights)
     const concentrationRisk = positions.reduce((sum, pos) => {

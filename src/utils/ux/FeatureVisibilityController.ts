@@ -9,7 +9,7 @@ export interface FeatureDefinition {
   id: string;
   name: string;
   description: string;
-  category: 'core' | 'intermediate' | 'advanced';
+  category: 'core' | 'import' | 'broker';
   requiredLevel: UserExperienceLevel;
   dependencies?: string[];
   unlockCriteria?: {
@@ -74,7 +74,7 @@ export const FEATURE_DEFINITIONS: FeatureDefinition[] = [
     id: 'position-sizing',
     name: 'Advanced Position Sizing',
     description: 'Kelly Criterion and VIX-adjusted sizing',
-    category: 'intermediate',
+    category: 'import',
     requiredLevel: 'import',
     dependencies: ['basic-calculator'],
     unlockCriteria: {
@@ -87,7 +87,7 @@ export const FEATURE_DEFINITIONS: FeatureDefinition[] = [
     id: 'goal-sizing',
     name: 'Goal-Based Sizing',
     description: 'Position sizing based on financial goals',
-    category: 'intermediate',
+    category: 'import',
     requiredLevel: 'import',
     dependencies: ['position-sizing']
   },
@@ -95,7 +95,7 @@ export const FEATURE_DEFINITIONS: FeatureDefinition[] = [
     id: 'strategy-builder',
     name: 'Strategy Builder',
     description: 'Build and test trading strategies',
-    category: 'intermediate',
+    category: 'import',
     requiredLevel: 'import',
     unlockCriteria: {
       tradesCompleted: 10,
@@ -106,7 +106,7 @@ export const FEATURE_DEFINITIONS: FeatureDefinition[] = [
     id: 'performance-tracking',
     name: 'Performance Tracking',
     description: 'Track and analyze your trading performance',
-    category: 'intermediate',
+    category: 'import',
     requiredLevel: 'import',
     dependencies: ['basic-dashboard']
   },
@@ -114,7 +114,7 @@ export const FEATURE_DEFINITIONS: FeatureDefinition[] = [
     id: 'interactive-analytics',
     name: 'Interactive Analytics',
     description: 'Advanced charts and analysis tools',
-    category: 'intermediate',
+    category: 'import',
     requiredLevel: 'import',
     unlockCriteria: {
       featuresUsed: ['performance-tracking'],
@@ -127,7 +127,7 @@ export const FEATURE_DEFINITIONS: FeatureDefinition[] = [
     id: 'advanced-analytics',
     name: 'Advanced Analytics',
     description: 'Complex statistical analysis and modeling',
-    category: 'advanced',
+    category: 'broker',
     requiredLevel: 'broker',
     dependencies: ['interactive-analytics'],
     unlockCriteria: {
@@ -140,7 +140,7 @@ export const FEATURE_DEFINITIONS: FeatureDefinition[] = [
     id: 'custom-formulas',
     name: 'Custom Formulas',
     description: 'Create your own calculation formulas',
-    category: 'advanced',
+    category: 'broker',
     requiredLevel: 'broker',
     unlockCriteria: {
       featuresUsed: ['strategy-builder', 'advanced-analytics'],
@@ -151,7 +151,7 @@ export const FEATURE_DEFINITIONS: FeatureDefinition[] = [
     id: 'api-integration',
     name: 'API Integration',
     description: 'Connect to external data sources and brokers',
-    category: 'advanced',
+    category: 'broker',
     requiredLevel: 'broker',
     unlockCriteria: {
       accountSize: 50000,
@@ -162,7 +162,7 @@ export const FEATURE_DEFINITIONS: FeatureDefinition[] = [
     id: 'backtesting',
     name: 'Backtesting Engine',
     description: 'Test strategies against historical data',
-    category: 'advanced',
+    category: 'broker',
     requiredLevel: 'broker',
     dependencies: ['strategy-builder', 'api-integration']
   },
@@ -170,7 +170,7 @@ export const FEATURE_DEFINITIONS: FeatureDefinition[] = [
     id: 'ai-analysis',
     name: 'AI Analysis',
     description: 'Machine learning insights and predictions',
-    category: 'advanced',
+    category: 'broker',
     requiredLevel: 'broker',
     dependencies: ['backtesting', 'advanced-analytics'],
     unlockCriteria: {
@@ -247,7 +247,7 @@ export class FeatureVisibilityController {
   /**
    * Get features by category
    */
-  getFeaturesByCategory(category: 'core' | 'intermediate' | 'advanced'): FeatureDefinition[] {
+  getFeaturesByCategory(category: 'core' | 'import' | 'broker'): FeatureDefinition[] {
     return this.getVisibleFeatures().filter(feature => feature.category === category);
   }
 

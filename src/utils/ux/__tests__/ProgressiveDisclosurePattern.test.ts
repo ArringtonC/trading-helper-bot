@@ -1,3 +1,5 @@
+/// <reference types="jest" />
+
 /**
  * Progressive Disclosure Pattern Test Suite
  * Tests for UXLayersController, FeatureVisibilityController, and overall pattern functionality
@@ -16,7 +18,7 @@ describe('Progressive Disclosure Pattern', () => {
   describe('UXLayersController', () => {
     
     describe('User Experience Assessment', () => {
-      it('should correctly assess beginner level', () => {
+      it('should correctly assess learning level', () => {
         const responses = {
           tradingExperience: 1,
           optionsKnowledge: 2,
@@ -26,10 +28,10 @@ describe('Progressive Disclosure Pattern', () => {
         };
         
         const level = UXLayersController.assessUserExperience(responses);
-        expect(level).toBe('beginner');
+        expect(level).toBe('learning');
       });
 
-      it('should correctly assess intermediate level', () => {
+      it('should correctly assess import level', () => {
         const responses = {
           tradingExperience: 3,
           optionsKnowledge: 3,
@@ -39,26 +41,26 @@ describe('Progressive Disclosure Pattern', () => {
         };
         
         const level = UXLayersController.assessUserExperience(responses);
-        expect(level).toBe('intermediate');
+        expect(level).toBe('import');
       });
 
-      it('should correctly assess advanced level', () => {
+      it('should correctly assess broker level', () => {
         const responses = {
           tradingExperience: 5,
           optionsKnowledge: 5,
           riskTolerance: 4,
           accountSize: 50000,
-          preferredComplexity: 'advanced' as const
+          preferredComplexity: 'broker' as const
         };
         
         const level = UXLayersController.assessUserExperience(responses);
-        expect(level).toBe('advanced');
+        expect(level).toBe('broker');
       });
     });
 
     describe('Feature Visibility', () => {
-      it('should show appropriate features for beginner level', () => {
-        const controller = new UXLayersController('beginner');
+      it('should show appropriate features for learning level', () => {
+        const controller = new UXLayersController('learning');
         
         expect(controller.shouldShowFeature('basic-calculator')).toBe(true);
         expect(controller.shouldShowFeature('risk-assessment')).toBe(true);
@@ -66,8 +68,8 @@ describe('Progressive Disclosure Pattern', () => {
         expect(controller.shouldShowFeature('custom-formulas')).toBe(false);
       });
 
-      it('should show appropriate features for intermediate level', () => {
-        const controller = new UXLayersController('intermediate');
+      it('should show appropriate features for import level', () => {
+        const controller = new UXLayersController('import');
         
         expect(controller.shouldShowFeature('position-sizing')).toBe(true);
         expect(controller.shouldShowFeature('goal-sizing')).toBe(true);
@@ -75,8 +77,8 @@ describe('Progressive Disclosure Pattern', () => {
         expect(controller.shouldShowFeature('api-integration')).toBe(false);
       });
 
-      it('should show all features for advanced level', () => {
-        const controller = new UXLayersController('advanced');
+      it('should show all features for broker level', () => {
+        const controller = new UXLayersController('broker');
         
         expect(controller.getVisibleFeatures()).toBe('all');
         expect(controller.shouldShowFeature('advanced-analytics')).toBe(true);
@@ -86,8 +88,8 @@ describe('Progressive Disclosure Pattern', () => {
     });
 
     describe('Configuration Options Filtering', () => {
-      it('should limit configuration options for beginners', () => {
-        const controller = new UXLayersController('beginner');
+      it('should limit configuration options for learning users', () => {
+        const controller = new UXLayersController('learning');
         const allOptions = ['account-balance', 'risk-per-trade', 'position-size', 'win-rate', 'payoff-ratio', 'max-exposure'];
         
         const filteredOptions = controller.getFilteredConfigOptions(allOptions);
@@ -97,8 +99,8 @@ describe('Progressive Disclosure Pattern', () => {
         expect(filteredOptions).toContain('position-size');
       });
 
-      it('should allow more configuration options for intermediate users', () => {
-        const controller = new UXLayersController('intermediate');
+      it('should allow more configuration options for import users', () => {
+        const controller = new UXLayersController('import');
         const allOptions = ['account-balance', 'risk-per-trade', 'position-size', 'win-rate', 'payoff-ratio', 'max-exposure'];
         
         const filteredOptions = controller.getFilteredConfigOptions(allOptions);
@@ -106,8 +108,8 @@ describe('Progressive Disclosure Pattern', () => {
         expect(filteredOptions.length).toBeGreaterThan(3);
       });
 
-      it('should allow unlimited configuration options for advanced users', () => {
-        const controller = new UXLayersController('advanced');
+      it('should allow unlimited configuration options for broker users', () => {
+        const controller = new UXLayersController('broker');
         const allOptions = ['account-balance', 'risk-per-trade', 'position-size', 'win-rate', 'payoff-ratio', 'max-exposure', 'custom-1', 'custom-2'];
         
         const filteredOptions = controller.getFilteredConfigOptions(allOptions);
@@ -116,8 +118,8 @@ describe('Progressive Disclosure Pattern', () => {
     });
 
     describe('Adaptive Menu Configuration', () => {
-      it('should provide simple menu for beginners', () => {
-        const controller = new UXLayersController('beginner');
+      it('should provide simple menu for learning users', () => {
+        const controller = new UXLayersController('learning');
         const menuConfig = controller.getAdaptiveMenuConfig();
         
         expect(menuConfig.primary.length).toBeLessThanOrEqual(3);
@@ -126,8 +128,8 @@ describe('Progressive Disclosure Pattern', () => {
         expect(menuConfig.configurationPanel.maxVisible).toBe(3);
       });
 
-      it('should provide balanced menu for intermediate users', () => {
-        const controller = new UXLayersController('intermediate');
+      it('should provide balanced menu for import users', () => {
+        const controller = new UXLayersController('import');
         const menuConfig = controller.getAdaptiveMenuConfig();
         
         expect(menuConfig.primary.length).toBeGreaterThan(3);
@@ -135,8 +137,8 @@ describe('Progressive Disclosure Pattern', () => {
         expect(menuConfig.configurationPanel.maxVisible).toBe(6);
       });
 
-      it('should provide full menu for advanced users', () => {
-        const controller = new UXLayersController('advanced');
+      it('should provide full menu for broker users', () => {
+        const controller = new UXLayersController('broker');
         const menuConfig = controller.getAdaptiveMenuConfig();
         
         expect(menuConfig.primary.length).toBeGreaterThan(4);
@@ -148,22 +150,22 @@ describe('Progressive Disclosure Pattern', () => {
 
     describe('Level Management', () => {
       it('should update configuration when level changes', () => {
-        const controller = new UXLayersController('beginner');
+        const controller = new UXLayersController('learning');
         expect(controller.getMaxConfigOptions()).toBe(3);
         
-        controller.setUserLevel('advanced');
+        controller.setUserLevel('broker');
         expect(controller.getMaxConfigOptions()).toBe('unlimited');
-        expect(controller.getUserLevel()).toBe('advanced');
+        expect(controller.getUserLevel()).toBe('broker');
       });
 
       it('should return correct default risk profile for each level', () => {
-        const beginnerController = new UXLayersController('beginner');
-        const intermediateController = new UXLayersController('intermediate');
-        const advancedController = new UXLayersController('advanced');
+        const learningController = new UXLayersController('learning');
+        const importController = new UXLayersController('import');
+        const brokerController = new UXLayersController('broker');
         
-        expect(beginnerController.getDefaultRiskProfile()).toBe('conservative');
-        expect(intermediateController.getDefaultRiskProfile()).toBe('moderate');
-        expect(advancedController.getDefaultRiskProfile()).toBe('aggressive');
+        expect(learningController.getDefaultRiskProfile()).toBe('conservative');
+        expect(importController.getDefaultRiskProfile()).toBe('moderate');
+        expect(brokerController.getDefaultRiskProfile()).toBe('aggressive');
       });
     });
   });
@@ -172,7 +174,7 @@ describe('Progressive Disclosure Pattern', () => {
     
     describe('Feature State Management', () => {
       it('should initialize with correct default states', () => {
-        const controller = new FeatureVisibilityController('beginner');
+        const controller = new FeatureVisibilityController('learning');
         
         // Core features should be visible and unlocked for beginners
         const basicCalculatorState = controller.getFeatureState('basic-calculator');
@@ -193,7 +195,7 @@ describe('Progressive Disclosure Pattern', () => {
           featuresUsed: new Set(['basic-calculator'])
         };
         
-        const controller = new FeatureVisibilityController('intermediate', userProgress);
+        const controller = new FeatureVisibilityController('import', userProgress);
         
         // Position sizing should be unlocked with sufficient account size and trades
         const positionSizingState = controller.getFeatureState('position-sizing');
@@ -212,7 +214,7 @@ describe('Progressive Disclosure Pattern', () => {
           featuresUsed: new Set()
         };
         
-        const controller = new FeatureVisibilityController('intermediate', userProgress);
+        const controller = new FeatureVisibilityController('import', userProgress);
         const positionSizingFeature = FEATURE_DEFINITIONS.find(f => f.id === 'position-sizing')!;
         const progress = controller.calculateUnlockProgress(positionSizingFeature);
         
@@ -230,7 +232,7 @@ describe('Progressive Disclosure Pattern', () => {
           featuresUsed: new Set(['basic-calculator']) // Missing required dependencies
         };
         
-        const controller = new FeatureVisibilityController('advanced', userProgress);
+        const controller = new FeatureVisibilityController('broker', userProgress);
         
         // AI analysis requires backtesting and advanced analytics
         const aiAnalysisState = controller.getFeatureState('ai-analysis');
@@ -254,7 +256,7 @@ describe('Progressive Disclosure Pattern', () => {
           ])
         };
         
-        const controller = new FeatureVisibilityController('advanced', userProgress);
+        const controller = new FeatureVisibilityController('broker', userProgress);
         
         // AI analysis should be unlocked when all dependencies are met
         const aiAnalysisState = controller.getFeatureState('ai-analysis');
@@ -264,7 +266,7 @@ describe('Progressive Disclosure Pattern', () => {
 
     describe('User Progress Tracking', () => {
       it('should update progress and recalculate states', () => {
-        const controller = new FeatureVisibilityController('intermediate');
+        const controller = new FeatureVisibilityController('import');
         
         // Initially, position sizing should not be unlocked
         let positionSizingState = controller.getFeatureState('position-sizing');
@@ -282,7 +284,7 @@ describe('Progressive Disclosure Pattern', () => {
       });
 
       it('should track feature usage', () => {
-        const controller = new FeatureVisibilityController('intermediate');
+        const controller = new FeatureVisibilityController('import');
         
         controller.markFeatureUsed('basic-calculator');
         controller.markFeatureUsed('position-sizing');
@@ -299,10 +301,10 @@ describe('Progressive Disclosure Pattern', () => {
           featuresUsed: new Set(['basic-calculator', 'position-sizing', 'goal-sizing'])
         };
         
-        const controller = new FeatureVisibilityController('intermediate', userProgress);
+        const controller = new FeatureVisibilityController('import', userProgress);
         const summary = controller.getUserProgressSummary();
         
-        expect(summary.level).toBe('intermediate');
+        expect(summary.level).toBe('import');
         expect(summary.accountSize).toBe(25000);
         expect(summary.tradesCompleted).toBe(30);
         expect(summary.timeSpent).toBe(200);
@@ -314,11 +316,11 @@ describe('Progressive Disclosure Pattern', () => {
 
     describe('Feature Categories', () => {
       it('should correctly categorize features', () => {
-        const controller = new FeatureVisibilityController('advanced');
+        const controller = new FeatureVisibilityController('broker');
         
         const coreFeatures = controller.getFeaturesByCategory('core');
-        const intermediateFeatures = controller.getFeaturesByCategory('intermediate');
-        const advancedFeatures = controller.getFeaturesByCategory('advanced');
+        const intermediateFeatures = controller.getFeaturesByCategory('import');
+        const advancedFeatures = controller.getFeaturesByCategory('broker');
         
         expect(coreFeatures.length).toBeGreaterThan(0);
         expect(intermediateFeatures.length).toBeGreaterThan(0);
@@ -341,7 +343,7 @@ describe('Progressive Disclosure Pattern', () => {
           featuresUsed: new Set(['basic-calculator'])
         };
         
-        const controller = new FeatureVisibilityController('intermediate', userProgress);
+        const controller = new FeatureVisibilityController('import', userProgress);
         const nextTargets = controller.getNextUnlockTargets();
         
         expect(nextTargets.length).toBeGreaterThan(0);
@@ -359,7 +361,7 @@ describe('Progressive Disclosure Pattern', () => {
           featuresUsed: new Set(['basic-calculator'])
         };
         
-        const controller = new FeatureVisibilityController('intermediate', userProgress);
+        const controller = new FeatureVisibilityController('import', userProgress);
         const unlockableFeatures = controller.getUnlockableFeatures();
         
         // Should include features with partial progress
@@ -369,14 +371,14 @@ describe('Progressive Disclosure Pattern', () => {
 
     describe('Level Transitions', () => {
       it('should update feature visibility when user level changes', () => {
-        const controller = new FeatureVisibilityController('beginner');
+        const controller = new FeatureVisibilityController('learning');
         
         // Advanced features should not be visible for beginners
         let advancedAnalyticsState = controller.getFeatureState('advanced-analytics');
         expect(advancedAnalyticsState?.isVisible).toBe(false);
         
         // Update to advanced level
-        controller.updateUserProgress({ level: 'advanced' });
+        controller.updateUserProgress({ level: 'broker' });
         
         // Now advanced features should be visible
         advancedAnalyticsState = controller.getFeatureState('advanced-analytics');
@@ -389,8 +391,8 @@ describe('Progressive Disclosure Pattern', () => {
     
     describe('UX Layers and Feature Visibility Integration', () => {
       it('should coordinate between UX layers and feature visibility', () => {
-        const uxController = new UXLayersController('intermediate');
-        const featureController = new FeatureVisibilityController('intermediate');
+        const uxController = new UXLayersController('import');
+        const featureController = new FeatureVisibilityController('import');
         
         // Both controllers should agree on feature visibility
         const visibleFeatures = featureController.getVisibleFeatures();
@@ -412,8 +414,8 @@ describe('Progressive Disclosure Pattern', () => {
 
     describe('Configuration Panel Positioning', () => {
       it('should position configuration panel based on user level', () => {
-        const beginnerController = new UXLayersController('beginner');
-        const advancedController = new UXLayersController('advanced');
+        const beginnerController = new UXLayersController('learning');
+        const advancedController = new UXLayersController('broker');
         
         const beginnerSettings = beginnerController.getConfigurationPanelSettings();
         const advancedSettings = advancedController.getConfigurationPanelSettings();
@@ -428,8 +430,8 @@ describe('Progressive Disclosure Pattern', () => {
 
     describe('Research-Backed Improvements Validation', () => {
       it('should implement progressive disclosure that reduces cognitive load', () => {
-        const beginnerController = new UXLayersController('beginner');
-        const advancedController = new UXLayersController('advanced');
+        const beginnerController = new UXLayersController('learning');
+        const advancedController = new UXLayersController('broker');
         
         const beginnerMenu = beginnerController.getAdaptiveMenuConfig();
         const advancedMenu = advancedController.getAdaptiveMenuConfig();
@@ -443,7 +445,7 @@ describe('Progressive Disclosure Pattern', () => {
       });
 
       it('should provide clear unlock criteria for task completion improvement', () => {
-        const controller = new FeatureVisibilityController('intermediate');
+        const controller = new FeatureVisibilityController('import');
         
         FEATURE_DEFINITIONS.forEach(feature => {
           if (feature.unlockCriteria) {
@@ -462,7 +464,7 @@ describe('Progressive Disclosure Pattern', () => {
 
     describe('Feature Flow Order', () => {
       it('should ensure logical feature progression', () => {
-        const controller = new FeatureVisibilityController('beginner');
+        const controller = new FeatureVisibilityController('learning');
         
         // Core features should be available first
         const coreFeatures = controller.getFeaturesByCategory('core');
@@ -473,7 +475,7 @@ describe('Progressive Disclosure Pattern', () => {
         });
         
         // Advanced features should not be visible for beginners
-        const advancedFeatures = FEATURE_DEFINITIONS.filter(f => f.category === 'advanced');
+        const advancedFeatures = FEATURE_DEFINITIONS.filter(f => f.category === 'broker');
         advancedFeatures.forEach(feature => {
           const state = controller.getFeatureState(feature.id);
           expect(state?.isVisible).toBe(false);
@@ -481,7 +483,7 @@ describe('Progressive Disclosure Pattern', () => {
       });
 
       it('should respect dependency chains', () => {
-        const controller = new FeatureVisibilityController('advanced', {
+        const controller = new FeatureVisibilityController('broker', {
           accountSize: 100000,
           tradesCompleted: 100,
           timeSpent: 1200,
@@ -509,13 +511,13 @@ describe('Progressive Disclosure Pattern', () => {
   describe('Performance and Edge Cases', () => {
     
     it('should handle rapid level changes efficiently', () => {
-      const controller = new UXLayersController('beginner');
+      const controller = new UXLayersController('learning');
       
       const startTime = performance.now();
       
       // Rapidly change levels multiple times
       for (let i = 0; i < 100; i++) {
-        const levels: UserExperienceLevel[] = ['beginner', 'intermediate', 'advanced'];
+        const levels: UserExperienceLevel[] = ['learning', 'import', 'broker'];
         const randomLevel = levels[i % 3];
         controller.setUserLevel(randomLevel);
       }
@@ -528,7 +530,7 @@ describe('Progressive Disclosure Pattern', () => {
     });
 
     it('should handle invalid feature IDs gracefully', () => {
-      const controller = new FeatureVisibilityController('intermediate');
+      const controller = new FeatureVisibilityController('import');
       
       expect(() => {
         controller.getFeatureState('non-existent-feature');
@@ -546,7 +548,7 @@ describe('Progressive Disclosure Pattern', () => {
       };
       
       expect(() => {
-        new FeatureVisibilityController('advanced', extremeProgress);
+        new FeatureVisibilityController('broker', extremeProgress);
       }).not.toThrow();
     });
   });
@@ -559,8 +561,8 @@ describe('Feature Definitions Validation', () => {
       expect(feature.id).toBeTruthy();
       expect(feature.name).toBeTruthy();
       expect(feature.description).toBeTruthy();
-      expect(['core', 'intermediate', 'advanced']).toContain(feature.category);
-      expect(['beginner', 'intermediate', 'advanced']).toContain(feature.requiredLevel);
+      expect(['core', 'import', 'broker']).toContain(feature.category);
+      expect(['learning', 'import', 'broker']).toContain(feature.requiredLevel);
     });
   });
 
@@ -608,31 +610,31 @@ describe('UX Layers Configuration Validation', () => {
   
   it('should have valid UX layer configurations', () => {
     Object.entries(UX_LAYERS).forEach(([level, config]) => {
-      expect(['beginner', 'intermediate', 'advanced']).toContain(level);
+      expect(['learning', 'import', 'broker']).toContain(level);
       expect(config.visibleFeatures).toBeDefined();
       expect(Array.isArray(config.hiddenFeatures)).toBe(true);
-      expect(['simple', 'standard', 'advanced']).toContain(config.navigationStyle);
+      expect(['simple', 'standard', 'broker']).toContain(config.navigationStyle);
       expect(['conservative', 'moderate', 'aggressive']).toContain(config.defaultRiskProfile);
     });
   });
 
   it('should have progressive complexity in configurations', () => {
-    const beginnerConfig = UX_LAYERS.beginner;
-    const intermediateConfig = UX_LAYERS.intermediate;
-    const advancedConfig = UX_LAYERS.advanced;
+    const learningConfig = UX_LAYERS.learning;
+    const importConfig = UX_LAYERS.import;
+    const brokerConfig = UX_LAYERS.broker;
     
-    // Beginner should have most restrictions
-    expect(beginnerConfig.maxConfigOptions).toBe(3);
-    expect(beginnerConfig.hiddenFeatures.length).toBeGreaterThan(0);
+    // Learning should have most restrictions
+    expect(learningConfig.maxConfigOptions).toBe(3);
+    expect(learningConfig.hiddenFeatures.length).toBeGreaterThan(0);
     
-    // Intermediate should have moderate restrictions
-    expect(intermediateConfig.maxConfigOptions).toBe(6);
-    expect(intermediateConfig.hiddenFeatures.length).toBeGreaterThan(0);
-    expect(intermediateConfig.hiddenFeatures.length).toBeLessThan(beginnerConfig.hiddenFeatures.length);
+    // Import should have moderate restrictions
+    expect(importConfig.maxConfigOptions).toBe(6);
+    expect(importConfig.hiddenFeatures.length).toBeGreaterThan(0);
+    expect(importConfig.hiddenFeatures.length).toBeLessThan(learningConfig.hiddenFeatures.length);
     
-    // Advanced should have no restrictions
-    expect(advancedConfig.maxConfigOptions).toBe('unlimited');
-    expect(advancedConfig.hiddenFeatures.length).toBe(0);
-    expect(advancedConfig.visibleFeatures).toBe('all');
+    // Broker should have no restrictions
+    expect(brokerConfig.maxConfigOptions).toBe('unlimited');
+    expect(brokerConfig.hiddenFeatures.length).toBe(0);
+    expect(brokerConfig.visibleFeatures).toBe('all');
   });
 }); 

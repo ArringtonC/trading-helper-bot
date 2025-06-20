@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import BrandButton from '../../components/ui/BrandButton';
 import BrandCard from '../../components/ui/BrandCard';
 import StatusBadge from '../../components/ui/StatusBadge';
-import rateLimiter from '../../utils/rateLimiter';
+import { rateLimitCheck } from '../../utils/rateLimiter';
 
 // Types for the trade screener
 interface MarketScanCriteria {
@@ -147,7 +147,7 @@ const TradeScreener: React.FC = () => {
 
   // Scan for trading opportunities
   const runMarketScan = async () => {
-    const rateLimitResult = rateLimiter('calculation');
+    const rateLimitResult = rateLimitCheck('calculation');
     if (!rateLimitResult.allowed) {
       alert(rateLimitResult.reason);
       return;

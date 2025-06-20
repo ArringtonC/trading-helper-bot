@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceDot } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceDot } from 'recharts';
 // Attempt to import the black-scholes library
 // Note: Since it's an older library, it might not have default export or types.
 // We might need to use require or adjust the import.
@@ -36,7 +36,6 @@ const DecayChart: React.FC<DecayChartProps> = ({
     const data: DecayDataPoint[] = [];
     if (timeToExpiration <= 0) return data; // No decay if time is 0 or less
     
-    const totalOriginalTime = timeToExpiration; // Keep track if needed, but calculation uses current remaining time
     const stepSizeInYears = timeToExpiration / (steps - 1);
 
     for (let i = 0; i < steps; i++) {

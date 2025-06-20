@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import ruleEngineCore from '../../utils/ruleEngine/ruleEngineCore';
 import { evaluateAndExecuteRules, RuleEventEmitter, RuleEngineLogger } from '../../utils/ruleEngine/ruleEngineCore';
-import { Rule } from '../types/RuleSchema';
-import { ActionContext } from '../utils/ruleEngine/actionExecutor';
+import { Rule } from '../../types/RuleSchema';
+import { ActionContext } from '../../utils/ruleEngine/actionExecutor';
 import { useTrades } from '../../context/TradesContext';
 import RuleEditor from '../../components/RuleEditor';
 

@@ -1,3 +1,5 @@
+/// <reference types="jest" />
+
 import { FlowOrderManager, FEATURE_FLOW_ORDER } from '../FlowOrderManager';
 import { FeatureAccessController } from '../FeatureAccessController';
 import { UserExperienceLevel } from '../UXLayersController';
@@ -7,8 +9,8 @@ describe('FlowOrderManager', () => {
   let featureAccessController: FeatureAccessController;
 
   beforeEach(() => {
-    featureAccessController = new FeatureAccessController('intermediate');
-    manager = new FlowOrderManager('intermediate', featureAccessController);
+    featureAccessController = new FeatureAccessController('import');
+    manager = new FlowOrderManager('import', featureAccessController);
   });
 
   describe('FEATURE_FLOW_ORDER Configuration', () => {
@@ -53,7 +55,7 @@ describe('FlowOrderManager', () => {
   describe('Feature Ordering', () => {
     it('should order features according to flow rules', () => {
       const features = ['ai-analysis', 'position-sizing', 'basic-dashboard', 'rule-engine'];
-      const result = manager.orderFeatures(features, 'intermediate');
+      const result = manager.orderFeatures(features, 'import');
       
       expect(result.orderedFeatures).toBeDefined();
       expect(result.orderedFeatures.length).toBe(features.length);
@@ -62,7 +64,7 @@ describe('FlowOrderManager', () => {
 
     it('should always position AI analysis features last', () => {
       const features = ['ai-analysis', 'position-sizing', 'ai-insights', 'basic-dashboard'];
-      const result = manager.orderFeatures(features, 'advanced');
+      const result = manager.orderFeatures(features, 'broker');
       
       const aiFeatures = result.orderedFeatures.filter(f => 
         FEATURE_FLOW_ORDER.aiAnalysisFeatures.includes(f)
@@ -82,7 +84,7 @@ describe('FlowOrderManager', () => {
 
     it('should apply ai-analysis-last rule when AI features are present', () => {
       const features = ['position-sizing', 'ai-analysis', 'basic-dashboard'];
-      const result = manager.orderFeatures(features, 'advanced');
+      const result = manager.orderFeatures(features, 'broker');
       
       expect(result.appliedRules).toContain('ai-analysis-last');
       expect(result.aiAnalysisPosition).toBeGreaterThan(-1);
@@ -90,16 +92,16 @@ describe('FlowOrderManager', () => {
 
     it('should not apply ai-analysis-last rule when no AI features are present', () => {
       const features = ['position-sizing', 'basic-dashboard', 'options-trading'];
-      const result = manager.orderFeatures(features, 'intermediate');
+      const result = manager.orderFeatures(features, 'import');
       
       expect(result.appliedRules).not.toContain('ai-analysis-last');
       expect(result.aiAnalysisPosition).toBe(-1);
     });
 
     it('should apply onboarding-first rule for beginners', () => {
-      const beginnerManager = new FlowOrderManager('beginner');
+      const beginnerManager = new FlowOrderManager('learning');
       const features = ['position-sizing', 'welcome-tutorial', 'ai-analysis'];
-      const result = beginnerManager.orderFeatures(features, 'beginner');
+      const result = beginnerManager.orderFeatures(features, 'learning');
       
       expect(result.appliedRules).toContain('onboarding-first');
       
@@ -110,7 +112,7 @@ describe('FlowOrderManager', () => {
 
     it('should apply core-tools-early rule for all user levels', () => {
       const features = ['ai-analysis', 'position-sizing', 'rule-engine', 'basic-dashboard'];
-      const result = manager.orderFeatures(features, 'intermediate');
+      const result = manager.orderFeatures(features, 'import');
       
       expect(result.appliedRules).toContain('core-tools-early');
       
@@ -126,7 +128,7 @@ describe('FlowOrderManager', () => {
   describe('Flow Types', () => {
     it('should handle onboarding flow type', () => {
       const features = ['welcome-tutorial', 'position-sizing', 'ai-analysis'];
-      const result = manager.orderFeatures(features, 'beginner', 'onboarding');
+      const result = manager.orderFeatures(features, 'learning', 'onboarding');
       
       expect(result.metadata.flowType).toBe('onboarding');
       expect(result.sections.length).toBeGreaterThan(0);
@@ -134,14 +136,14 @@ describe('FlowOrderManager', () => {
 
     it('should handle navigation flow type', () => {
       const features = ['position-sizing', 'options-trading', 'ai-analysis'];
-      const result = manager.orderFeatures(features, 'intermediate', 'navigation');
+      const result = manager.orderFeatures(features, 'import', 'navigation');
       
       expect(result.metadata.flowType).toBe('navigation');
     });
 
     it('should handle dashboard flow type', () => {
       const features = ['basic-dashboard', 'performance-tracking', 'ai-analysis'];
-      const result = manager.orderFeatures(features, 'advanced', 'dashboard');
+      const result = manager.orderFeatures(features, 'broker', 'dashboard');
       
       expect(result.metadata.flowType).toBe('dashboard');
     });
@@ -149,27 +151,27 @@ describe('FlowOrderManager', () => {
 
   describe('User Level Filtering', () => {
     it('should filter sections by user level', () => {
-      const beginnerManager = new FlowOrderManager('beginner');
-      const result = beginnerManager.getRecommendedFlow('beginner');
+      const beginnerManager = new FlowOrderManager('learning');
+      const result = beginnerManager.getRecommendedFlow('learning');
       
       // Should not include advanced-only features
       expect(result.orderedFeatures).not.toContain('ai-analysis');
       expect(result.orderedFeatures).not.toContain('rule-engine');
       
       // Should include beginner-appropriate features
-      expect(result.sections.some(s => s.userLevels.includes('beginner'))).toBe(true);
+      expect(result.sections.some(s => s.userLevels.includes('learning'))).toBe(true);
     });
 
     it('should include more features for advanced users', () => {
-      const advancedManager = new FlowOrderManager('advanced');
-      const result = advancedManager.getRecommendedFlow('advanced');
+      const advancedManager = new FlowOrderManager('broker');
+      const result = advancedManager.getRecommendedFlow('broker');
       
       // Should include advanced features
       expect(result.orderedFeatures).toContain('ai-analysis');
       
       // Should have more total features than beginner
-      const beginnerManager = new FlowOrderManager('beginner');
-      const beginnerResult = beginnerManager.getRecommendedFlow('beginner');
+      const beginnerManager = new FlowOrderManager('learning');
+      const beginnerResult = beginnerManager.getRecommendedFlow('learning');
       
       expect(result.orderedFeatures.length).toBeGreaterThan(beginnerResult.orderedFeatures.length);
     });
@@ -177,19 +179,19 @@ describe('FlowOrderManager', () => {
 
   describe('Section Management', () => {
     it('should get features for specific section', () => {
-      const coreFeatures = manager.getFeaturesForSection('core-tools', 'intermediate');
+      const coreFeatures = manager.getFeaturesForSection('core-tools', 'import');
       expect(coreFeatures.length).toBeGreaterThan(0);
       expect(coreFeatures).toContain('position-sizing');
       expect(coreFeatures).toContain('basic-dashboard');
     });
 
     it('should return empty array for invalid section', () => {
-      const features = manager.getFeaturesForSection('invalid-section', 'intermediate');
+      const features = manager.getFeaturesForSection('invalid-section', 'import');
       expect(features).toEqual([]);
     });
 
     it('should return empty array for section not available to user level', () => {
-      const features = manager.getFeaturesForSection('ai-analysis', 'beginner');
+      const features = manager.getFeaturesForSection('ai-analysis', 'learning');
       expect(features).toEqual([]);
     });
   });
@@ -231,7 +233,7 @@ describe('FlowOrderManager', () => {
 
   describe('Flow Statistics', () => {
     it('should provide accurate statistics for beginner', () => {
-      const stats = manager.getFlowStatistics('beginner');
+      const stats = manager.getFlowStatistics('learning');
       
       expect(stats.totalSections).toBeGreaterThan(0);
       expect(stats.availableSections).toBeLessThanOrEqual(stats.totalSections);
@@ -241,8 +243,8 @@ describe('FlowOrderManager', () => {
     });
 
     it('should show more features available for advanced users', () => {
-      const beginnerStats = manager.getFlowStatistics('beginner');
-      const advancedStats = manager.getFlowStatistics('advanced');
+      const beginnerStats = manager.getFlowStatistics('learning');
+      const advancedStats = manager.getFlowStatistics('broker');
       
       expect(advancedStats.availableFeatures).toBeGreaterThan(beginnerStats.availableFeatures);
       expect(advancedStats.aiAnalysisFeatures).toBeGreaterThan(beginnerStats.aiAnalysisFeatures);
@@ -252,7 +254,7 @@ describe('FlowOrderManager', () => {
   describe('Time Estimation', () => {
     it('should calculate estimated completion time', () => {
       const features = ['position-sizing', 'basic-dashboard', 'options-trading'];
-      const result = manager.orderFeatures(features, 'intermediate');
+      const result = manager.orderFeatures(features, 'import');
       
       expect(result.metadata.estimatedCompletionTime).toBeDefined();
       expect(result.metadata.estimatedCompletionTime).toMatch(/\d+/);
@@ -262,8 +264,8 @@ describe('FlowOrderManager', () => {
       const shortFeatures = ['position-sizing'];
       const longFeatures = ['position-sizing', 'options-trading', 'ai-analysis', 'rule-engine'];
       
-      const shortResult = manager.orderFeatures(shortFeatures, 'advanced');
-      const longResult = manager.orderFeatures(longFeatures, 'advanced');
+      const shortResult = manager.orderFeatures(shortFeatures, 'broker');
+      const longResult = manager.orderFeatures(longFeatures, 'broker');
       
       // Parse time estimates (assuming format like "15 minutes" or "1h 30m")
       const parseTime = (timeStr: string): number => {
@@ -284,7 +286,7 @@ describe('FlowOrderManager', () => {
   describe('Integration with FeatureAccessController', () => {
     it('should filter features based on access controller', () => {
       const features = ['position-sizing', 'ai-analysis', 'non-existent-feature'];
-      const result = manager.orderFeatures(features, 'intermediate');
+      const result = manager.orderFeatures(features, 'import');
       
       // Should only include accessible features
       expect(result.orderedFeatures.length).toBeLessThanOrEqual(features.length);
@@ -292,9 +294,9 @@ describe('FlowOrderManager', () => {
     });
 
     it('should work without feature access controller', () => {
-      const managerWithoutController = new FlowOrderManager('intermediate');
+      const managerWithoutController = new FlowOrderManager('import');
       const features = ['position-sizing', 'ai-analysis'];
-      const result = managerWithoutController.orderFeatures(features, 'intermediate');
+      const result = managerWithoutController.orderFeatures(features, 'import');
       
       expect(result.orderedFeatures.length).toBe(features.length);
     });
@@ -305,15 +307,15 @@ describe('FlowOrderManager', () => {
       const features = ['ai-analysis', 'position-sizing', 'rule-engine', 'basic-dashboard'];
       
       // Run ordering multiple times - should be consistent
-      const result1 = manager.orderFeatures(features, 'advanced');
-      const result2 = manager.orderFeatures(features, 'advanced');
+      const result1 = manager.orderFeatures(features, 'broker');
+      const result2 = manager.orderFeatures(features, 'broker');
       
       expect(result1.orderedFeatures).toEqual(result2.orderedFeatures);
       expect(result1.appliedRules).toEqual(result2.appliedRules);
     });
 
     it('should reduce cognitive load through proper feature grouping', () => {
-      const result = manager.getRecommendedFlow('intermediate');
+      const result = manager.getRecommendedFlow('import');
       
       // Features should be grouped by category/priority
       const sections = result.sections;
@@ -327,7 +329,7 @@ describe('FlowOrderManager', () => {
 
     it('should ensure AI analysis is always last for optimal user experience', () => {
       const features = ['position-sizing', 'ai-analysis', 'options-trading', 'ai-insights'];
-      const result = manager.orderFeatures(features, 'advanced');
+      const result = manager.orderFeatures(features, 'broker');
       
       // All AI features should be at the end
       const aiFeatures = FEATURE_FLOW_ORDER.aiAnalysisFeatures.filter(f => features.includes(f));

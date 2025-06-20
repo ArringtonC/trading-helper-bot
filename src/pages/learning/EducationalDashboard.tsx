@@ -28,7 +28,7 @@ const EducationalDashboard: React.FC<EducationalDashboardProps> = ({ userId = 'd
   const [userProgress, setUserProgress] = useState<any>(null);
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [visualizerRecommendations, setVisualizerRecommendations] = useState<any[]>([]);
-  const [userLevel, setUserLevel] = useState<'beginner' | 'intermediate' | 'advanced'>('beginner');
+  const [userLevel, setUserLevel] = useState<'learning' | 'import' | 'broker'>('learning');
 
   useEffect(() => {
     // Initialize user progress and recommendations
@@ -76,11 +76,11 @@ const EducationalDashboard: React.FC<EducationalDashboardProps> = ({ userId = 'd
     
     // Map user level to difficulty level
     const levelMap = {
-      'beginner': 'beginner' as const,
-      'intermediate': 'intermediate' as const,
-      'advanced': 'advanced' as const
+      'learning': 'learning' as const,
+      'import': 'import' as const,
+      'broker': 'broker' as const
     };
-    const level = levelMap[assessmentResult.userLevel] || 'beginner';
+    const level = levelMap[assessmentResult.userLevel] || 'learning';
     setUserLevel(level);
 
     // Get module recommendations
@@ -135,11 +135,11 @@ const EducationalDashboard: React.FC<EducationalDashboardProps> = ({ userId = 'd
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'beginner':
+      case 'learning':
         return 'bg-green-100 text-green-800';
-      case 'intermediate':
+      case 'import':
         return 'bg-yellow-100 text-yellow-800';
-      case 'advanced':
+      case 'broker':
         return 'bg-red-100 text-red-800';
       default:
         return 'bg-gray-100 text-gray-800';

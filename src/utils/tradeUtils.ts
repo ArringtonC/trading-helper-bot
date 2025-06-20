@@ -1,6 +1,4 @@
 import { OptionTrade, ClosedTrade } from '../types/options';
-import { IBKRTradeRecord } from '../types/ibkr';
-import { IBKRActivityStatementParser } from '../services/IBKRActivityStatementParser';
 import { NormalizedTradeData } from '../types/trade';
 
 /**

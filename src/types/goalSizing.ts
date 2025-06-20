@@ -47,6 +47,6 @@ export interface TradingGoals {
   targetMonthlyIncome: number;
   expectedWinRate: number;
   averageWinAmount: number;
-  tradingFrequency: string;
-  riskTolerance: string;
+  tradingFrequency: 'daily' | 'weekly' | 'monthly';
+  riskTolerance: 'conservative' | 'moderate' | 'aggressive';
 } 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { LearningPath, TutorialProgress, MESFeatureFlags } from '../types';
 
 interface EnhancedLearningModuleProps {
-  userLevel: 'beginner' | 'intermediate' | 'advanced';
+  userLevel: 'learning' | 'import' | 'broker';
   learningPath: LearningPath;
   progress: TutorialProgress;
   onModuleComplete: (moduleId: string) => void;

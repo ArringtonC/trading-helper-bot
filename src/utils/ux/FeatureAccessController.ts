@@ -229,8 +229,8 @@ export class FeatureAccessController {
     // Check if feature can be unlocked with current progress
     const organizationStatus = this.featureOrganizationController.getFeatureTier(featureId);
     if (organizationStatus) {
-      const tier = organizationStatus as 'core' | 'intermediate' | 'advanced' | 'resources';
-      const unlockStatus = this.featureOrganizationController.getUnlockStatus(tier as 'intermediate' | 'advanced');
+      const tier = organizationStatus as 'core' | 'import' | 'broker' | 'resources';
+      const unlockStatus = this.featureOrganizationController.getUnlockStatus(tier as 'import' | 'broker');
       
       if (unlockStatus.isUnlocked) {
         // Force cache refresh
@@ -479,8 +479,8 @@ export class FeatureAccessController {
     let nextSteps: string[] | undefined;
     
     if (decisions.organizationDetails) {
-      const tier = decisions.organizationDetails as 'intermediate' | 'advanced';
-      if (tier === 'intermediate' || tier === 'advanced') {
+      const tier = decisions.organizationDetails as 'import' | 'broker';
+      if (tier === 'import' || tier === 'broker') {
         const unlockStatus = this.featureOrganizationController.getUnlockStatus(tier);
         unlockProgress = unlockStatus.progress;
         nextSteps = unlockStatus.nextSteps;
@@ -554,10 +554,10 @@ export class FeatureAccessController {
   private getNextUnlockTargets(): Array<{ featureId: string; progress: number; nextSteps: string[] }> {
     const targets: Array<{ featureId: string; progress: number; nextSteps: string[] }> = [];
     
-    // Check intermediate tier
-    const intermediateStatus = this.featureOrganizationController.getUnlockStatus('intermediate');
+    // Check import tier
+    const intermediateStatus = this.featureOrganizationController.getUnlockStatus('import');
     if (!intermediateStatus.isUnlocked) {
-      FEATURE_ORGANIZATION.intermediate.features.forEach(featureId => {
+      FEATURE_ORGANIZATION.import.features.forEach((featureId: string) => {
         targets.push({
           featureId,
           progress: intermediateStatus.progress,
@@ -567,9 +567,9 @@ export class FeatureAccessController {
     }
     
     // Check advanced tier
-    const advancedStatus = this.featureOrganizationController.getUnlockStatus('advanced');
+    const advancedStatus = this.featureOrganizationController.getUnlockStatus('broker');
     if (!advancedStatus.isUnlocked) {
-      FEATURE_ORGANIZATION.advanced.features.forEach(featureId => {
+      FEATURE_ORGANIZATION.broker.features.forEach((featureId: string) => {
         targets.push({
           featureId,
           progress: advancedStatus.progress,

@@ -16,11 +16,8 @@
 import VolatilityCalculationEngine, { 
   VolatilityCalculationResult, 
   PriceData, 
-  VolatilityData,
   IVPercentileResult,
-  ATRResult,
-  BollingerBandsResult,
-  VIXCorrelationResult
+  BollingerBandsResult
 } from './VolatilityCalculationEngine';
 import VolatilityDataService, { DataSourceConfig } from './VolatilityDataService';
 
@@ -71,6 +68,22 @@ export interface PortfolioVolatilityAnalysis {
     riskRegimeDistribution: Record<string, number>;
   };
   timestamp: string;
+}
+
+export interface VolatilityMetrics {
+  currentVolatility: number;
+  historicalVolatility: number;
+  vixLevel: number;
+  atr: number;
+  bollingerBandWidth: number;
+  volatilityRank: number;
+  volatilityPercentile: number;
+  impliedVolatility?: number;
+  realized30DayVol?: number;
+  vixCorrelation?: number;
+  priceVolumeCorrelation?: number;
+  garchVolatility?: number;
+  normalizedVolatility?: number;
 }
 
 export class VolatilityAnalysisService {

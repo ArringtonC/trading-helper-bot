@@ -21,7 +21,7 @@ interface FlowOrderDemoProps {
 }
 
 export const FlowOrderDemo: React.FC<FlowOrderDemoProps> = ({ className = '' }) => {
-  const [userLevel, setUserLevel] = useState<UserExperienceLevel>('intermediate');
+  const [userLevel, setUserLevel] = useState<UserExperienceLevel>('import');
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([
     'position-sizing',
     'ai-analysis',
@@ -77,9 +77,9 @@ export const FlowOrderDemo: React.FC<FlowOrderDemoProps> = ({ className = '' }) 
   };
 
   const userLevelConfig = {
-    beginner: { icon: <Users className="h-5 w-5" />, color: 'text-green-600', bgColor: 'bg-green-50' },
-    intermediate: { icon: <TrendingUp className="h-5 w-5" />, color: 'text-blue-600', bgColor: 'bg-blue-50' },
-    advanced: { icon: <Zap className="h-5 w-5" />, color: 'text-purple-600', bgColor: 'bg-purple-50' }
+    learning: { icon: <Users className="h-5 w-5" />, color: 'text-green-600', bgColor: 'bg-green-50' },
+    import: { icon: <TrendingUp className="h-5 w-5" />, color: 'text-blue-600', bgColor: 'bg-blue-50' },
+    broker: { icon: <Zap className="h-5 w-5" />, color: 'text-purple-600', bgColor: 'bg-purple-50' }
   };
 
   const availableFeatures = [
@@ -125,7 +125,7 @@ export const FlowOrderDemo: React.FC<FlowOrderDemoProps> = ({ className = '' }) 
         <div className="bg-white rounded-lg shadow-sm border p-6">
           <h3 className="text-lg font-semibold mb-4">User Level</h3>
           <div className="space-y-2">
-            {(['beginner', 'intermediate', 'advanced'] as UserExperienceLevel[]).map(level => (
+            {(['learning', 'import', 'broker'] as UserExperienceLevel[]).map(level => (
               <button
                 key={level}
                 onClick={() => setUserLevel(level)}
@@ -353,7 +353,7 @@ export const FlowOrderDemo: React.FC<FlowOrderDemoProps> = ({ className = '' }) 
                     section.category === 'core' ? 'bg-green-500' :
                     section.category === 'trading' ? 'bg-blue-500' :
                     section.category === 'analysis' ? 'bg-purple-500' :
-                    section.category === 'advanced' ? 'bg-red-500' :
+                    section.category === 'broker' ? 'bg-red-500' :
                     'bg-gray-500'
                   }`} />
                   <h4 className="font-medium">{section.name}</h4>

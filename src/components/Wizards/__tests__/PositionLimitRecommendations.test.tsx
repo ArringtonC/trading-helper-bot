@@ -116,7 +116,7 @@ describe('PositionLimitRecommendations', () => {
           accountSize: 50000,
           riskTolerance: 'moderate',
           tradingStrategy: 'swing_trading',
-          experienceLevel: 'intermediate',
+          experienceLevel: 'import',
           goalType: 'growth',
           capitalObjectiveParameters: {
             currentBalance: 50000,

@@ -7,11 +7,6 @@ import PositionDetailView from '../../components/options/PositionDetailView';
 import { OptionTrade, OptionStrategy } from '../../types/options';
 
 const currencyFmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
-const dateFmt = (d: Date | string | undefined) => {
-  if (!d) return '';
-  const date = typeof d === 'string' ? new Date(d) : d;
-  return date.toISOString().slice(0, 10);
-};
 
 const InteractiveAnalytics: React.FC = () => {
   const { trades } = useTrades();
@@ -102,18 +97,8 @@ const InteractiveAnalytics: React.FC = () => {
     setTimeout(() => setShowAnnotation(false), 2000);
   };
 
-  // Helper: Check if a row (object) has all zero or empty values (except id/symbol)
-  const isAllZeroRow = (row: any) => {
-    return Object.entries(row)
-      .filter(([key]) => key !== 'id' && key !== 'symbol' && key !== 'expiry' && key !== 'strike')
-      .every(([, value]) => Number(value) === 0 || value === '' || value === null || value === undefined);
-  };
-
   // Filtered trades for table/chart: only those with non-zero P&L
   const nonZeroPLTrades = tradeOnlyOptionTrades.filter(t => (t.tradePL ?? 0) !== 0);
-
-  // Filtered symbols for heatmap: only those with at least one non-zero P&L
-  const nonZeroSymbols = Array.from(new Set(nonZeroPLTrades.map(t => t.symbol)));
 
   // Top 10 symbols by total P&L
   const topSymbols = useMemo(() => {

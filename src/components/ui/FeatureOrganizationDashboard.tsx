@@ -44,8 +44,8 @@ const FeatureTierDisplay: React.FC<FeatureTierDisplayProps> = ({
   const getTierIcon = (name: string) => {
     switch (name) {
       case 'core': return <Star className="h-5 w-5 text-yellow-500" />;
-      case 'intermediate': return <TrendingUp className="h-5 w-5 text-blue-500" />;
-      case 'advanced': return <Zap className="h-5 w-5 text-purple-500" />;
+      case 'import': return <TrendingUp className="h-5 w-5 text-blue-500" />;
+      case 'broker': return <Zap className="h-5 w-5 text-purple-500" />;
       case 'resources': return <BookOpen className="h-5 w-5 text-green-500" />;
       default: return <Settings className="h-5 w-5 text-gray-500" />;
     }
@@ -54,8 +54,8 @@ const FeatureTierDisplay: React.FC<FeatureTierDisplayProps> = ({
   const getTierColor = (name: string) => {
     switch (name) {
       case 'core': return 'border-yellow-200 bg-yellow-50';
-      case 'intermediate': return 'border-blue-200 bg-blue-50';
-      case 'advanced': return 'border-purple-200 bg-purple-50';
+      case 'import': return 'border-blue-200 bg-blue-50';
+      case 'broker': return 'border-purple-200 bg-purple-50';
       case 'resources': return 'border-green-200 bg-green-50';
       default: return 'border-gray-200 bg-gray-50';
     }

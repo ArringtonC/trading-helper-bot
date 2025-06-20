@@ -63,7 +63,7 @@ describe('Progressive Disclosure Navigation', () => {
         case 'showUnifiedDashboard': return 'true';
         case 'enableAdvancedFeatures': return 'true';
         case 'enableDebugMode': return 'true';
-        case 'userExperienceLevel': return 'intermediate';
+        case 'userExperienceLevel': return 'import';
         default: return 'false';
       }
     });
@@ -93,7 +93,7 @@ describe('Progressive Disclosure Navigation', () => {
       const levelSelector = screen.getByDisplayValue('📈 Intermediate');
       
       // Change to beginner level
-      fireEvent.change(levelSelector, { target: { value: 'beginner' } });
+      fireEvent.change(levelSelector, { target: { value: 'learning' } });
       
       await waitFor(() => {
         expect(screen.getByDisplayValue('🌱 Beginner')).toBeInTheDocument();
@@ -101,7 +101,7 @@ describe('Progressive Disclosure Navigation', () => {
       });
       
       // Verify localStorage was called
-      expect(localStorageMock.setItem).toHaveBeenCalledWith('userExperienceLevel', 'beginner');
+      expect(localStorageMock.setItem).toHaveBeenCalledWith('userExperienceLevel', 'learning');
     });
 
     it('should display correct icons for each level', async () => {
@@ -114,13 +114,13 @@ describe('Progressive Disclosure Navigation', () => {
       const levelSelector = screen.getByRole('combobox');
       
       // Test beginner level
-      fireEvent.change(levelSelector, { target: { value: 'beginner' } });
+      fireEvent.change(levelSelector, { target: { value: 'learning' } });
       await waitFor(() => {
         expect(screen.getByText('🌱')).toBeInTheDocument();
       });
       
       // Test advanced level
-      fireEvent.change(levelSelector, { target: { value: 'advanced' } });
+      fireEvent.change(levelSelector, { target: { value: 'broker' } });
       await waitFor(() => {
         expect(screen.getByText('🚀')).toBeInTheDocument();
       });
@@ -149,7 +149,7 @@ describe('Progressive Disclosure Navigation', () => {
       );
       
       const levelSelector = screen.getByRole('combobox');
-      fireEvent.change(levelSelector, { target: { value: 'beginner' } });
+      fireEvent.change(levelSelector, { target: { value: 'learning' } });
       
       await waitFor(() => {
         // Should show beginner-appropriate features
@@ -169,7 +169,7 @@ describe('Progressive Disclosure Navigation', () => {
       );
       
       const levelSelector = screen.getByRole('combobox');
-      fireEvent.change(levelSelector, { target: { value: 'intermediate' } });
+      fireEvent.change(levelSelector, { target: { value: 'import' } });
       
       await waitFor(() => {
         // Should show intermediate features
@@ -191,7 +191,7 @@ describe('Progressive Disclosure Navigation', () => {
       );
       
       const levelSelector = screen.getByRole('combobox');
-      fireEvent.change(levelSelector, { target: { value: 'advanced' } });
+      fireEvent.change(levelSelector, { target: { value: 'broker' } });
       
       await waitFor(() => {
         // Should show all features including advanced ones
@@ -213,7 +213,7 @@ describe('Progressive Disclosure Navigation', () => {
           case 'showRuleEngine': return 'false';
           case 'enableAdvancedFeatures': return 'false';
           case 'enableDebugMode': return 'false';
-          case 'userExperienceLevel': return 'advanced';
+          case 'userExperienceLevel': return 'broker';
           default: return 'true';
         }
       });
@@ -225,7 +225,7 @@ describe('Progressive Disclosure Navigation', () => {
       );
       
       const levelSelector = screen.getByRole('combobox');
-      fireEvent.change(levelSelector, { target: { value: 'advanced' } });
+      fireEvent.change(levelSelector, { target: { value: 'broker' } });
       
       await waitFor(() => {
         // Features should be hidden due to feature flags
@@ -248,14 +248,14 @@ describe('Progressive Disclosure Navigation', () => {
       const levelSelector = screen.getByRole('combobox');
       
       // Intermediate level should show basic import
-      fireEvent.change(levelSelector, { target: { value: 'intermediate' } });
+      fireEvent.change(levelSelector, { target: { value: 'import' } });
       await waitFor(() => {
         expect(screen.getByText('📥 Import')).toBeInTheDocument();
         expect(screen.queryByText('🔧 Direct Parser')).not.toBeInTheDocument();
       });
       
       // Advanced level should show both import features
-      fireEvent.change(levelSelector, { target: { value: 'advanced' } });
+      fireEvent.change(levelSelector, { target: { value: 'broker' } });
       await waitFor(() => {
         expect(screen.getByText('📥 Import')).toBeInTheDocument();
         expect(screen.getByText('🔧 Direct Parser')).toBeInTheDocument();

@@ -35,7 +35,7 @@ describe('UserExperienceAssessment', () => {
 
       const result = assessment.assessUser(behavior, trading, preferences);
 
-      expect(result.userLevel).toBe('beginner');
+      expect(result.userLevel).toBe('learning');
       expect(result.riskProfile.level).toBe('conservative');
       expect(result.shouldShowOnboarding).toBe(true);
       expect(result.recommendations).toContain('Start with the Position Sizing tool to learn proper risk management');
@@ -66,7 +66,7 @@ describe('UserExperienceAssessment', () => {
 
       const result = assessment.assessUser(behavior, trading, preferences);
 
-      expect(result.userLevel).toBe('intermediate');
+      expect(result.userLevel).toBe('import');
       expect(result.riskProfile.level).toBe('moderate');
       expect(result.shouldShowOnboarding).toBe(false);
       expect(result.recommendations).toContain('Explore the Options Trading tools for advanced strategies');
@@ -91,13 +91,13 @@ describe('UserExperienceAssessment', () => {
 
       const preferences: Partial<ExplicitPreferences> = {
         hasCompletedOnboarding: true,
-        preferredComplexity: 'advanced',
+        preferredComplexity: 'broker',
         preferredRiskLevel: 'aggressive'
       };
 
       const result = assessment.assessUser(behavior, trading, preferences);
 
-      expect(result.userLevel).toBe('advanced');
+      expect(result.userLevel).toBe('broker');
       expect(result.riskProfile.level).toBe('aggressive');
       expect(result.shouldShowOnboarding).toBe(false);
       expect(result.recommendations).toContain('Set up IBKR connection for live data integration');
@@ -105,13 +105,13 @@ describe('UserExperienceAssessment', () => {
 
     it('should handle manual override', () => {
       const preferences: Partial<ExplicitPreferences> = {
-        manualOverride: 'advanced',
+        manualOverride: 'broker',
         preferredRiskLevel: 'moderate'
       };
 
       const result = assessment.assessUser({}, {}, preferences);
 
-      expect(result.userLevel).toBe('advanced');
+      expect(result.userLevel).toBe('broker');
       expect(result.confidence).toBe(1.0);
       expect(result.reasoning).toContain('User manually set experience level to advanced');
     });
@@ -124,12 +124,12 @@ describe('UserExperienceAssessment', () => {
       };
 
       const preferences: Partial<ExplicitPreferences> = {
-        selfReportedLevel: 'intermediate'
+        selfReportedLevel: 'import'
       };
 
       const result = assessment.assessUser(behavior, {}, preferences);
 
-      expect(result.userLevel).toBe('intermediate');
+      expect(result.userLevel).toBe('import');
     });
 
     it('should identify warning flags', () => {
@@ -145,7 +145,7 @@ describe('UserExperienceAssessment', () => {
       };
 
       const preferences: Partial<ExplicitPreferences> = {
-        selfReportedLevel: 'advanced' // Inconsistent with experience
+        selfReportedLevel: 'broker' // Inconsistent with experience
       };
 
       const result = assessment.assessUser(behavior, trading, preferences);
@@ -173,7 +173,7 @@ describe('UserExperienceAssessment', () => {
           totalTrades: 100
         },
         {
-          selfReportedLevel: 'intermediate'
+          selfReportedLevel: 'import'
         }
       );
 
@@ -187,12 +187,12 @@ describe('UserExperienceAssessment', () => {
   describe('quickAssessment', () => {
     it('should provide quick assessment for new users', () => {
       const preferences: Partial<ExplicitPreferences> = {
-        selfReportedLevel: 'beginner'
+        selfReportedLevel: 'learning'
       };
 
       const result = assessment.quickAssessment(preferences);
 
-      expect(result.userLevel).toBe('beginner');
+      expect(result.userLevel).toBe('learning');
       expect(result.riskProfile.level).toBe('conservative');
       expect(result.shouldShowOnboarding).toBe(true);
     });
@@ -200,7 +200,7 @@ describe('UserExperienceAssessment', () => {
     it('should handle minimal preferences in quick assessment', () => {
       const result = assessment.quickAssessment({});
 
-      expect(result.userLevel).toBe('beginner'); // Default for new users
+      expect(result.userLevel).toBe('learning'); // Default for new users
       expect(result.confidence).toBeGreaterThan(0);
     });
   });
@@ -332,7 +332,7 @@ describe('UserExperienceAssessment', () => {
     it('should handle empty input gracefully', () => {
       const result = assessment.assessUser({}, {}, {});
 
-      expect(result.userLevel).toBe('beginner'); // Default fallback
+      expect(result.userLevel).toBe('learning'); // Default fallback
       expect(result.confidence).toBeGreaterThan(0);
       expect(result.riskProfile).toBeDefined();
       expect(result.recommendations).toBeDefined();
@@ -380,7 +380,7 @@ describe('UserExperienceAssessment', () => {
         {}
       );
 
-      expect(result.userLevel).toBe('advanced');
+      expect(result.userLevel).toBe('broker');
       expect(result.riskProfile.level).toBe('aggressive');
     });
   });
@@ -420,7 +420,7 @@ describe('UserExperienceAssessment', () => {
       const result = assessment.assessUser(
         { timeSpentInApp: 600 },
         { tradingExperienceYears: 5 },
-        { selfReportedLevel: 'advanced' }
+        { selfReportedLevel: 'broker' }
       );
 
       expect(result.shouldShowOnboarding).toBe(false);

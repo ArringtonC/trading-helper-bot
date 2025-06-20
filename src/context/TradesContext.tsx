@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { FetchedTrade } from '../pages/OptionsDB';
+import { FetchedTrade } from '../pages/trading/OptionsDB';
 
 type TradesContextType = {
   trades: FetchedTrade[];

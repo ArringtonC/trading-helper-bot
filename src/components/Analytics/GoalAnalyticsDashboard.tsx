@@ -80,7 +80,7 @@ export const GoalAnalyticsDashboard: React.FC<GoalAnalyticsDashboardProps> = ({
         
         // Get unified analytics
         const analyticsEngine = new UnifiedAnalyticsEngine({
-          userLevel: 'advanced',
+          userLevel: 'broker',
           enabledModules: ['position-summary', 'basic-risk', 'trade-performance'],
           layout: 'detailed',
           refreshInterval: 30000

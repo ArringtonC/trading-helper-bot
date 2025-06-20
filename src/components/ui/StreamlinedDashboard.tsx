@@ -165,12 +165,12 @@ const ModuleCard: React.FC<ModuleCardProps> = ({
         <div className="flex items-center space-x-2">
           <span className={`px-2 py-1 rounded-full text-xs font-medium ${
             module.category === 'core' ? 'bg-blue-100 text-blue-800' :
-            module.category === 'intermediate' ? 'bg-yellow-100 text-yellow-800' :
+            module.category === 'import' ? 'bg-yellow-100 text-yellow-800' :
             'bg-purple-100 text-purple-800'
           }`}>
             {module.category}
           </span>
-          {(module.category === 'intermediate' || module.category === 'advanced') && (
+          {(module.category === 'import' || module.category === 'broker') && (
             <button
               onClick={onToggleExpand}
               className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -206,8 +206,8 @@ const StreamlinedDashboard: React.FC<StreamlinedDashboardProps> = ({
   // Initialize analytics engine with user level
   const analyticsEngine = useMemo(() => {
     const config: AnalyticsConfig = {
-      userLevel: userLevel === 'beginner' ? 'beginner' : 
-                 userLevel === 'intermediate' ? 'intermediate' : 'advanced',
+      userLevel: userLevel === 'learning' ? 'learning' : 
+                 userLevel === 'import' ? 'import' : 'broker',
       enabledModules: [], // Will be populated based on user level
       layout: 'compact',
       refreshInterval: 30000
@@ -334,9 +334,9 @@ const StreamlinedDashboard: React.FC<StreamlinedDashboardProps> = ({
               onChange={(e) => handleUserLevelChange(e.target.value as UserExperienceLevel)}
               className="px-3 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="advanced">Advanced</option>
+              <option value="learning">Beginner</option>
+              <option value="import">Intermediate</option>
+              <option value="broker">Advanced</option>
             </select>
           </div>
         )}
@@ -346,9 +346,9 @@ const StreamlinedDashboard: React.FC<StreamlinedDashboardProps> = ({
       <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
         <h3 className="text-blue-800 font-medium text-sm">Progressive Disclosure Active</h3>
         <p className="text-blue-600 text-sm mt-1">
-          {userLevel === 'beginner' && 'Showing essential features only. Upgrade to Intermediate for more analytics.'}
-          {userLevel === 'intermediate' && 'Showing core and intermediate features. Upgrade to Advanced for full analytics suite.'}
-          {userLevel === 'advanced' && 'All analytics features available. You have full access to the complete suite.'}
+          {userLevel === 'learning' && 'Showing essential features only. Upgrade to Intermediate for more analytics.'}
+          {userLevel === 'import' && 'Showing core and intermediate features. Upgrade to Advanced for full analytics suite.'}
+          {userLevel === 'broker' && 'All analytics features available. You have full access to the complete suite.'}
         </p>
       </div>
 

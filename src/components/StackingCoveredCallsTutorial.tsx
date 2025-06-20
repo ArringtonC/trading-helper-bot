@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import CommonMistakesEducation from './CommonMistakesEducation';
 
 interface StackingCoveredCallsTutorialProps {

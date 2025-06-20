@@ -31,7 +31,7 @@ export interface UserProfile {
   accountSize: number;
   riskTolerance: 'conservative' | 'moderate' | 'aggressive';
   tradingStrategy: 'day_trading' | 'swing_trading' | 'position_trading' | 'scalping';
-  experienceLevel: 'beginner' | 'intermediate' | 'advanced';
+  experienceLevel: 'learning' | 'import' | 'broker';
   goalType: 'growth' | 'income' | 'preservation' | 'capital_objective';
   assetClass?: 'stocks' | 'options' | 'futures' | 'crypto' | 'forex';
   marketCondition?: 'low_volatility' | 'normal_volatility' | 'high_volatility' | 'bear_market' | 'bull_market' | 'crisis_conditions';
@@ -485,7 +485,7 @@ export function validateUserPositionLimits(
 
   // Check against conservative guidelines
   const conservative = POSITION_SIZING_STANDARDS.conservative;
-  if (userProfile.experienceLevel === 'beginner') {
+  if (userProfile.experienceLevel === 'learning') {
     if (userLimits.maxPositionSize > conservative.maxPositionSize * 2) {
       warnings.push('Position size may be too high for beginner level');
     }

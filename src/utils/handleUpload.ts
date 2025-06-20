@@ -1,11 +1,13 @@
 import { parseTradeCSV, RawTrade, ParsedTrade } from './parseTradeCSV';
 import { parsePositionCSV, Position } from './parsePositionCSV';
 import { isTradeCSV, isPositionCSV } from './parseTradeCSV';
-import { insertNormalizedTrades, insertPositions, resetDatabase, getAggregatePL, getTradeCounts, getDailyPnlForReconciliation, getDb } from '../services/DatabaseService';
-import { BrokerType, NormalizedTradeData, AssetCategory, OpenCloseIndicator, PutCall } from '../types/trade';
+import { insertNormalizedTrades, insertPositions, resetDatabase, getAggregatePL, getTradeCounts, getDailyPnlForReconciliation } from '../services/DatabaseService';
+import { BrokerType, NormalizedTradeData, PutCall } from '../types/trade';
 import { DailyPnlData, reconcilePnlData, ReconciliationResult } from '../services/ReconciliationService';
 import Papa from 'papaparse';
 import eventEmitter from './eventEmitter';
+import { Account } from '../types/account';
+import { validateNormalizedTradeData } from './validateNormalizedTrade';
 
 // Helper function to parse the authoritative P&L file (simple CSV: symbol,date,pnl)
 const parseAuthoritativePnl = (fileContent: string): Promise<DailyPnlData[]> => {
@@ -193,20 +195,28 @@ export const handleUpload = async (
   return reconciliationResult;
 };
 
-// Helper function to read file content (used by the handleUpload function above)
-async function readFileContent(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      if (event.target && event.target.result) {
-        resolve(event.target.result as string);
-      } else {
-        reject(new Error('Failed to read file content.'));
-      }
-    };
-    reader.onerror = (error) => {
-      reject(error);
-    };
-    reader.readAsText(file);
-  });
-}
+// /**
+//  * @deprecated This function is no longer used - modern File.text() API is used instead
+//  * Kept for backwards compatibility and potential future use cases requiring FileReader
+//  * 
+//  * Helper function to read file content using FileReader API
+//  * @param file - The File object to read
+//  * @returns Promise<string> - The file content as text
+//  */
+// async function readFileContent(file: File): Promise<string> {
+//   return new Promise((resolve, reject) => {
+//     const reader = new FileReader();
+//     reader.onload = (event) => {
+//       if (event.target && event.target.result) {
+//         resolve(event.target.result as string);
+//       } else {
+//         reject(new Error('Failed to read file content.'));
+//       }
+//     };
+//     reader.onerror = (error) => {
+//       reject(error);
+//     };
+//     reader.readAsText(file);
+//   });
+// }
+

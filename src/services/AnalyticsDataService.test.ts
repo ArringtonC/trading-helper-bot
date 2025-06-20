@@ -1,18 +1,56 @@
+// Mock the DatabaseService module at the top level - Jest hoists this automatically
+jest.mock('./DatabaseService', () => ({
+  getTrades: jest.fn(),
+}));
+
 import { AnalyticsDataService } from './AnalyticsDataService';
-import { jest } from '@jest/globals';
-// Mock fetch for network tests
-global.fetch = jest.fn();
+import { NormalizedTradeData, BrokerType, PutCall, OpenCloseIndicator } from '../types/trade';
+import { getTrades } from './DatabaseService';
+
+// Get the mocked function with proper typing
+const mockedGetTrades = getTrades as jest.MockedFunction<typeof getTrades>;
 
 describe('AnalyticsDataService', () => {
   let service: AnalyticsDataService;
+  
+  const mockTradeData = {
+    id: '1',
+    importTimestamp: '2023-01-01T10:00:00Z',
+    broker: BrokerType.IBKR,
+    accountId: 'TEST123' as string | undefined,
+    symbol: 'AAPL',
+    assetCategory: 'STK' as const,
+    quantity: 100,
+    tradePrice: 150.50,
+    currency: 'USD',
+    netAmount: 15050,
+    tradeDate: '2023-01-01',
+    action: 'BUY',
+    description: 'Test trade',
+    settleDate: undefined as string | undefined,
+    dateTime: undefined as string | undefined,
+    proceeds: null as number | null,
+    cost: null as number | null,
+    commission: null as number | null,
+    fees: null as number | null,
+    costBasis: null as number | null,
+    strikePrice: null as number | null,
+    multiplier: undefined as number | undefined,
+    expiryDate: undefined as string | undefined,
+    putCall: undefined as PutCall | undefined,
+    openCloseIndicator: undefined as OpenCloseIndicator | undefined,
+    optionSymbol: undefined as string | undefined,
+    orderID: undefined as string | undefined,
+    executionID: undefined as string | undefined,
+    notes: undefined as string | undefined,
+    rawCsvRow: {} as Record<string, string> | undefined,
+    rawRealizedPL: undefined as number | undefined
+  };
 
   beforeEach(() => {
     service = new AnalyticsDataService();
-    
-    
-    // Reset fetch mock
-    (fetch as jest.MockedFunction<typeof fetch>).mockClear();
-    
+    mockedGetTrades.mockClear();
+    mockedGetTrades.mockResolvedValue([mockTradeData]);
   });
 
   describe('Constructor', () => {
@@ -20,315 +58,67 @@ describe('AnalyticsDataService', () => {
       expect(service).toBeDefined();
       expect(service).toBeInstanceOf(AnalyticsDataService);
     });
-
-    
   });
 
-  
-  describe('Methods', () => {
-    
-    describe('getAllTrades', () => {
-      it('should exist and be callable', () => {
-        expect(typeof service.getAllTrades).toBe('function');
-      });
-
-      
-      it('should return expected result', () => {
-        // Add specific test for getAllTrades
-        const result = service.getAllTrades(/* valid input */);
-        expect(result).toBeDefined();
-      });
-
-      it('should handle invalid input', () => {
-        // Test error handling
-        expect(() => service.getAllTrades(null)).toThrow();
-      });
-      
-    });
-    
-    describe('preprocessTrades', () => {
-      it('should exist and be callable', () => {
-        expect(typeof service.preprocessTrades).toBe('function');
-      });
-
-      
-      it('should return expected result', () => {
-        // Add specific test for preprocessTrades
-        const result = service.preprocessTrades(/* valid input */);
-        expect(result).toBeDefined();
-      });
-
-      it('should handle invalid input', () => {
-        // Test error handling
-        expect(() => service.preprocessTrades(null)).toThrow();
-      });
-      
-    });
-    
-    describe('map', () => {
-      it('should exist and be callable', () => {
-        expect(typeof service.map).toBe('function');
-      });
-
-      
-      it('should return expected result', () => {
-        // Add specific test for map
-        const result = service.map(/* valid input */);
-        expect(result).toBeDefined();
-      });
-
-      it('should handle invalid input', () => {
-        // Test error handling
-        expect(() => service.map(null)).toThrow();
-      });
-      
-    });
-    
-    describe('if', () => {
-      it('should exist and be callable', () => {
-        expect(typeof service.if).toBe('function');
-      });
-
-      
-      it('should return expected result', () => {
-        // Add specific test for if
-        const result = service.if(/* valid input */);
-        expect(result).toBeDefined();
-      });
-
-      it('should handle invalid input', () => {
-        // Test error handling
-        expect(() => service.if(null)).toThrow();
-      });
-      
-    });
-    
-    describe('if', () => {
-      it('should exist and be callable', () => {
-        expect(typeof service.if).toBe('function');
-      });
-
-      
-      it('should return expected result', () => {
-        // Add specific test for if
-        const result = service.if(/* valid input */);
-        expect(result).toBeDefined();
-      });
-
-      it('should handle invalid input', () => {
-        // Test error handling
-        expect(() => service.if(null)).toThrow();
-      });
-      
-    });
-    
-    describe('if', () => {
-      it('should exist and be callable', () => {
-        expect(typeof service.if).toBe('function');
-      });
-
-      
-      it('should return expected result', () => {
-        // Add specific test for if
-        const result = service.if(/* valid input */);
-        expect(result).toBeDefined();
-      });
-
-      it('should handle invalid input', () => {
-        // Test error handling
-        expect(() => service.if(null)).toThrow();
-      });
-      
-    });
-    
-    describe('if', () => {
-      it('should exist and be callable', () => {
-        expect(typeof service.if).toBe('function');
-      });
-
-      
-      it('should return expected result', () => {
-        // Add specific test for if
-        const result = service.if(/* valid input */);
-        expect(result).toBeDefined();
-      });
-
-      it('should handle invalid input', () => {
-        // Test error handling
-        expect(() => service.if(null)).toThrow();
-      });
-      
-    });
-    
-    describe('if', () => {
-      it('should exist and be callable', () => {
-        expect(typeof service.if).toBe('function');
-      });
-
-      
-      it('should return expected result', () => {
-        // Add specific test for if
-        const result = service.if(/* valid input */);
-        expect(result).toBeDefined();
-      });
-
-      it('should handle invalid input', () => {
-        // Test error handling
-        expect(() => service.if(null)).toThrow();
-      });
-      
-    });
-    
-    describe('if', () => {
-      it('should exist and be callable', () => {
-        expect(typeof service.if).toBe('function');
-      });
-
-      
-      it('should return expected result', () => {
-        // Add specific test for if
-        const result = service.if(/* valid input */);
-        expect(result).toBeDefined();
-      });
-
-      it('should handle invalid input', () => {
-        // Test error handling
-        expect(() => service.if(null)).toThrow();
-      });
-      
-    });
-    
-    describe('if', () => {
-      it('should exist and be callable', () => {
-        expect(typeof service.if).toBe('function');
-      });
-
-      
-      it('should return expected result', () => {
-        // Add specific test for if
-        const result = service.if(/* valid input */);
-        expect(result).toBeDefined();
-      });
-
-      it('should handle invalid input', () => {
-        // Test error handling
-        expect(() => service.if(null)).toThrow();
-      });
-      
-    });
-    
-    describe('getTradesBySymbol', () => {
-      it('should exist and be callable', () => {
-        expect(typeof service.getTradesBySymbol).toBe('function');
-      });
-
-      
-      it('should return expected result', () => {
-        // Add specific test for getTradesBySymbol
-        const result = service.getTradesBySymbol(/* valid input */);
-        expect(result).toBeDefined();
-      });
-
-      it('should handle invalid input', () => {
-        // Test error handling
-        expect(() => service.getTradesBySymbol(null)).toThrow();
-      });
-      
-    });
-    
-  });
-  
-
-  
-  describe('Network Operations', () => {
-    it('should handle network success', async () => {
-      const mockResponse = { ok: true, json: jest.fn().mockResolvedValue({ data: 'test' }) };
-      (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValue(mockResponse as any);
-
-      // Test network method
-      // const result = await service.networkMethod();
-      // expect(result).toBeDefined();
+  describe('getAllTrades', () => {
+    it('should exist and be callable', () => {
+      expect(typeof service.getAllTrades).toBe('function');
     });
 
-    it('should handle network failures', async () => {
-      (fetch as jest.MockedFunction<typeof fetch>).mockRejectedValue(new Error('Network error'));
-
-      // Test network error handling
-      // await expect(service.networkMethod()).rejects.toThrow('Network error');
+    it('should return array of trades', async () => {
+      const result = await service.getAllTrades();
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(1);
+      expect(result[0].symbol).toBe('AAPL');
     });
 
-    it('should handle malformed responses', async () => {
-      const mockResponse = { ok: true, json: jest.fn().mockRejectedValue(new Error('Invalid JSON')) };
-      (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValue(mockResponse as any);
-
-      // Test malformed response handling
-      // await expect(service.networkMethod()).rejects.toThrow();
+    it('should call DatabaseService.getTrades', async () => {
+      await service.getAllTrades();
+      expect(mockedGetTrades).toHaveBeenCalledTimes(1);
     });
   });
-  
+
+  describe('getTradesBySymbol', () => {
+    it('should exist and be callable', () => {
+      expect(typeof service.getTradesBySymbol).toBe('function');
+    });
+
+    it('should return trades for specific symbol', async () => {
+      const result = await service.getTradesBySymbol('AAPL');
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(1);
+      expect(result[0].symbol).toBe('AAPL');
+    });
+
+    it('should return empty array for non-matching symbol', async () => {
+      const result = await service.getTradesBySymbol('TSLA');
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(0);
+    });
+
+    it('should handle empty symbol', async () => {
+      const result = await service.getTradesBySymbol('');
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(0);
+    });
+  });
 
   describe('Error Handling', () => {
-    it('should handle undefined inputs gracefully', () => {
-      // Test undefined input handling for all public methods
+    it('should handle database errors', async () => {
+      mockedGetTrades.mockRejectedValue(new Error('Database error'));
       
-      expect(() => service.getAllTrades(undefined)).not.toThrow('Unexpected error');
-      
-      expect(() => service.preprocessTrades(undefined)).not.toThrow('Unexpected error');
-      
-      expect(() => service.map(undefined)).not.toThrow('Unexpected error');
-      
-      expect(() => service.if(undefined)).not.toThrow('Unexpected error');
-      
-      expect(() => service.if(undefined)).not.toThrow('Unexpected error');
-      
-      expect(() => service.if(undefined)).not.toThrow('Unexpected error');
-      
-      expect(() => service.if(undefined)).not.toThrow('Unexpected error');
-      
-      expect(() => service.if(undefined)).not.toThrow('Unexpected error');
-      
-      expect(() => service.if(undefined)).not.toThrow('Unexpected error');
-      
-      expect(() => service.if(undefined)).not.toThrow('Unexpected error');
-      
-      expect(() => service.getTradesBySymbol(undefined)).not.toThrow('Unexpected error');
-      
+      await expect(service.getAllTrades()).rejects.toThrow('Database error');
+      await expect(service.getTradesBySymbol('AAPL')).rejects.toThrow('Database error');
     });
 
-    it('should handle null inputs gracefully', () => {
-      // Test null input handling for all public methods  
+    it('should handle empty database response', async () => {
+      mockedGetTrades.mockResolvedValue([]);
       
-      expect(() => service.getAllTrades(null)).not.toThrow('Unexpected error');
+      const allTrades = await service.getAllTrades();
+      expect(allTrades).toEqual([]);
       
-      expect(() => service.preprocessTrades(null)).not.toThrow('Unexpected error');
-      
-      expect(() => service.map(null)).not.toThrow('Unexpected error');
-      
-      expect(() => service.if(null)).not.toThrow('Unexpected error');
-      
-      expect(() => service.if(null)).not.toThrow('Unexpected error');
-      
-      expect(() => service.if(null)).not.toThrow('Unexpected error');
-      
-      expect(() => service.if(null)).not.toThrow('Unexpected error');
-      
-      expect(() => service.if(null)).not.toThrow('Unexpected error');
-      
-      expect(() => service.if(null)).not.toThrow('Unexpected error');
-      
-      expect(() => service.if(null)).not.toThrow('Unexpected error');
-      
-      expect(() => service.getTradesBySymbol(null)).not.toThrow('Unexpected error');
-      
+      const symbolTrades = await service.getTradesBySymbol('AAPL');
+      expect(symbolTrades).toEqual([]);
     });
   });
-
-  // TODO: Add integration tests
-  // TODO: Add performance tests for large datasets
-  // TODO: Add edge case tests specific to AnalyticsDataService
-  // TODO: Add mock data generators for realistic testing
-  
-  // GENERATED BY: scripts/generate-service-test.js
-  // DATE: 2025-06-07T21:56:32.431Z
-  // SOURCE: src/services/AnalyticsDataService.ts
 });

@@ -18,7 +18,7 @@ interface UnlockNotification {
 }
 
 export const ProgressiveDisclosureDashboard: React.FC<ProgressiveDisclosureDashboardProps> = ({
-  initialUserLevel = 'intermediate',
+  initialUserLevel = 'import',
   initialUserProgress,
   onFeatureSelect,
   className = ''
@@ -764,18 +764,18 @@ export const ProgressiveDisclosureDashboard: React.FC<ProgressiveDisclosureDashb
 // Helper functions
 const getLevelIcon = (level: UserExperienceLevel) => {
   switch (level) {
-    case 'beginner': return '🌱';
-    case 'intermediate': return '📈';
-    case 'advanced': return '🚀';
+    case 'learning': return '🌱';
+    case 'import': return '📈';
+    case 'broker': return '🚀';
     default: return '📊';
   }
 };
 
 const getLevelColor = (level: UserExperienceLevel) => {
   switch (level) {
-    case 'beginner': return '#22c55e';
-    case 'intermediate': return '#3b82f6';
-    case 'advanced': return '#8b5cf6';
+    case 'learning': return '#22c55e';
+    case 'import': return '#3b82f6';
+    case 'broker': return '#8b5cf6';
     default: return '#6b7280';
   }
 };

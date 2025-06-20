@@ -5,14 +5,14 @@ describe('FeatureAccessController', () => {
   let controller: FeatureAccessController;
 
   beforeEach(() => {
-    controller = new FeatureAccessController('beginner');
+    controller = new FeatureAccessController('learning');
   });
 
   describe('Initialization', () => {
     it('should initialize with correct user level', () => {
       const context = controller.getContext();
-      expect(context.userLevel).toBe('beginner');
-      expect(context.userProgress.level).toBe('beginner');
+      expect(context.userLevel).toBe('learning');
+      expect(context.userProgress.level).toBe('learning');
     });
 
     it('should initialize with default user progress', () => {
@@ -24,7 +24,7 @@ describe('FeatureAccessController', () => {
     });
 
     it('should accept custom user progress', () => {
-      const customController = new FeatureAccessController('intermediate', {
+      const customController = new FeatureAccessController('import', {
         tradesCompleted: 25,
         accountSize: 15000,
         timeSpent: 300
@@ -37,7 +37,7 @@ describe('FeatureAccessController', () => {
     });
 
     it('should accept configuration options', () => {
-      const customController = new FeatureAccessController('advanced', {}, {
+      const customController = new FeatureAccessController('broker', {}, {
         cacheTimeout: 10000,
         debugMode: true,
         featureFlags: { testFlag: true }
@@ -141,7 +141,7 @@ describe('FeatureAccessController', () => {
 
     it('should unlock intermediate features when criteria are met', () => {
       // Use intermediate level controller since position-sizing requires intermediate level
-      const intermediateController = new FeatureAccessController('intermediate');
+      const intermediateController = new FeatureAccessController('import');
       
       // Initially intermediate features should not be accessible without sufficient progress
       let decision = intermediateController.canAccessFeature('position-sizing');
@@ -171,16 +171,16 @@ describe('FeatureAccessController', () => {
 
   describe('User Level Management', () => {
     it('should update user level and reinitialize controllers', () => {
-      controller.updateUserLevel('advanced');
+      controller.updateUserLevel('broker');
       
       const context = controller.getContext();
-      expect(context.userLevel).toBe('advanced');
-      expect(context.userProgress.level).toBe('advanced');
+      expect(context.userLevel).toBe('broker');
+      expect(context.userProgress.level).toBe('broker');
     });
 
     it('should provide different feature access for different levels', () => {
-      const beginnerController = new FeatureAccessController('beginner');
-      const advancedController = new FeatureAccessController('advanced');
+      const beginnerController = new FeatureAccessController('learning');
+      const advancedController = new FeatureAccessController('broker');
       
       const beginnerFeatures = beginnerController.getAccessibleFeatures();
       const advancedFeatures = advancedController.getAccessibleFeatures();
@@ -284,8 +284,8 @@ describe('FeatureAccessController', () => {
       const report = controller.getAccessReport();
       
       expect(report.byCategory).toHaveProperty('core');
-      expect(report.byCategory).toHaveProperty('intermediate');
-      expect(report.byCategory).toHaveProperty('advanced');
+      expect(report.byCategory).toHaveProperty('import');
+      expect(report.byCategory).toHaveProperty('broker');
       expect(report.byCategory).toHaveProperty('resources');
       
       Object.values(report.byCategory).forEach(category => {
@@ -375,9 +375,9 @@ describe('FeatureAccessController', () => {
     });
 
     it('should provide consistent results across different user levels', () => {
-      const beginnerController = new FeatureAccessController('beginner');
-      const intermediateController = new FeatureAccessController('intermediate');
-      const advancedController = new FeatureAccessController('advanced');
+      const beginnerController = new FeatureAccessController('learning');
+      const intermediateController = new FeatureAccessController('import');
+      const advancedController = new FeatureAccessController('broker');
       
       // Core features should be accessible to all levels
       expect(beginnerController.canAccessFeature('basic-calculator').isVisible).toBe(true);

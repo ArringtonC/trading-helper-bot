@@ -12,7 +12,7 @@ describe('Position Limit Recommendation Engine', () => {
     accountSize: 100000,
     riskTolerance: 'moderate',
     tradingStrategy: 'swing_trading',
-    experienceLevel: 'intermediate',
+    experienceLevel: 'import',
     goalType: 'growth'
   };
 
@@ -40,7 +40,7 @@ describe('Position Limit Recommendation Engine', () => {
       const conservativeProfile: UserProfile = {
         ...baseUserProfile,
         riskTolerance: 'conservative',
-        experienceLevel: 'beginner'
+        experienceLevel: 'learning'
       };
 
       const result = generatePositionLimitRecommendations(conservativeProfile);
@@ -133,7 +133,7 @@ describe('Position Limit Recommendation Engine', () => {
     it('should warn beginners about high limits', () => {
       const beginnerProfile: UserProfile = {
         ...baseUserProfile,
-        experienceLevel: 'beginner'
+        experienceLevel: 'learning'
       };
 
       const highLimits: CurrentLimits = {
@@ -198,7 +198,7 @@ describe('Position Limit Recommendation Engine', () => {
         ...baseUserProfile,
         riskTolerance: 'aggressive',
         tradingStrategy: 'day_trading',
-        experienceLevel: 'advanced',
+        experienceLevel: 'broker',
         assetClass: 'stocks'
       };
 
@@ -266,7 +266,7 @@ describe('Position Limit Recommendation Engine', () => {
 
       expect(result.rationale.factors.some(factor => factor.includes('moderate'))).toBe(true);
       expect(result.rationale.factors.some(factor => factor.includes('swing trading'))).toBe(true);
-      expect(result.rationale.factors.some(factor => factor.includes('intermediate'))).toBe(true);
+      expect(result.rationale.factors.some(factor => factor.includes('import'))).toBe(true);
     });
   });
 

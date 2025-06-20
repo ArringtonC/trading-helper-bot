@@ -54,7 +54,7 @@ describe('Position Limit Recommendations', () => {
     });
 
     it('should reduce limits for beginners', () => {
-      const input = { ...baseInput, experience: 'beginner' as const };
+      const input = { ...baseInput, experience: 'learning' as const };
       const result = calculateFixedPercentageLimits(input);
       
       // Should be reduced for beginners (0.5 position, 0.6 exposure multiplier)
@@ -63,7 +63,7 @@ describe('Position Limit Recommendations', () => {
     });
 
     it('should increase limits for advanced traders', () => {
-      const input = { ...baseInput, experience: 'advanced' as const };
+      const input = { ...baseInput, experience: 'broker' as const };
       const result = calculateFixedPercentageLimits(input);
       
       // Should be increased for advanced (1.2 position, 1.1 exposure multiplier)
@@ -82,7 +82,7 @@ describe('Position Limit Recommendations', () => {
       const input = { 
         ...baseInput, 
         riskTolerance: 'aggressive' as const,
-        experience: 'advanced' as const
+        experience: 'broker' as const
       };
       const result = calculateFixedPercentageLimits(input);
       
@@ -180,7 +180,7 @@ describe('Position Limit Recommendations', () => {
       const input = { 
         ...baseInput, 
         tradingStrategy: 'scalping' as const,
-        experience: 'beginner' as const
+        experience: 'learning' as const
       };
       const result = calculateStrategySpecificLimits(input);
       

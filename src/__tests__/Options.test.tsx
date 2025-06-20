@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import Options from '../pages/OptionsDB';
+import Options from '../pages/trading/OptionsDB';
 import { AccountService } from '../services/AccountService';
 import { OptionService } from '../services/OptionService';
 

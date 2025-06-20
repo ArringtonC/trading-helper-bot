@@ -141,6 +141,54 @@ const TutorialsPage = React.lazy(() => import(
   /* webpackChunkName: "page-tutorials" */
   './pages/learning/TutorialsPage'
 ));
+const SP500DemoPage = React.lazy(() => import(
+  /* webpackChunkName: "page-sp500-demo" */
+  './pages/learning/SP500DemoPage'
+));
+const SP500Demo = React.lazy(() => import(
+  /* webpackChunkName: "page-sp500-professional" */
+  './pages/demo/SP500Demo'
+));
+const RiskManagementPage = React.lazy(() => import(
+  /* webpackChunkName: "page-risk-management" */
+  './pages/trading/RiskManagementPage'
+));
+const CuratedStockListsPage = React.lazy(() => import(
+  /* webpackChunkName: "page-curated-lists" */
+  './pages/trading/CuratedStockListsPage'
+));
+
+const AdvancedScreeningPage = React.lazy(() => import(
+  /* webpackChunkName: "page-advanced-screening" */
+  './pages/trading/AdvancedScreeningPage'
+));
+
+const WatchlistPage = React.lazy(() => import(
+  /* webpackChunkName: "page-watchlist" */
+  './pages/trading/WatchlistPage'
+));
+
+const TemplateMatchingDemo = React.lazy(() => import(
+  /* webpackChunkName: "page-template-matching" */
+  './components/Goals/TemplateMatchingDemo'
+).then(module => ({ default: module.default })));
+
+const AccountClassificationInterface = React.lazy(() => import(
+  /* webpackChunkName: "page-account-classification" */
+  './components/Goals/AccountClassificationInterface'
+).then(module => ({ default: module.default })));
+
+const ValidationDashboard = React.lazy(() => import(
+  /* webpackChunkName: "page-validation-dashboard" */
+  './pages/ValidationDashboard'
+));
+
+const NavigationSectionsTest = React.lazy(() => import(
+  /* webpackChunkName: "page-navigation-test" */
+  './components/NavigationSections'
+).then(module => ({ default: () => React.createElement('div', { className: 'p-8' }, React.createElement(module.default)) })));
+
+const StockSelectionLanding = React.lazy(() => import('./components/StockSelectionLanding'));
 
 // Loading component for suspense fallback
 const Loading = () => (
@@ -305,11 +353,27 @@ const App: React.FC = () => {
                       <Route path="/weekend-gap-risk" element={<WeekendGapRiskDashboard />} />
                       <Route path="/psychological-trading" element={<PsychologicalTradingPage />} />
                       <Route path="/trade-screener" element={<TradeScreener />} />
+                      <Route path="/learning" element={<TutorialsPage />} />
                       <Route path="/tutorials" element={<TutorialsPage />} />
                       <Route path="/nvda-tutorial" element={<NVDAOptionsTutorialPage />} />
                       <Route path="/stacking-tutorial" element={<StackingCoveredCallsTutorialPage />} />
                       <Route path="/selling-calls-tutorial" element={<SellingCallsTutorialPage />} />
                       <Route path="/mes-futures-tutorial" element={<MESFuturesTutorialPage />} />
+                      <Route path="/sp500-demo" element={<SP500DemoPage />} />
+                      <Route path="/sp500-professional" element={<SP500Demo />} />
+                      <Route path="/risk-management" element={<RiskManagementPage />} />
+                      <Route path="/curated-lists" element={<CuratedStockListsPage />} />
+                      <Route path="/template-matching" element={<TemplateMatchingDemo />} />
+                      <Route path="/account-classification" element={<AccountClassificationInterface />} />
+                      <Route path="/advanced-screening" element={<AdvancedScreeningPage />} />
+                      <Route path="/validation-dashboard" element={<ValidationDashboard />} />
+                      <Route path="/navigation-test" element={<NavigationSectionsTest />} />
+                      <Route path="/watchlist" element={<WatchlistPage />} />
+                      <Route path="/quick-picks" element={
+                        <React.Suspense fallback={<div className="p-8 text-center">Loading Quick Picks...</div>}>
+                          <StockSelectionLanding />
+                        </React.Suspense>
+                      } />
                     </Routes>
                   </Suspense>
                 </main>

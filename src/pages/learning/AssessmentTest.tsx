@@ -81,9 +81,9 @@ const AssessmentTest: React.FC = () => {
 
   const getLevelColor = (level: string) => {
     switch (level) {
-      case 'beginner': return 'green';
-      case 'intermediate': return 'orange';
-      case 'advanced': return 'red';
+      case 'learning': return 'green';
+      case 'import': return 'orange';
+      case 'broker': return 'red';
       default: return 'default';
     }
   };
@@ -148,7 +148,7 @@ const AssessmentTest: React.FC = () => {
         totalTrades: 500,
         selfReportedLevel: '',
         preferredRiskLevel: 'aggressive',
-        preferredComplexity: 'advanced',
+        preferredComplexity: 'broker',
         hasCompletedOnboarding: true
       }
     }
@@ -256,9 +256,9 @@ const AssessmentTest: React.FC = () => {
 
             <Form.Item name="selfReportedLevel" label="Self-Reported Level">
               <Select placeholder="Select level" allowClear>
-                <Option value="beginner">Beginner</Option>
-                <Option value="intermediate">Intermediate</Option>
-                <Option value="advanced">Advanced</Option>
+                <Option value="learning">Beginner</Option>
+                <Option value="import">Intermediate</Option>
+                <Option value="broker">Advanced</Option>
               </Select>
             </Form.Item>
 
@@ -274,7 +274,7 @@ const AssessmentTest: React.FC = () => {
               <Select placeholder="Select complexity" allowClear>
                 <Option value="simple">Simple</Option>
                 <Option value="moderate">Moderate</Option>
-                <Option value="advanced">Advanced</Option>
+                <Option value="broker">Advanced</Option>
               </Select>
             </Form.Item>
 

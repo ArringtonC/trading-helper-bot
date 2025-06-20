@@ -58,7 +58,7 @@ const PositionLimitRecommendations: React.FC<PositionLimitRecommendationsProps> 
       accountSize: accountSize || config.capitalObjectiveParameters?.currentBalance || 10000,
       riskTolerance: (config.goalParameters?.riskTolerance as 'conservative' | 'moderate' | 'aggressive') || 'moderate',
       tradingStrategy: 'swing_trading', // Default - could be made configurable
-      experienceLevel: 'intermediate', // Default - could be made configurable 
+      experienceLevel: 'import', // Default - could be made configurable 
       goalType: config.goalType as 'growth' | 'income' | 'preservation' | 'capital_objective'
     };
 

@@ -829,7 +829,7 @@ export async function insertTradesAndPositions(trades: NormalizedTradeData[], po
 
 // --- Migration Logic --- 
 
-const LATEST_SCHEMA_VERSION = 2;
+const LATEST_SCHEMA_VERSION = 3;
 
 function runMigrations(db: Database) {
   const currentVersion = db.exec("PRAGMA user_version")[0].values[0][0] as number;
@@ -842,10 +842,9 @@ function runMigrations(db: Database) {
       if (currentVersion < 2) {
         migrateToV2(db);
       }
-      // Add future migrations here, e.g.:
-      // if (currentVersion < 3) {
-      //   migrateToV3(db);
-      // }
+      if (currentVersion < 3) {
+        migrateToV3(db);
+      }
       
       // Update the version number after successful migrations
       db.exec(`PRAGMA user_version = ${LATEST_SCHEMA_VERSION};`);
@@ -917,7 +916,267 @@ function migrateToV2(db: Database) {
   console.log('[DEBUG migrateToV2] V2 migration complete.');
 }
 
+function migrateToV3(db: Database) {
+  console.log('[DEBUG migrateToV3] Applying V3 migrations (S&P 500 Market Data)...');
+  
+  // Create sp500_prices table for S&P 500 historical data
+  console.log('[DEBUG migrateToV3] Creating sp500_prices table...');
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS sp500_prices (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      date TEXT NOT NULL,
+      open REAL NOT NULL,
+      high REAL NOT NULL,
+      low REAL NOT NULL,
+      close REAL NOT NULL,
+      volume INTEGER,
+      adjusted_close REAL,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+      UNIQUE(date)
+    );
+  `);
+  
+  // Create indexes for efficient time-series queries
+  console.log('[DEBUG migrateToV3] Creating indexes for sp500_prices...');
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_sp500_prices_date ON sp500_prices(date);`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_sp500_prices_date_close ON sp500_prices(date, close);`);
+  
+  // Create market_news table for news events correlated to market data
+  console.log('[DEBUG migrateToV3] Creating market_news table...');
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS market_news (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      date TEXT NOT NULL,
+      title TEXT NOT NULL,
+      description TEXT,
+      source TEXT,
+      category TEXT NOT NULL, -- 'fed_policy', 'tariff', 'general'
+      relevance_score INTEGER NOT NULL CHECK(relevance_score >= 0 AND relevance_score <= 10),
+      keywords TEXT, -- JSON array of matched keywords
+      impact_type TEXT, -- 'positive', 'negative', 'neutral'
+      url TEXT,
+      published_at TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+  `);
+  
+  // Create indexes for efficient news queries
+  console.log('[DEBUG migrateToV3] Creating indexes for market_news...');
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_market_news_date ON market_news(date);`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_market_news_category ON market_news(category);`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_market_news_relevance ON market_news(relevance_score DESC);`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_market_news_date_relevance ON market_news(date, relevance_score DESC);`);
+  
+  console.log('[DEBUG migrateToV3] V3 migration complete (S&P 500 Market Data tables and indexes created).');
+}
+
 // --- End Migration Logic ---
+
+// --- S&P 500 Market Data Functions ---
+
+export interface SP500PriceData {
+  id?: number;
+  date: string; // YYYY-MM-DD format
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume?: number;
+  adjusted_close?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface MarketNewsData {
+  id?: number;
+  date: string; // YYYY-MM-DD format  
+  title: string;
+  description?: string;
+  source?: string;
+  category: 'fed_policy' | 'tariff' | 'general';
+  relevance_score: number; // 0-10
+  keywords?: string; // JSON array
+  impact_type?: 'positive' | 'negative' | 'neutral';
+  url?: string;
+  published_at?: string;
+  created_at?: string;
+  updated_at?: string;
+  // Distance from highs analysis
+  distanceFromHighs?: number; // Percentage distance from all-time high at event date
+  currentPrice?: number; // Price at the time of the event
+  allTimeHigh?: number; // All-time high up to the event date
+}
+
+export async function insertSP500Prices(prices: SP500PriceData[]): Promise<{ successCount: number; errors: any[] }> {
+  const currentDb = await getDb();
+  const errors: any[] = [];
+  let successCount = 0;
+
+  const stmt = currentDb.prepare(`
+    INSERT OR REPLACE INTO sp500_prices (date, open, high, low, close, volume, adjusted_close, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))
+  `);
+
+  try {
+    for (const price of prices) {
+      try {
+        stmt.run([
+          price.date,
+          price.open,
+          price.high,
+          price.low,
+          price.close,
+          price.volume || null,
+          price.adjusted_close || null
+        ]);
+        successCount++;
+      } catch (error) {
+        errors.push({ price: price.date, error });
+        console.error(`[DatabaseService] Error inserting S&P 500 price for ${price.date}:`, error);
+      }
+    }
+  } finally {
+    stmt.free();
+  }
+
+  console.log(`[DatabaseService] Inserted ${successCount} S&P 500 price records with ${errors.length} errors.`);
+  return { successCount, errors };
+}
+
+export async function getSP500Prices(startDate?: string, endDate?: string): Promise<SP500PriceData[]> {
+  const currentDb = await getDb();
+  let query = "SELECT * FROM sp500_prices";
+  const params: string[] = [];
+
+  if (startDate || endDate) {
+    const conditions: string[] = [];
+    if (startDate) {
+      conditions.push("date >= ?");
+      params.push(startDate);
+    }
+    if (endDate) {
+      conditions.push("date <= ?");
+      params.push(endDate);
+    }
+    query += " WHERE " + conditions.join(" AND ");
+  }
+
+  query += " ORDER BY date ASC";
+
+  const res = currentDb.exec(query, params);
+
+  if (!res[0] || !res[0].values || res[0].values.length === 0) {
+    return [];
+  }
+
+  return res[0].values.map(row => ({
+    id: row[0] as number,
+    date: row[1] as string,
+    open: row[2] as number,
+    high: row[3] as number,
+    low: row[4] as number,
+    close: row[5] as number,
+    volume: row[6] as number ?? undefined,
+    adjusted_close: row[7] as number ?? undefined,
+    created_at: row[8] as string,
+    updated_at: row[9] as string,
+  }));
+}
+
+export async function insertMarketNews(newsItems: MarketNewsData[]): Promise<{ successCount: number; errors: any[] }> {
+  const currentDb = await getDb();
+  const errors: any[] = [];
+  let successCount = 0;
+
+  const stmt = currentDb.prepare(`
+    INSERT INTO market_news (date, title, description, source, category, relevance_score, keywords, impact_type, url, published_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+  `);
+
+  try {
+    for (const news of newsItems) {
+      try {
+        stmt.run([
+          news.date,
+          news.title,
+          news.description || null,
+          news.source || null,
+          news.category,
+          news.relevance_score,
+          news.keywords || null,
+          news.impact_type || null,
+          news.url || null,
+          news.published_at || null
+        ]);
+        successCount++;
+      } catch (error) {
+        errors.push({ title: news.title, error });
+        console.error(`[DatabaseService] Error inserting market news "${news.title}":`, error);
+      }
+    }
+  } finally {
+    stmt.free();
+  }
+
+  console.log(`[DatabaseService] Inserted ${successCount} market news records with ${errors.length} errors.`);
+  return { successCount, errors };
+}
+
+export async function getMarketNews(startDate?: string, endDate?: string, category?: string, minRelevance?: number): Promise<MarketNewsData[]> {
+  const currentDb = await getDb();
+  let query = "SELECT * FROM market_news";
+  const params: (string | number)[] = [];
+  const conditions: string[] = [];
+
+  if (startDate) {
+    conditions.push("date >= ?");
+    params.push(startDate);
+  }
+  if (endDate) {
+    conditions.push("date <= ?");
+    params.push(endDate);
+  }
+  if (category) {
+    conditions.push("category = ?");
+    params.push(category);
+  }
+  if (minRelevance !== undefined) {
+    conditions.push("relevance_score >= ?");
+    params.push(minRelevance);
+  }
+
+  if (conditions.length > 0) {
+    query += " WHERE " + conditions.join(" AND ");
+  }
+
+  query += " ORDER BY date DESC, relevance_score DESC";
+
+  const res = currentDb.exec(query, params);
+
+  if (!res[0] || !res[0].values || res[0].values.length === 0) {
+    return [];
+  }
+
+  return res[0].values.map(row => ({
+    id: row[0] as number,
+    date: row[1] as string,
+    title: row[2] as string,
+    description: row[3] as string | null,
+    source: row[4] as string | null,
+    category: row[5] as string,
+    relevance_score: row[6] as number,
+    keywords: row[7] as string | null,
+    impact_type: row[8] as string | null,
+    url: row[9] as string | null,
+    published_at: row[10] as string | null,
+    created_at: row[11] as string,
+    updated_at: row[12] as string,
+  })) as MarketNewsData[];
+}
+
+// --- End S&P 500 Market Data Functions ---
 
 // --- Add back the missing functions ---
 export async function saveIBKRAccount(account: IBKRAccount): Promise<void> {

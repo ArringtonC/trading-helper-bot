@@ -19,7 +19,7 @@ export interface FlowSection {
   priority: number; // Lower number = higher priority in flow
   features: string[];
   userLevels: UserExperienceLevel[];
-  category: 'core' | 'trading' | 'analysis' | 'advanced' | 'resources';
+  category: 'core' | 'trading' | 'analysis' | 'broker' | 'resources';
   isRequired?: boolean;
   estimatedTime?: string;
 }
@@ -184,7 +184,7 @@ export const FEATURE_FLOW_ORDER: FlowOrderConfig = {
       name: 'Automation & Rules',
       description: 'Automated trading rules and custom logic',
       priority: 31,
-      category: 'advanced',
+      category: 'broker',
       userLevels: ['broker'],
       estimatedTime: '20-30 minutes',
       features: [
@@ -201,7 +201,7 @@ export const FEATURE_FLOW_ORDER: FlowOrderConfig = {
       name: 'AI-Powered Analysis',
       description: 'Machine learning insights and predictions',
       priority: 90,
-      category: 'advanced',
+      category: 'broker',
       userLevels: ['broker'],
       estimatedTime: '10-20 minutes',
       features: [

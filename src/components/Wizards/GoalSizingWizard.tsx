@@ -562,19 +562,19 @@ const GoalSizingWizard: React.FC<GoalSizingWizardProps> = ({
                 });
               }}
               onGrowthProjectionChange={(projection) => {
-                                 // Update capital objective parameters based on growth projection
-                 if (projection.validation.isValid) {
-                   dispatch({ 
-                     type: 'UPDATE_CONFIG', 
-                     payload: { 
-                       capitalObjectiveParameters: {
-                         currentBalance: state.config.capitalObjectiveParameters?.currentBalance || 10000,
-                         targetBalance: projection.compoundedFinalValue,
-                         timeHorizonMonths: state.config.capitalObjectiveParameters?.timeHorizonMonths || 12
-                       }
-                     }
-                   });
-                 }
+                // Update capital objective parameters based on growth projection
+                if (projection.isValid) {
+                  dispatch({ 
+                    type: 'UPDATE_CONFIG', 
+                    payload: { 
+                      capitalObjectiveParameters: {
+                        currentBalance: state.config.capitalObjectiveParameters?.currentBalance || 10000,
+                        targetBalance: projection.compoundedValue,
+                        timeHorizonMonths: state.config.capitalObjectiveParameters?.timeHorizonMonths || 12
+                      }
+                    }
+                  });
+                }
               }}
               initialValues={{
                 winRate: state.config.tradeStatistics?.winRate || 55,
@@ -585,16 +585,6 @@ const GoalSizingWizard: React.FC<GoalSizingWizardProps> = ({
               }}
               showAdvancedOptions={state.showEnhancedInterface}
             />
-            
-            {/* Toggle for Advanced Options */}
-            <div className="mt-6 text-center">
-              <button
-                onClick={() => dispatch({ type: 'TOGGLE_ENHANCED_INTERFACE', payload: !state.showEnhancedInterface })}
-                className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors"
-              >
-                {state.showEnhancedInterface ? 'Hide' : 'Show'} Advanced Options
-              </button>
-            </div>
             
             {/* Legacy suggestions for compatibility */}
             {state.enhancedPositionResult && (

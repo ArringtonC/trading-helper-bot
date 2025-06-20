@@ -12,7 +12,7 @@ import {
   TooltipItem
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { getSummary, getTrades, initDatabase } from '../../services/DatabaseService';
+import { getTrades, initDatabase } from '../../services/DatabaseService';
 import { fmtUsd } from '../../utils/formatters';
 import { toast } from 'react-toastify';
 import { connectToIBKR, disconnectFromIBKR, subscribeToIBKREvents, requestIBKRAccountSummary, getIBKRPositions, getIBKROrders, getIBKRExecutions } from '../../services/BrokerService';
@@ -30,14 +30,9 @@ ChartJS.register(
   Legend
 );
 
-interface TradeRow {
-  dateTime: string;  // "YYYY-MM-DD, hh:mm:ss"
-  tradePL: number;
-}
-
 export const PLDashboard: React.FC = () => {
   const [userName] = useState('Trader');
-  const [accountValue, setAccountValue] = useState<number>(6694.75); // Set initial value from CSV
+  const [accountValue] = useState<number>(6694.75); // Set initial value from CSV
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>();
   const [chartData, setChartData] = useState<ChartData<'line', number[]>>({
@@ -49,7 +44,6 @@ export const PLDashboard: React.FC = () => {
   const [isIBKRConnecting, setIsIBKRConnecting] = useState(false);
   const [ibkrConnectionStatus, setIbkrConnectionStatus] = useState('Disconnected');
   const [ibkrError, setIbkrError] = useState<string | null>(null);
-  const [ibkrAccountSummary, setIbkrAccountSummary] = useState<any | null>(null);
 
   // Deduplicated account summary by tag
   const [ibkrAccountSummaryMap, setIbkrAccountSummaryMap] = useState<Record<string, { value: string; currency: string }>>({});

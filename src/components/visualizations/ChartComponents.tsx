@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, ComponentProps } from 'react';
+import React, { lazy, Suspense } from 'react';
 
 // Loading component for charts
 const ChartLoading = () => (

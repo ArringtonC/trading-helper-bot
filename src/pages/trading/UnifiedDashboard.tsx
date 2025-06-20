@@ -69,7 +69,7 @@ class DataCache {
 
 // SIMPLIFIED USER EXPERIENCE LEVELS BASED ON PRD PERSONAS
 interface UserExperienceConfig {
-  level: 'basic' | 'intermediate' | 'advanced';
+  level: 'basic' | 'import' | 'broker';
   maxVisibleWidgets: number;
   showAdvancedMetrics: boolean;
   showComplexCharts: boolean;
@@ -87,7 +87,7 @@ const EXPERIENCE_CONFIGS: Record<string, UserExperienceConfig> = {
     autoHideEmptyWidgets: true
   },
   intermediate: {
-    level: 'intermediate',
+    level: 'import',
     maxVisibleWidgets: 5,
     showAdvancedMetrics: true,
     showComplexCharts: false,
@@ -95,7 +95,7 @@ const EXPERIENCE_CONFIGS: Record<string, UserExperienceConfig> = {
     autoHideEmptyWidgets: true
   },
   advanced: {
-    level: 'advanced',
+    level: 'broker',
     maxVisibleWidgets: 10,
     showAdvancedMetrics: true,
     showComplexCharts: true,
@@ -211,11 +211,11 @@ const UnifiedDashboard: React.FC = () => {
     const enableAdvanced = loadSetting('enableAdvancedFeatures') === 'true';
     const enableDebug = loadSetting('enableDebugMode') === 'true';
     
-    if (enableDebug || enableAdvanced) return 'advanced';
+    if (enableDebug || enableAdvanced) return 'broker';
     
     // Check if user has used advanced features before
     const hasUsedAdvanced = localStorage.getItem('dashboard-used-advanced') === 'true';
-    return hasUsedAdvanced ? 'intermediate' : 'basic';
+    return hasUsedAdvanced ? 'import' : 'basic';
   });
 
   const experienceConfig = EXPERIENCE_CONFIGS[userExperienceLevel] || EXPERIENCE_CONFIGS.basic;

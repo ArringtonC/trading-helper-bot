@@ -16,7 +16,7 @@ export interface OnboardingFlowConfig {
   entryPoint: string;
   sequence: OnboardingStep[];
   skipOptions: boolean;
-  maxComplexity: 'basic' | 'intermediate' | 'advanced';
+  maxComplexity: 'basic' | 'import' | 'broker';
   description: string;
 }
 
@@ -98,7 +98,7 @@ export class OnboardingFlowController {
       entryPoint: '/dashboard',
       description: 'Streamlined setup for experienced traders',
       skipOptions: true,
-      maxComplexity: 'advanced',
+      maxComplexity: 'broker',
       sequence: [
         {
           id: 'account-setup',
@@ -154,7 +154,7 @@ export class OnboardingFlowController {
     }
     
     // New traders (beginners) get the visualizer-first approach
-    if (userLevel === 'beginner' || tradingExperience < 1) {
+    if (userLevel === 'learning' || tradingExperience < 1) {
       return 'newTrader';
     }
     

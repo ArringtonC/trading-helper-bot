@@ -5,7 +5,7 @@
 
 export type ModuleType = 'basic-options' | 'position-sizing' | 'risk-management' | 'market-fundamentals';
 export type ContentType = 'text' | 'interactive' | 'quiz' | 'visualization' | 'calculation';
-export type DifficultyLevel = 'beginner' | 'intermediate' | 'advanced';
+export type DifficultyLevel = 'learning' | 'import' | 'broker';
 
 export interface LearningObjective {
   id: string;
@@ -105,7 +105,7 @@ export default class EducationalModules {
       type: 'basic-options',
       title: 'Options Trading Fundamentals',
       description: 'Learn the basics of options trading, including calls, puts, and basic strategies',
-      difficulty: 'beginner',
+      difficulty: 'learning',
       estimatedTimeMinutes: 45,
       learningObjectives: [
         {
@@ -186,7 +186,7 @@ export default class EducationalModules {
         }
       ],
       prerequisites: [],
-      tags: ['options', 'fundamentals', 'beginner'],
+      tags: ['options', 'fundamentals', 'learning'],
       updatedAt: new Date()
     };
 
@@ -196,7 +196,7 @@ export default class EducationalModules {
       type: 'position-sizing',
       title: 'Position Sizing and Risk Management',
       description: 'Learn how to properly size your positions to manage risk and preserve capital',
-      difficulty: 'beginner',
+      difficulty: 'learning',
       estimatedTimeMinutes: 60,
       learningObjectives: [
         {
@@ -253,7 +253,7 @@ export default class EducationalModules {
         }
       ],
       prerequisites: [],
-      tags: ['position-sizing', 'risk-management', 'beginner'],
+      tags: ['position-sizing', 'risk-management', 'learning'],
       updatedAt: new Date()
     };
 
@@ -263,7 +263,7 @@ export default class EducationalModules {
       type: 'risk-management',
       title: 'Comprehensive Risk Management',
       description: 'Advanced risk management techniques to protect your capital',
-      difficulty: 'intermediate',
+      difficulty: 'import',
       estimatedTimeMinutes: 90,
       learningObjectives: [
         {
@@ -314,7 +314,7 @@ export default class EducationalModules {
         }
       ],
       prerequisites: ['position-sizing'],
-      tags: ['risk-management', 'portfolio', 'intermediate'],
+      tags: ['risk-management', 'portfolio', 'import'],
       updatedAt: new Date()
     };
 
@@ -334,7 +334,7 @@ export default class EducationalModules {
       description: 'Essential knowledge for new options traders',
       modules: ['basic-options', 'position-sizing'],
       estimatedTimeHours: 2,
-      targetAudience: 'beginner',
+      targetAudience: 'learning',
       skills: ['options-basics', 'position-sizing', 'risk-management']
     };
 
@@ -344,7 +344,7 @@ export default class EducationalModules {
       description: 'Complete education path from beginner to intermediate',
       modules: ['basic-options', 'position-sizing', 'risk-management'],
       estimatedTimeHours: 3.5,
-      targetAudience: 'intermediate',
+      targetAudience: 'import',
       skills: ['options-basics', 'position-sizing', 'risk-management', 'portfolio-management']
     };
 
@@ -402,13 +402,13 @@ export default class EducationalModules {
       .filter(module => !completedModules.includes(module.id))
       .filter(module => {
         // Include modules at user level and below
-        if (userLevel === 'advanced') return true;
-        if (userLevel === 'intermediate') return module.difficulty !== 'advanced';
-        return module.difficulty === 'beginner';
+        if (userLevel === 'broker') return true;
+        if (userLevel === 'import') return module.difficulty !== 'broker';
+        return module.difficulty === 'learning';
       })
       .sort((a, b) => {
         // Sort by difficulty, then by estimated time
-        const difficultyOrder = { beginner: 1, intermediate: 2, advanced: 3 };
+        const difficultyOrder = { learning: 1, import: 2, broker: 3 };
         if (difficultyOrder[a.difficulty] !== difficultyOrder[b.difficulty]) {
           return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
         }
@@ -569,7 +569,7 @@ export default class EducationalModules {
       .filter(p => p.completedAt)
       .map(p => p.moduleId);
 
-    const recommendedModules = this.getRecommendedModules('beginner', completedModuleIds);
+    const recommendedModules = this.getRecommendedModules('learning', completedModuleIds);
     if (recommendedModules.length > 0) {
       const module = recommendedModules[0];
       const firstContent = module.content[0];

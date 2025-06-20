@@ -1,4 +1,4 @@
-import { Condition, SimpleCondition, CompoundCondition, Operator } from '../../types/RuleSchema';
+import { Condition, SimpleCondition } from '../../types/RuleSchema';
 
 /**
  * Operator function map for extensibility and clarity.

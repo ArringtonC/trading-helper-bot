@@ -52,7 +52,7 @@ class ErrorBoundary extends React.Component<
 const MESFuturesTutorial: React.FC<MESFutorialProps> = ({
   onComplete,
   onNext,
-  userLevel = 'beginner',
+  userLevel = 'learning',
   enableEnhancedFeatures = false
 }) => {
   const [state, actions, featureFlags] = useMESState();

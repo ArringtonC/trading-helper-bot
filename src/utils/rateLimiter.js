@@ -364,26 +364,10 @@ export const getSecurityEvents = () => {
   return globalRateLimiter.getSecurityLog();
 };
 
-// React hook for easy integration
+// React hook for easy integration (import React where needed)
 export const useRateLimit = (action = 'api') => {
-  const [status, setStatus] = React.useState(null);
-  
-  React.useEffect(() => {
-    const updateStatus = () => {
-      setStatus(globalRateLimiter.getStatus(action));
-    };
-    
-    updateStatus();
-    const interval = setInterval(updateStatus, 5000); // Update every 5 seconds
-    
-    return () => clearInterval(interval);
-  }, [action]);
-  
-  const checkLimit = React.useCallback(() => {
-    return globalRateLimiter.isAllowed(action);
-  }, [action]);
-  
-  return { status, checkLimit };
+  // This hook should be imported in React components, not defined in a utility file
+  throw new Error('useRateLimit hook should be moved to a React hooks file. Import React and define this in a .tsx/.jsx file');
 };
 
 export default globalRateLimiter; 

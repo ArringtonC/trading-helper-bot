@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ChevronLeftIcon, HomeIcon } from '@heroicons/react/24/outline';
-import { GoalSizingConfig } from '../types/goalSizing';
+import { GoalSizingConfig } from '../../types/goalSizing';
 
 // Add slider styles
 const sliderStyles = `
@@ -115,7 +115,7 @@ const PositionSizingResults: React.FC = () => {
       avgRewardRisk: data.avgRewardRisk || data.config?.tradeStatistics?.payoffRatio || 2.0,
       riskPerTrade: data.riskPerTrade || data.config?.sizingRules?.baseSizePercentage || 2.5,
       rewardRiskRatio: data.rewardRiskRatio || data.config?.tradeStatistics?.payoffRatio || 2.0,
-      tradingExperience: data.tradingExperience || 'intermediate'
+      tradingExperience: data.tradingExperience || 'import'
     };
   };
 

@@ -26,44 +26,44 @@ describe('OnboardingFlowController', () => {
 
   describe('Flow Determination', () => {
     test('should route beginners to newTrader flow with visualizer entry point', () => {
-      const flowType = controller.determineOnboardingFlow('beginner', 0, false);
+      const flowType = controller.determineOnboardingFlow('learning', 0, false);
       expect(flowType).toBe('newTrader');
       
-      const entryPoint = controller.getEntryPoint('beginner', 0);
+      const entryPoint = controller.getEntryPoint('learning', 0);
       expect(entryPoint).toBe('/visualizer');
     });
 
     test('should route experienced users to experienced flow with dashboard entry point', () => {
-      const flowType = controller.determineOnboardingFlow('advanced', 5, false);
+      const flowType = controller.determineOnboardingFlow('broker', 5, false);
       expect(flowType).toBe('experienced');
       
-      const entryPoint = controller.getEntryPoint('advanced', 5);
+      const entryPoint = controller.getEntryPoint('broker', 5);
       expect(entryPoint).toBe('/dashboard');
     });
 
     test('should route intermediate users with experience to experienced flow', () => {
-      const flowType = controller.determineOnboardingFlow('intermediate', 2, false);
+      const flowType = controller.determineOnboardingFlow('import', 2, false);
       expect(flowType).toBe('experienced');
     });
 
     test('should route users who completed onboarding to experienced flow', () => {
-      const flowType = controller.determineOnboardingFlow('beginner', 0, true);
+      const flowType = controller.determineOnboardingFlow('learning', 0, true);
       expect(flowType).toBe('experienced');
     });
 
     test('should prioritize visualizer for new traders', () => {
-      expect(controller.shouldPrioritizeVisualizer('beginner', 0)).toBe(true);
-      expect(controller.shouldPrioritizeVisualizer('intermediate', 0.5)).toBe(true);
-      expect(controller.shouldPrioritizeVisualizer('advanced', 5)).toBe(false);
+      expect(controller.shouldPrioritizeVisualizer('learning', 0)).toBe(true);
+      expect(controller.shouldPrioritizeVisualizer('import', 0.5)).toBe(true);
+      expect(controller.shouldPrioritizeVisualizer('broker', 5)).toBe(false);
     });
   });
 
   describe('Onboarding Initialization', () => {
     test('should initialize newTrader flow correctly', () => {
-      const progress = controller.initializeOnboarding('beginner', 0, false);
+      const progress = controller.initializeOnboarding('learning', 0, false);
       
       expect(progress.flowType).toBe('newTrader');
-      expect(progress.userLevel).toBe('beginner');
+      expect(progress.userLevel).toBe('learning');
       expect(progress.currentStep).toBe(0);
       expect(progress.completedSteps).toEqual([]);
       expect(progress.currentPath).toBe('/visualizer');
@@ -71,16 +71,16 @@ describe('OnboardingFlowController', () => {
     });
 
     test('should initialize experienced flow correctly', () => {
-      const progress = controller.initializeOnboarding('advanced', 5, false);
+      const progress = controller.initializeOnboarding('broker', 5, false);
       
       expect(progress.flowType).toBe('experienced');
-      expect(progress.userLevel).toBe('advanced');
+      expect(progress.userLevel).toBe('broker');
       expect(progress.currentPath).toBe('/dashboard');
       expect(progress.totalSteps).toBe(4); // experienced flow has 4 steps
     });
 
     test('should save progress to localStorage', () => {
-      controller.initializeOnboarding('beginner', 0, false);
+      controller.initializeOnboarding('learning', 0, false);
       
       const stored = localStorage.getItem('onboarding_progress');
       expect(stored).toBeTruthy();
@@ -92,7 +92,7 @@ describe('OnboardingFlowController', () => {
 
   describe('Progress Management', () => {
     beforeEach(() => {
-      controller.initializeOnboarding('beginner', 0, false);
+      controller.initializeOnboarding('learning', 0, false);
     });
 
     test('should complete steps correctly', () => {
@@ -139,7 +139,7 @@ describe('OnboardingFlowController', () => {
 
   describe('Completion Tracking', () => {
     beforeEach(() => {
-      controller.initializeOnboarding('beginner', 0, false);
+      controller.initializeOnboarding('learning', 0, false);
     });
 
     test('should calculate completion percentage correctly', () => {
@@ -200,7 +200,7 @@ describe('OnboardingFlowController', () => {
       
       expect(experiencedFlow.entryPoint).toBe('/dashboard');
       expect(experiencedFlow.skipOptions).toBe(true);
-      expect(experiencedFlow.maxComplexity).toBe('advanced');
+      expect(experiencedFlow.maxComplexity).toBe('broker');
       expect(experiencedFlow.description).toContain('Streamlined setup');
     });
 
@@ -231,7 +231,7 @@ describe('OnboardingFlowController', () => {
   describe('Progress Persistence', () => {
     test('should load progress from localStorage', () => {
       // Initialize and complete a step
-      controller.initializeOnboarding('beginner', 0, false);
+      controller.initializeOnboarding('learning', 0, false);
       controller.completeStep('risk-assessment');
       
       // Create new controller instance
@@ -250,7 +250,7 @@ describe('OnboardingFlowController', () => {
     });
 
     test('should reset onboarding correctly', () => {
-      controller.initializeOnboarding('beginner', 0, false);
+      controller.initializeOnboarding('learning', 0, false);
       expect(controller.getProgress()).toBeTruthy();
       
       controller.resetOnboarding();
@@ -294,11 +294,11 @@ describe('OnboardingFlowController', () => {
     test('should enforce proper page order as specified in requirements', () => {
       // The requirements specify: Settings → IBKR Connection → Visualizer → Options Page → other features
       // For new traders, visualizer should be the primary entry point
-      const entryPoint = controller.getEntryPoint('beginner', 0);
+      const entryPoint = controller.getEntryPoint('learning', 0);
       expect(entryPoint).toBe('/visualizer');
       
       // For experienced traders, should follow more traditional flow
-      const experiencedEntry = controller.getEntryPoint('advanced', 5);
+      const experiencedEntry = controller.getEntryPoint('broker', 5);
       expect(experiencedEntry).toBe('/dashboard');
     });
   });

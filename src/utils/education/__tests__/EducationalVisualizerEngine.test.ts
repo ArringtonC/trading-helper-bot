@@ -30,7 +30,7 @@ describe('EducationalVisualizerEngine', () => {
       expect(viz).toBeDefined();
       expect(viz?.title).toBe('Interactive Options Payoff Diagram');
       expect(viz?.type).toBe('options-payoff');
-      expect(viz?.difficulty).toBe('beginner');
+      expect(viz?.difficulty).toBe('learning');
     });
 
     it('should return undefined for non-existent visualization', () => {
@@ -50,17 +50,17 @@ describe('EducationalVisualizerEngine', () => {
     });
 
     it('should filter visualizations by difficulty', () => {
-      const beginnerViz = visualizerEngine.getVisualizationsByDifficulty('beginner');
-      const intermediateViz = visualizerEngine.getVisualizationsByDifficulty('intermediate');
-      const advancedViz = visualizerEngine.getVisualizationsByDifficulty('advanced');
+      const beginnerViz = visualizerEngine.getVisualizationsByDifficulty('learning');
+      const intermediateViz = visualizerEngine.getVisualizationsByDifficulty('import');
+      const advancedViz = visualizerEngine.getVisualizationsByDifficulty('broker');
       
       expect(beginnerViz).toHaveLength(2);
       expect(intermediateViz).toHaveLength(2);
       expect(advancedViz).toHaveLength(1);
       
-      expect(beginnerViz.every(v => v.difficulty === 'beginner')).toBe(true);
-      expect(intermediateViz.every(v => v.difficulty === 'intermediate')).toBe(true);
-      expect(advancedViz.every(v => v.difficulty === 'advanced')).toBe(true);
+      expect(beginnerViz.every(v => v.difficulty === 'learning')).toBe(true);
+      expect(intermediateViz.every(v => v.difficulty === 'import')).toBe(true);
+      expect(advancedViz.every(v => v.difficulty === 'broker')).toBe(true);
     });
   });
 
@@ -326,25 +326,25 @@ describe('EducationalVisualizerEngine', () => {
     const userId = 'test-user';
 
     it('should recommend visualizations for beginners', () => {
-      const recommendation = visualizerEngine.getRecommendedVisualization(userId, 'beginner');
+      const recommendation = visualizerEngine.getRecommendedVisualization(userId, 'learning');
       
       expect(recommendation).toBeDefined();
-      expect(recommendation?.difficulty).toBe('beginner');
+      expect(recommendation?.difficulty).toBe('learning');
       expect(recommendation?.type).toBe('options-payoff'); // Should prioritize options first
     });
 
     it('should recommend visualizations for intermediate users', () => {
-      const recommendation = visualizerEngine.getRecommendedVisualization(userId, 'intermediate');
+      const recommendation = visualizerEngine.getRecommendedVisualization(userId, 'import');
       
       expect(recommendation).toBeDefined();
-      expect(['beginner', 'intermediate']).toContain(recommendation?.difficulty);
+      expect(['learning', 'import']).toContain(recommendation?.difficulty);
     });
 
     it('should recommend visualizations for advanced users', () => {
-      const recommendation = visualizerEngine.getRecommendedVisualization(userId, 'advanced');
+      const recommendation = visualizerEngine.getRecommendedVisualization(userId, 'broker');
       
       expect(recommendation).toBeDefined();
-      expect(['beginner', 'intermediate', 'advanced']).toContain(recommendation?.difficulty);
+      expect(['learning', 'import', 'broker']).toContain(recommendation?.difficulty);
     });
 
     it('should exclude completed visualizations', () => {
@@ -358,7 +358,7 @@ describe('EducationalVisualizerEngine', () => {
       };
       visualizerEngine.recordInteraction(completedEvent);
       
-      const recommendation = visualizerEngine.getRecommendedVisualization(userId, 'beginner');
+      const recommendation = visualizerEngine.getRecommendedVisualization(userId, 'learning');
       
       expect(recommendation).toBeDefined();
       expect(recommendation?.id).not.toBe('options-payoff-basic');
@@ -367,7 +367,7 @@ describe('EducationalVisualizerEngine', () => {
 
     it('should return null when no recommendations available', () => {
       // Mark all beginner visualizations as completed
-      const beginnerViz = visualizerEngine.getVisualizationsByDifficulty('beginner');
+      const beginnerViz = visualizerEngine.getVisualizationsByDifficulty('learning');
       beginnerViz.forEach(viz => {
         const event: InteractionEvent = {
           type: 'completed',
@@ -379,7 +379,7 @@ describe('EducationalVisualizerEngine', () => {
         visualizerEngine.recordInteraction(event);
       });
       
-      const recommendation = visualizerEngine.getRecommendedVisualization(userId, 'beginner');
+      const recommendation = visualizerEngine.getRecommendedVisualization(userId, 'learning');
       expect(recommendation).toBeNull();
     });
   });

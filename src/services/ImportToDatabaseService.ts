@@ -1,23 +1,10 @@
-import { IBKRImportResult, IBKRTradeRecord, IBKRPosition, IBKRAccount } from '../types/ibkr';
+import { IBKRImportResult, IBKRTradeRecord, IBKRAccount } from '../types/ibkr';
 import { Account, AccountType } from '../types/account';
 import { OptionTrade, OptionStrategy } from '../types/options';
 import { FixedIBKRParser } from './FixedIBKRParser';
 import { AccountService } from './AccountService';
 import { OptionService } from './OptionService';
-import { refreshDashboard } from '../utils/enhancedDashboardRefresh';
 import { parseIBKRTrades, getMonthNumber } from '../utils/specializedIBKRParser';
-
-interface ImportResult {
-  success: boolean;
-  accountId: string;
-  accountName: string;
-  totalTrades: number;
-  newTrades: number;
-  updatedTrades: number;
-  positions: number;
-  logs: string[];
-  errors: string[];
-}
 
 // Helper to map IBKRTrade (from specialized parser) to IBKRTradeRecord
 function mapSpecializedTradeToRecord(trade: any): IBKRTradeRecord {

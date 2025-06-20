@@ -10,6 +10,7 @@ const Navigation: React.FC = () => {
   const currentPath = location.pathname;
   const [isTutorialModalOpen, setIsTutorialModalOpen] = useState(false);
   const [userLevel, setUserLevel] = useState<UserExperienceLevel>('import');
+  const [showSections, setShowSections] = useState(false);
   
   // Memoize controllers to prevent recreation on each render
   const controllers = useMemo(() => {
@@ -41,104 +42,62 @@ const Navigation: React.FC = () => {
   }, []);
 
   const handleLevelChange = useCallback((newLevel: UserExperienceLevel) => {
-    // Update state immediately for responsive UI
     setUserLevel(newLevel);
+    saveSetting('userExperienceLevel', newLevel);
     
-    // Update controllers
+    // Update controllers with new level
     controllers.ux.setUserLevel(newLevel);
     controllers.navigation.setUserLevel(newLevel);
-    
-    // Batch storage operations
-    requestAnimationFrame(() => {
-      saveSetting('userExperienceLevel', newLevel);
-      localStorage.setItem('userExperienceLevel', newLevel);
-    });
   }, [controllers]);
 
-  const getLevelIcon = useCallback((level: UserExperienceLevel) => {
+  const getLevelIcon = (level: UserExperienceLevel) => {
     switch (level) {
       case 'learning': return '🌱';
       case 'import': return '📊';
       case 'broker': return '🔗';
-      default: return '🎯';
+      default: return '📊';
     }
-  }, []);
+  };
 
-  const getLevelColor = useCallback((level: UserExperienceLevel) => {
+  const getLevelColor = (level: UserExperienceLevel) => {
     switch (level) {
-      case 'learning': return 'text-green-600 bg-green-50';
-      case 'import': return 'text-blue-600 bg-blue-50';
-      case 'broker': return 'text-purple-600 bg-purple-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case 'learning': return 'text-green-600';
+      case 'import': return 'text-blue-600';
+      case 'broker': return 'text-orange-600';
+      default: return 'text-blue-600';
     }
-  }, []);
+  };
 
-  // Memoize navigation items to prevent recalculation
-  const navigationItems = useMemo(() => {
-    const baseItems = controllers.navigation.getVisibleNavigationItems();
-    
-    // Filter out debug items that aren't enabled
-    const filteredBaseItems = baseItems.filter(item => {
-      // If it's not a debug item, always show it
-      if (item.category !== 'debug') return true;
-      
-      // For debug items, check the corresponding setting
-      switch (item.id) {
-        case 'unified-dashboard':
-          return featureFlags.showUnifiedDashboard;
-        case 'rule-engine':
-          return featureFlags.showRuleEngine;
-        case 'legacy-dashboard':
-          return featureFlags.showLegacyDashboard;
-        default:
-          return false; // Hide unknown debug items by default
-      }
-    });
-    
-    const importNavItems = [
-      ...(featureFlags.showImport ? [{ path: '/import', label: '📥 Import', feature: 'import', minLevel: 'import' }] : []),
-      ...(featureFlags.showDirectImport ? [{ path: '/import/direct', label: '🔧 Direct Parser', feature: 'direct-parser', minLevel: 'broker' }] : []),
-    ];
-
-    return [...filteredBaseItems, ...importNavItems];
-  }, [userLevel, controllers.navigation, featureFlags]);
+  // Memoize navigation sections
+  const navigationSections = useMemo(() => {
+    return controllers.navigation.getNavigationSections();
+  }, [controllers.navigation]);
 
   return (
     <>
       <div className="flex border-b border-gray-200 overflow-x-auto">
-        {/* User Level Indicator */}
+        {/* Sections Toggle */}
         <div className="flex items-center px-3 py-2 border-r border-gray-200 flex-shrink-0">
-          <div className="flex items-center space-x-2">
-            <span className={`text-lg ${getLevelColor(userLevel)}`}>
-              {getLevelIcon(userLevel)}
-            </span>
-            <select
-              value={userLevel}
-              onChange={(e) => handleLevelChange(e.target.value as UserExperienceLevel)}
-              className={`text-sm font-medium border-none bg-transparent ${getLevelColor(userLevel)} focus:outline-none cursor-pointer`}
-              title="Change experience level to show/hide features"
-            >
-              <option value="learning">Learning</option>
-              <option value="import">Import</option>
-              <option value="broker">Broker</option>
-            </select>
-          </div>
+          <button
+            onClick={() => setShowSections(!showSections)}
+            className="text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors duration-150"
+            title="Toggle sections view"
+          >
+            📋 Sections
+          </button>
         </div>
         
-        {/* Navigation Items */}
-        {navigationItems.map(item => (
-          <Link 
-            key={item.path}
-            to={item.path}
-            className={`py-2 px-4 font-medium whitespace-nowrap transition-colors duration-150 ${
-              currentPath === item.path 
-                ? 'text-blue-600 border-b-2 border-blue-600' 
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            {item.label}
-          </Link>
-        ))}
+        {/* Home Link */}
+        <Link 
+          to="/"
+          className={`py-2 px-4 font-medium whitespace-nowrap transition-colors duration-150 ${
+            currentPath === '/' 
+              ? 'text-blue-600 border-b-2 border-blue-600' 
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          🏠 Home
+        </Link>
         
         {/* Help Button */}
         {featureFlags.showHelpPage && (
@@ -163,6 +122,42 @@ const Navigation: React.FC = () => {
           Settings
         </Link>
       </div>
+
+      {/* Sections Dropdown */}
+      {showSections && (
+        <div className="bg-white border-b border-gray-200 shadow-sm">
+          <div className="max-w-6xl mx-auto p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {navigationSections.map(section => (
+                <div key={section.key} className="space-y-2">
+                  <h3 className="font-semibold text-gray-800 text-sm uppercase tracking-wide">
+                    {section.title}
+                  </h3>
+                  <p className="text-xs text-gray-600 mb-3">
+                    {section.description}
+                  </p>
+                  <div className="space-y-1">
+                    {section.items.map(item => (
+                      <Link
+                        key={item.id}
+                        to={item.path}
+                        className={`block px-3 py-2 text-sm rounded transition-colors duration-150 ${
+                          currentPath === item.path
+                            ? 'bg-blue-100 text-blue-700 font-medium'
+                            : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800'
+                        }`}
+                        onClick={() => setShowSections(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
       
       <TutorialListModal 
         isOpen={isTutorialModalOpen} 

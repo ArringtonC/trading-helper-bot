@@ -1,4 +1,4 @@
-import { TutorialStep, GameificationElements, Badge, Achievement } from '../types/Tutorial';
+import { TutorialStep, GameificationElements } from '../types/Tutorial';
 
 export const tutorialSteps: TutorialStep[] = [
   {

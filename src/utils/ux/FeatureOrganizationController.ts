@@ -29,8 +29,8 @@ export interface UnlockCriteria {
 
 export interface FeatureOrganizationConfig {
   core: FeatureTier;
-  intermediate: FeatureTier;
-  advanced: FeatureTier;
+  import: FeatureTier;
+  broker: FeatureTier;
   resources: FeatureTier;
 }
 
@@ -59,7 +59,7 @@ export const FEATURE_ORGANIZATION: FeatureOrganizationConfig = {
     ]
   },
   
-  intermediate: {
+  import: {
     alwaysVisible: false,
     requiresUnlock: true,
     location: 'primary-navigation',
@@ -82,7 +82,7 @@ export const FEATURE_ORGANIZATION: FeatureOrganizationConfig = {
     ]
   },
   
-  advanced: {
+  broker: {
     alwaysVisible: false,
     requiresUnlock: true,
     location: 'advanced-menu',
@@ -152,14 +152,14 @@ export class FeatureOrganizationController {
     // Always include resources
     accessible.push(...FEATURE_ORGANIZATION.resources.features);
     
-    // Add intermediate features if unlocked
-    if (this.meetsUnlockCriteria('intermediate')) {
-      accessible.push(...FEATURE_ORGANIZATION.intermediate.features);
+    // Add import features if unlocked
+    if (this.meetsUnlockCriteria('import')) {
+      accessible.push(...FEATURE_ORGANIZATION.import.features);
     }
     
-    // Add advanced features if unlocked
-    if (this.meetsUnlockCriteria('advanced')) {
-      accessible.push(...FEATURE_ORGANIZATION.advanced.features);
+    // Add broker features if unlocked
+    if (this.meetsUnlockCriteria('broker')) {
+      accessible.push(...FEATURE_ORGANIZATION.broker.features);
     }
     
     return Array.from(new Set(accessible)); // Remove duplicates
@@ -168,7 +168,7 @@ export class FeatureOrganizationController {
   /**
    * Check if user meets unlock criteria for a specific tier
    */
-  meetsUnlockCriteria(tier: 'intermediate' | 'advanced'): boolean {
+  meetsUnlockCriteria(tier: 'import' | 'broker'): boolean {
     const tierConfig = FEATURE_ORGANIZATION[tier];
     if (!tierConfig.requiresUnlock || !tierConfig.unlockCriteria) {
       return true;
@@ -190,7 +190,7 @@ export class FeatureOrganizationController {
     }
     
     if (criteria.featuresUsed) {
-      const hasUsedRequired = criteria.featuresUsed.every(feature => 
+      const hasUsedRequired = criteria.featuresUsed.every((feature: string) => 
         this.userProgress.featuresUsed.has(feature)
       );
       if (!hasUsedRequired) {
@@ -207,7 +207,7 @@ export class FeatureOrganizationController {
   /**
    * Get unlock status for a specific tier
    */
-  getUnlockStatus(tier: 'intermediate' | 'advanced'): UnlockStatus {
+  getUnlockStatus(tier: 'import' | 'broker'): UnlockStatus {
     const tierConfig = FEATURE_ORGANIZATION[tier];
     if (!tierConfig.requiresUnlock || !tierConfig.unlockCriteria) {
       return {
@@ -263,7 +263,7 @@ export class FeatureOrganizationController {
     // Check features used
     if (criteria.featuresUsed) {
       totalCriteria++;
-      const unusedFeatures = criteria.featuresUsed.filter(feature => 
+      const unusedFeatures = criteria.featuresUsed.filter((feature: string) => 
         !this.userProgress.featuresUsed.has(feature)
       );
       if (unusedFeatures.length === 0) {
@@ -294,13 +294,13 @@ export class FeatureOrganizationController {
         ...FEATURE_ORGANIZATION.core,
         unlockStatus: { isUnlocked: true, progress: 100, missingCriteria: [], nextSteps: [] }
       },
-      intermediate: {
-        ...FEATURE_ORGANIZATION.intermediate,
-        unlockStatus: this.getUnlockStatus('intermediate')
+      import: {
+        ...FEATURE_ORGANIZATION.import,
+        unlockStatus: this.getUnlockStatus('import')
       },
-      advanced: {
-        ...FEATURE_ORGANIZATION.advanced,
-        unlockStatus: this.getUnlockStatus('advanced')
+      broker: {
+        ...FEATURE_ORGANIZATION.broker,
+        unlockStatus: this.getUnlockStatus('broker')
       },
       resources: {
         ...FEATURE_ORGANIZATION.resources,
@@ -318,7 +318,7 @@ export class FeatureOrganizationController {
     Object.entries(FEATURE_ORGANIZATION).forEach(([tierName, tier]) => {
       if (tier.location === location) {
         if (tierName === 'core' || tierName === 'resources' || 
-            this.meetsUnlockCriteria(tierName as 'intermediate' | 'advanced')) {
+            this.meetsUnlockCriteria(tierName as 'import' | 'broker')) {
           features.push(...tier.features);
         }
       }
@@ -354,26 +354,26 @@ export class FeatureOrganizationController {
    */
   getProgressSummary() {
     const baseProgress = this.featureVisibilityController.getUserProgressSummary();
-    const intermediateStatus = this.getUnlockStatus('intermediate');
-    const advancedStatus = this.getUnlockStatus('advanced');
+    const importStatus = this.getUnlockStatus('import');
+    const brokerStatus = this.getUnlockStatus('broker');
     
     return {
       ...baseProgress,
       tierProgress: {
         core: { isUnlocked: true, progress: 100 },
-        intermediate: { 
-          isUnlocked: intermediateStatus.isUnlocked, 
-          progress: intermediateStatus.progress 
+        import: { 
+          isUnlocked: importStatus.isUnlocked, 
+          progress: importStatus.progress 
         },
-        advanced: { 
-          isUnlocked: advancedStatus.isUnlocked, 
-          progress: advancedStatus.progress 
+        broker: { 
+          isUnlocked: brokerStatus.isUnlocked, 
+          progress: brokerStatus.progress 
         },
         resources: { isUnlocked: true, progress: 100 }
       },
       nextUnlockTargets: [
-        ...(intermediateStatus.isUnlocked ? [] : ['intermediate tier']),
-        ...(advancedStatus.isUnlocked ? [] : ['advanced tier'])
+        ...(importStatus.isUnlocked ? [] : ['import tier']),
+        ...(brokerStatus.isUnlocked ? [] : ['broker tier'])
       ]
     };
   }
@@ -384,13 +384,13 @@ export class FeatureOrganizationController {
   getRecommendedActions(): string[] {
     const actions: string[] = [];
     
-    const intermediateStatus = this.getUnlockStatus('intermediate');
-    const advancedStatus = this.getUnlockStatus('advanced');
+    const importStatus = this.getUnlockStatus('import');
+    const brokerStatus = this.getUnlockStatus('broker');
     
-    if (!intermediateStatus.isUnlocked && intermediateStatus.nextSteps.length > 0) {
-      actions.push(...intermediateStatus.nextSteps.slice(0, 2)); // Top 2 actions
-    } else if (!advancedStatus.isUnlocked && advancedStatus.nextSteps.length > 0) {
-      actions.push(...advancedStatus.nextSteps.slice(0, 2)); // Top 2 actions
+    if (!importStatus.isUnlocked && importStatus.nextSteps.length > 0) {
+      actions.push(...importStatus.nextSteps.slice(0, 2)); // Top 2 actions
+    } else if (!brokerStatus.isUnlocked && brokerStatus.nextSteps.length > 0) {
+      actions.push(...brokerStatus.nextSteps.slice(0, 2)); // Top 2 actions
     }
     
     // If no tier-specific actions, suggest general progression

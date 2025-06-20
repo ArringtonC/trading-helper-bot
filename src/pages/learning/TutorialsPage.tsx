@@ -109,6 +109,28 @@ const TutorialsPage: React.FC = () => {
       bgColor: 'bg-blue-50',
       textColor: 'text-blue-800',
       borderColor: 'border-blue-200'
+    },
+    {
+      id: 'sp500-demo',
+      title: 'S&P 500 Demo Lab',
+      subtitle: 'Template Matching & Account Classification',
+      description: 'Interactive S&P 500 demo with real market data from 2025. Match your profile with proven investor templates and experience authentic market scenarios.',
+      icon: '📈',
+      difficulty: 'Beginner',
+      duration: '30 minutes',
+      route: '/sp500-demo',
+      requirements: 'No minimum capital',
+      highlights: [
+        'Real market data from 2025',
+        'Account profile matching',
+        'Historic market events',
+        'Multiple difficulty levels',
+        'Goal-first approach'
+      ],
+      riskLevel: 'Low',
+      bgColor: 'bg-emerald-50',
+      textColor: 'text-emerald-800',
+      borderColor: 'border-emerald-200'
     }
   ];
 

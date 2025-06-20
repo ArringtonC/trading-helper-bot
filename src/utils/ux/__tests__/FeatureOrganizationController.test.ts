@@ -5,7 +5,7 @@ describe('FeatureOrganizationController', () => {
   let controller: FeatureOrganizationController;
 
   beforeEach(() => {
-    controller = new FeatureOrganizationController('beginner');
+    controller = new FeatureOrganizationController('learning');
   });
 
   describe('FEATURE_ORGANIZATION Configuration', () => {
@@ -14,11 +14,11 @@ describe('FeatureOrganizationController', () => {
       expect(FEATURE_ORGANIZATION.core.requiresUnlock).toBe(false);
       expect(FEATURE_ORGANIZATION.core.location).toBe('primary-navigation');
       
-      expect(FEATURE_ORGANIZATION.intermediate.requiresUnlock).toBe(true);
-      expect(FEATURE_ORGANIZATION.intermediate.unlockCriteria).toBeDefined();
+      expect(FEATURE_ORGANIZATION.import.requiresUnlock).toBe(true);
+      expect(FEATURE_ORGANIZATION.import.unlockCriteria).toBeDefined();
       
-      expect(FEATURE_ORGANIZATION.advanced.requiresUnlock).toBe(true);
-      expect(FEATURE_ORGANIZATION.advanced.unlockCriteria).toBeDefined();
+      expect(FEATURE_ORGANIZATION.broker.requiresUnlock).toBe(true);
+      expect(FEATURE_ORGANIZATION.broker.unlockCriteria).toBeDefined();
       
       expect(FEATURE_ORGANIZATION.resources.alwaysVisible).toBe(true);
       expect(FEATURE_ORGANIZATION.resources.location).toBe('secondary-navigation');
@@ -33,12 +33,12 @@ describe('FeatureOrganizationController', () => {
     });
 
     it('should have progressive unlock criteria', () => {
-      const intermediateCriteria = FEATURE_ORGANIZATION.intermediate.unlockCriteria!;
+      const intermediateCriteria = FEATURE_ORGANIZATION.import.unlockCriteria!;
       expect(intermediateCriteria.tradesCompleted).toBe(10);
       expect(intermediateCriteria.timeSpent).toBe(120);
       expect(intermediateCriteria.riskAssessmentCompleted).toBe(true);
       
-      const advancedCriteria = FEATURE_ORGANIZATION.advanced.unlockCriteria!;
+      const advancedCriteria = FEATURE_ORGANIZATION.broker.unlockCriteria!;
       expect(advancedCriteria.tradesCompleted).toBe(50);
       expect(advancedCriteria.accountSize).toBe(10000);
       expect(advancedCriteria.winRate).toBe(0.4);
@@ -59,13 +59,13 @@ describe('FeatureOrganizationController', () => {
         expect(accessibleFeatures).toContain(feature);
       });
       
-      // Should not include intermediate features for new users
-      FEATURE_ORGANIZATION.intermediate.features.forEach(feature => {
+      // Should not include import features for new users
+      FEATURE_ORGANIZATION.import.features.forEach(feature => {
         expect(accessibleFeatures).not.toContain(feature);
       });
     });
 
-    it('should unlock intermediate features when criteria are met', () => {
+    it('should unlock import features when criteria are met', () => {
       // Update user progress to meet intermediate criteria
       controller.updateUserProgress({
         tradesCompleted: 15,
@@ -75,13 +75,13 @@ describe('FeatureOrganizationController', () => {
       
       const accessibleFeatures = controller.getAccessibleFeatures();
       
-      // Should now include intermediate features
-      FEATURE_ORGANIZATION.intermediate.features.forEach(feature => {
+      // Should now include import features
+      FEATURE_ORGANIZATION.import.features.forEach(feature => {
         expect(accessibleFeatures).toContain(feature);
       });
     });
 
-    it('should unlock advanced features when criteria are met', () => {
+    it('should unlock broker features when criteria are met', () => {
       // Update user progress to meet advanced criteria
       controller.updateUserProgress({
         tradesCompleted: 60,
@@ -92,8 +92,8 @@ describe('FeatureOrganizationController', () => {
       
       const accessibleFeatures = controller.getAccessibleFeatures();
       
-      // Should include advanced features
-      FEATURE_ORGANIZATION.advanced.features.forEach(feature => {
+      // Should include broker features
+      FEATURE_ORGANIZATION.broker.features.forEach(feature => {
         expect(accessibleFeatures).toContain(feature);
       });
     });
@@ -102,14 +102,14 @@ describe('FeatureOrganizationController', () => {
   describe('Unlock Criteria Validation', () => {
     it('should correctly evaluate intermediate unlock criteria', () => {
       // Test with insufficient criteria
-      expect(controller.meetsUnlockCriteria('intermediate')).toBe(false);
+      expect(controller.meetsUnlockCriteria('import')).toBe(false);
       
       // Test with partial criteria
       controller.updateUserProgress({
         tradesCompleted: 15,
         timeSpent: 50 // Not enough time
       });
-      expect(controller.meetsUnlockCriteria('intermediate')).toBe(false);
+      expect(controller.meetsUnlockCriteria('import')).toBe(false);
       
       // Test with all criteria met
       controller.updateUserProgress({
@@ -117,12 +117,12 @@ describe('FeatureOrganizationController', () => {
         timeSpent: 150,
         accountSize: 5000
       });
-      expect(controller.meetsUnlockCriteria('intermediate')).toBe(true);
+      expect(controller.meetsUnlockCriteria('import')).toBe(true);
     });
 
     it('should correctly evaluate advanced unlock criteria', () => {
       // Test with insufficient criteria
-      expect(controller.meetsUnlockCriteria('advanced')).toBe(false);
+      expect(controller.meetsUnlockCriteria('broker')).toBe(false);
       
       // Test with all criteria met
       controller.updateUserProgress({
@@ -131,13 +131,13 @@ describe('FeatureOrganizationController', () => {
         accountSize: 15000,
         featuresUsed: new Set(['strategy-builder', 'performance-tracking', 'interactive-analytics'])
       });
-      expect(controller.meetsUnlockCriteria('advanced')).toBe(true);
+      expect(controller.meetsUnlockCriteria('broker')).toBe(true);
     });
   });
 
   describe('Unlock Status Tracking', () => {
-    it('should provide detailed unlock status for intermediate tier', () => {
-      const status = controller.getUnlockStatus('intermediate');
+    it('should provide detailed unlock status for import tier', () => {
+      const status = controller.getUnlockStatus('import');
       
       expect(status.isUnlocked).toBe(false);
       expect(status.progress).toBe(0);
@@ -152,7 +152,7 @@ describe('FeatureOrganizationController', () => {
         timeSpent: 50 // Doesn't meet time requirement
       });
       
-      const status = controller.getUnlockStatus('intermediate');
+      const status = controller.getUnlockStatus('import');
       expect(status.progress).toBeGreaterThan(0);
       expect(status.progress).toBeLessThan(100);
     });
@@ -164,7 +164,7 @@ describe('FeatureOrganizationController', () => {
         accountSize: 5000
       });
       
-      const status = controller.getUnlockStatus('intermediate');
+      const status = controller.getUnlockStatus('import');
       expect(status.isUnlocked).toBe(true);
       expect(status.progress).toBe(100);
       expect(status.missingCriteria).toHaveLength(0);
@@ -189,7 +189,7 @@ describe('FeatureOrganizationController', () => {
       expect(advancedFeatures).toHaveLength(0);
     });
 
-    it('should include intermediate features in primary navigation when unlocked', () => {
+    it('should include import features in primary navigation when unlocked', () => {
       controller.updateUserProgress({
         tradesCompleted: 15,
         timeSpent: 150,
@@ -207,11 +207,11 @@ describe('FeatureOrganizationController', () => {
       const summary = controller.getProgressSummary();
       
       expect(summary.tierProgress.core.isUnlocked).toBe(true);
-      expect(summary.tierProgress.intermediate.isUnlocked).toBe(false);
-      expect(summary.tierProgress.advanced.isUnlocked).toBe(false);
+      expect(summary.tierProgress.import.isUnlocked).toBe(false);
+      expect(summary.tierProgress.broker.isUnlocked).toBe(false);
       expect(summary.tierProgress.resources.isUnlocked).toBe(true);
       
-      expect(summary.nextUnlockTargets).toContain('intermediate tier');
+      expect(summary.nextUnlockTargets).toContain('import tier');
     });
 
     it('should provide actionable recommendations', () => {
@@ -242,8 +242,8 @@ describe('FeatureOrganizationController', () => {
   describe('Feature Tier Identification', () => {
     it('should correctly identify feature tiers', () => {
       expect(controller.getFeatureTier('basic-calculator')).toBe('core');
-      expect(controller.getFeatureTier('position-sizing')).toBe('intermediate');
-      expect(controller.getFeatureTier('ai-analysis')).toBe('advanced');
+      expect(controller.getFeatureTier('position-sizing')).toBe('import');
+      expect(controller.getFeatureTier('ai-analysis')).toBe('broker');
       expect(controller.getFeatureTier('education')).toBe('resources');
       expect(controller.getFeatureTier('non-existent-feature')).toBeNull();
     });
@@ -264,17 +264,17 @@ describe('FeatureOrganizationController', () => {
     });
 
     it('should update feature visibility when progress changes', () => {
-      // Initially intermediate features are not visible
+      // Initially import features are not visible
       expect(controller.shouldShowFeature('position-sizing')).toBe(false);
       
-      // Unlock intermediate features
+      // Unlock import features
       controller.updateUserProgress({
         tradesCompleted: 15,
         timeSpent: 150,
         accountSize: 5000
       });
       
-      // Now intermediate features should be visible
+      // Now import features should be visible
       expect(controller.shouldShowFeature('position-sizing')).toBe(true);
     });
   });
@@ -289,7 +289,7 @@ describe('FeatureOrganizationController', () => {
     });
 
     it('should use feature usage for unlock criteria', () => {
-      // Mark required features as used for advanced tier
+      // Mark required features as used for broker tier
       controller.markFeatureUsed('strategy-builder');
       controller.markFeatureUsed('performance-tracking');
       controller.markFeatureUsed('interactive-analytics');
@@ -301,7 +301,7 @@ describe('FeatureOrganizationController', () => {
         accountSize: 15000
       });
       
-      expect(controller.meetsUnlockCriteria('advanced')).toBe(true);
+      expect(controller.meetsUnlockCriteria('broker')).toBe(true);
     });
   });
 
@@ -321,8 +321,8 @@ describe('FeatureOrganizationController', () => {
     });
 
     it('should provide clear unlock criteria for task completion improvement', () => {
-      const intermediateStatus = controller.getUnlockStatus('intermediate');
-      const advancedStatus = controller.getUnlockStatus('advanced');
+      const intermediateStatus = controller.getUnlockStatus('import');
+      const advancedStatus = controller.getUnlockStatus('broker');
       
       // Unlock messages should be clear and actionable
       expect(intermediateStatus.nextSteps.length).toBeGreaterThan(0);
@@ -340,23 +340,23 @@ describe('FeatureOrganizationController', () => {
       const organizedFeatures = controller.getOrganizedFeatures();
       expect(organizedFeatures.core.unlockStatus.isUnlocked).toBe(true);
       
-      // Intermediate features should require progression
-      expect(organizedFeatures.intermediate.unlockStatus.isUnlocked).toBe(false);
-      expect(organizedFeatures.intermediate.unlockStatus.progress).toBe(0);
+      // Import features should require progression
+      expect(organizedFeatures.import.unlockStatus.isUnlocked).toBe(false);
+      expect(organizedFeatures.import.unlockStatus.progress).toBe(0);
       
-      // Advanced features should require significant progression
-      expect(organizedFeatures.advanced.unlockStatus.isUnlocked).toBe(false);
-      expect(organizedFeatures.advanced.unlockCriteria?.tradesCompleted).toBeGreaterThan(
-        organizedFeatures.intermediate.unlockCriteria?.tradesCompleted || 0
+      // Broker features should require significant progression
+      expect(organizedFeatures.broker.unlockStatus.isUnlocked).toBe(false);
+      expect(organizedFeatures.broker.unlockCriteria?.tradesCompleted).toBeGreaterThan(
+        organizedFeatures.import.unlockCriteria?.tradesCompleted || 0
       );
     });
   });
 
   describe('Integration with User Experience Levels', () => {
     it('should work with different user experience levels', () => {
-      const beginnerController = new FeatureOrganizationController('beginner');
-      const intermediateController = new FeatureOrganizationController('intermediate');
-      const advancedController = new FeatureOrganizationController('advanced');
+      const beginnerController = new FeatureOrganizationController('learning');
+      const intermediateController = new FeatureOrganizationController('import');
+      const advancedController = new FeatureOrganizationController('broker');
       
       // All should have access to core features
       expect(beginnerController.shouldShowFeature('basic-calculator')).toBe(true);

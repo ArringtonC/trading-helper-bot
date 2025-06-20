@@ -4,7 +4,7 @@ import { MESFuturesTutorialProps } from './types';
 const LegacyTutorial: React.FC<MESFuturesTutorialProps> = ({
   onComplete,
   onNext,
-  userLevel = 'beginner'
+  userLevel = 'learning'
 }) => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">

@@ -3,7 +3,7 @@ import { TutorialProgress, MESFeatureFlags } from './types';
 
 interface MESNavigationTabsProps {
   currentTab: string;
-  onTabChange: (tab: string) => void;
+  onTabChange: (tab: 'dashboard' | 'learn' | 'practice' | 'community' | 'settings' | 'analysis') => void;
   progress: TutorialProgress;
   featureFlags: MESFeatureFlags;
   unreadNotifications: number;
@@ -91,7 +91,7 @@ const MESNavigationTabs: React.FC<MESNavigationTabsProps> = ({
             return (
               <button
                 key={tab.id}
-                onClick={() => !isDisabled && onTabChange(tab.id)}
+                onClick={() => !isDisabled && onTabChange(tab.id as 'dashboard' | 'learn' | 'practice' | 'community' | 'settings' | 'analysis')}
                 disabled={isDisabled}
                 title={getTabTooltip(tab)}
                 className={`relative py-4 px-6 font-medium whitespace-nowrap transition-all duration-200 border-b-2 ${

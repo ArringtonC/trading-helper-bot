@@ -9,7 +9,7 @@ export interface UXLayerConfig {
   visibleFeatures: string[] | 'all';
   hiddenFeatures: string[];
   maxConfigOptions: number | 'unlimited';
-  navigationStyle: 'simple' | 'standard' | 'advanced';
+  navigationStyle: 'simple' | 'standard' | 'broker';
   defaultRiskProfile: 'conservative' | 'moderate' | 'aggressive';
 }
 
@@ -18,7 +18,7 @@ export interface UserAssessmentResponse {
   optionsKnowledge: number; // 1-5 scale
   riskTolerance: number; // 1-5 scale
   accountSize: number; // Dollar amount
-  preferredComplexity: 'simple' | 'moderate' | 'advanced';
+  preferredComplexity: 'simple' | 'moderate' | 'broker';
 }
 
 export interface AdaptiveMenuConfig {
@@ -79,7 +79,7 @@ export const UX_LAYERS: Record<UserExperienceLevel, UXLayerConfig> = {
     visibleFeatures: 'all',
     hiddenFeatures: [],
     maxConfigOptions: 'unlimited',
-    navigationStyle: 'advanced',
+    navigationStyle: 'broker',
     defaultRiskProfile: 'aggressive'
   }
 };
@@ -101,9 +101,9 @@ export class UXLayersController {
    */
   private migrateOldLevelNames(): void {
     const oldToNewMapping: { [key: string]: UserExperienceLevel } = {
-      'beginner': 'learning',
-      'intermediate': 'import', 
-      'advanced': 'broker'
+      'learning': 'learning',
+      'import': 'import', 
+      'broker': 'broker'
     };
 
     // Check and update userExperienceLevel
@@ -138,7 +138,7 @@ export class UXLayersController {
     if (responses.optionsKnowledge > 3) score += 2;
     if (responses.riskTolerance > 2) score += 1;
     if (responses.accountSize > 10000) score += 1;
-    if (responses.preferredComplexity === 'advanced') score += 2;
+    if (responses.preferredComplexity === 'broker') score += 2;
     if (responses.preferredComplexity === 'moderate') score += 1;
     
     if (score <= 2) return 'learning';
@@ -248,7 +248,7 @@ export class UXLayersController {
   /**
    * Get navigation style for current user level
    */
-  getNavigationStyle(): 'simple' | 'standard' | 'advanced' {
+  getNavigationStyle(): 'simple' | 'standard' | 'broker' {
     return this.config.navigationStyle;
   }
 

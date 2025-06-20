@@ -4,7 +4,7 @@ import { MESFutorialState, UserProfile, TutorialProgress, VirtualPortfolio, Lear
 const defaultUserProfile: UserProfile = {
   id: 'default-user',
   name: 'Futures Trader',
-  experienceLevel: 'beginner',
+  experienceLevel: 'learning',
   joinDate: new Date(),
   preferences: {
     learningStyle: 'mixed',
@@ -62,7 +62,7 @@ const defaultLearningPath: LearningPath = {
   id: 'comprehensive-mes-trading',
   name: 'Comprehensive MES Trading',
   description: 'Master MES futures trading with research-backed strategies',
-  difficulty: 'beginner',
+  difficulty: 'learning',
   estimatedDuration: 8,
   modules: [
     'fundamentals',

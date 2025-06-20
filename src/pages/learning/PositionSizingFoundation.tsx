@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { AccountValidationEngine } from '../../utils/finance/AccountValidationEngine';
 import { PositionSizingCalculator } from '../../utils/finance/PositionSizingCalculator';
 import { EnhancedPositionSizingInterface } from '../../components/Wizards/EnhancedPositionSizingInterface';
-import { AccountValidationAlert } from '../../components/ui/AccountValidationAlert';
 import FundingPlanModal from '../../components/ui/FundingPlanModal';
 import StreamlinedDashboard from '../../components/ui/StreamlinedDashboard';
 import { UserExperienceLevel } from '../../utils/ux/UXLayersController';
@@ -135,12 +134,12 @@ export const PositionSizingFoundation: React.FC = () => {
   });
   
   // State for legacy trading goals (for compatibility)
-  const [tradingGoals, setTradingGoals] = useState<TradingGoals>({
+  const [tradingGoals] = useState<TradingGoals>({
     targetMonthlyIncome: 500,
     expectedWinRate: 0.6,
     averageWinAmount: 150,
-    tradingFrequency: 'weekly',
-    riskTolerance: 'moderate'
+    tradingFrequency: 'weekly' as const,
+    riskTolerance: 'moderate' as const
   });
   
   // State for modals and UI

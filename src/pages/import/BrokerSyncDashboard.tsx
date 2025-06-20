@@ -108,7 +108,7 @@ const BrokerSyncDashboard: React.FC = () => {
   
   // Auto-sync settings
   const [autoSyncEnabled, setAutoSyncEnabled] = useState(false);
-  const [syncInterval, setSyncInterval] = useState(30); // seconds
+  const [syncInterval] = useState(30); // seconds
   
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 

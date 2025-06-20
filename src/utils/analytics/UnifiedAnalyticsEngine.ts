@@ -1,5 +1,5 @@
 import React from 'react';
-import { getTrades, getPositions } from '../../services/DatabaseService';
+import { getPositions } from '../../services/DatabaseService';
 import { AnalyticsDataService } from '../../services/AnalyticsDataService';
 import { calculateCurrentVolatilityRegime, VolatilityRegime } from '../../services/MarketAnalysisService';
 import riskService, { RiskDataPayload } from '../../services/RiskService';
@@ -14,7 +14,7 @@ import { NormalizedTradeData } from '../../types/trade';
 export interface AnalyticsModule {
   id: string;
   name: string;
-  category: 'core' | 'intermediate' | 'advanced';
+  category: 'core' | 'import' | 'broker';
   priority: number;
   enabled: boolean;
   component: React.ComponentType<any>;
@@ -178,7 +178,7 @@ class UnifiedAnalyticsEngine {
     this.registerModule({
       id: 'performance-charts',
       name: 'Performance Charts',
-      category: 'intermediate',
+      category: 'import',
       priority: 4,
       enabled: this.config.userLevel !== 'learning',
       component: null as any,
@@ -188,7 +188,7 @@ class UnifiedAnalyticsEngine {
     this.registerModule({
       id: 'strategy-heatmap',
       name: 'Strategy Heatmap',
-      category: 'intermediate',
+      category: 'import',
       priority: 5,
       enabled: this.config.userLevel !== 'learning',
       component: null as any,
@@ -198,7 +198,7 @@ class UnifiedAnalyticsEngine {
     this.registerModule({
       id: 'correlation-analysis',
       name: 'Correlation Analysis',
-      category: 'intermediate',
+      category: 'import',
       priority: 6,
       enabled: this.config.userLevel !== 'learning',
       component: null as any,
@@ -208,7 +208,7 @@ class UnifiedAnalyticsEngine {
     this.registerModule({
       id: 'risk-analysis',
       name: 'Advanced Risk Analysis',
-      category: 'intermediate',
+      category: 'import',
       priority: 7,
       enabled: this.config.userLevel !== 'learning',
       component: null as any,
@@ -219,7 +219,7 @@ class UnifiedAnalyticsEngine {
     this.registerModule({
       id: 'greeks-dashboard',
       name: 'Greeks Dashboard',
-      category: 'advanced',
+      category: 'broker',
       priority: 8,
       enabled: this.config.userLevel === 'broker',
       component: null as any,
@@ -229,7 +229,7 @@ class UnifiedAnalyticsEngine {
     this.registerModule({
       id: 'market-regime',
       name: 'Market Regime Analysis',
-      category: 'advanced',
+      category: 'broker',
       priority: 9,
       enabled: this.config.userLevel === 'broker',
       component: null as any,
@@ -239,7 +239,7 @@ class UnifiedAnalyticsEngine {
     this.registerModule({
       id: 'volatility-surface',
       name: 'Volatility Surface',
-      category: 'advanced',
+      category: 'broker',
       priority: 10,
       enabled: this.config.userLevel === 'broker',
       component: null as any,
@@ -249,7 +249,7 @@ class UnifiedAnalyticsEngine {
     this.registerModule({
       id: 'portfolio-optimization',
       name: 'Portfolio Optimization',
-      category: 'advanced',
+      category: 'broker',
       priority: 11,
       enabled: this.config.userLevel === 'broker',
       component: null as any,
@@ -269,7 +269,7 @@ class UnifiedAnalyticsEngine {
 
   private isModuleAccessible(module: AnalyticsModule): boolean {
     const userLevelHierarchy = { learning: 0, import: 1, broker: 2 };
-    const moduleLevel = { core: 0, intermediate: 1, advanced: 2 };
+    const moduleLevel = { core: 0, import: 1, broker: 2 };
     
     return userLevelHierarchy[this.config.userLevel] >= moduleLevel[module.category];
   }
@@ -915,7 +915,7 @@ class UnifiedAnalyticsEngine {
   }
 
   // Progressive disclosure helpers
-  public getModulesByCategory(category: 'core' | 'intermediate' | 'advanced'): AnalyticsModule[] {
+  public getModulesByCategory(category: 'core' | 'import' | 'broker'): AnalyticsModule[] {
     return this.getEnabledModules().filter(module => module.category === category);
   }
 

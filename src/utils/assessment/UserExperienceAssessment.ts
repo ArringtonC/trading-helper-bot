@@ -39,7 +39,7 @@ export interface ExplicitPreferences {
   preferredRiskLevel: 'conservative' | 'moderate' | 'aggressive' | null;
   primaryTradingGoal: 'income' | 'growth' | 'speculation' | 'learning' | null;
   timeAvailableForTrading: 'minimal' | 'moderate' | 'extensive' | null;
-  preferredComplexity: 'simple' | 'moderate' | 'advanced' | null;
+  preferredComplexity: 'simple' | 'moderate' | 'broker' | null;
   hasCompletedOnboarding: boolean;
   manualOverride: UserExperienceLevel | null;
 }
@@ -351,7 +351,7 @@ export class UserExperienceAssessment {
       switch (preferences.preferredComplexity) {
         case 'simple': score = 0.25; break;
         case 'moderate': score = 0.5; break;
-        case 'advanced': score = 0.75; break;
+        case 'broker': score = 0.75; break;
       }
       factors.push(`Preferred complexity: ${preferences.preferredComplexity}`);
     }
@@ -387,9 +387,9 @@ export class UserExperienceAssessment {
    * Convert overall score to user level
    */
   private scoreToUserLevel(score: number): UserExperienceLevel {
-    if (score < 0.4) return 'beginner';
-    if (score < 0.6) return 'intermediate';
-    return 'advanced';
+    if (score < 0.4) return 'learning';
+    if (score < 0.6) return 'import';
+    return 'broker';
   }
 
   /**
@@ -397,9 +397,9 @@ export class UserExperienceAssessment {
    */
   private userLevelToScore(level: UserExperienceLevel): number {
     switch (level) {
-      case 'beginner': return 0.25;
-      case 'intermediate': return 0.5;
-      case 'advanced': return 0.75;
+      case 'learning': return 0.25;
+      case 'import': return 0.5;
+      case 'broker': return 0.75;
     }
   }
 
@@ -407,9 +407,9 @@ export class UserExperienceAssessment {
    * Convert score to readable level
    */
   private scoreToLevel(score: number): string {
-    if (score < 0.4) return 'beginner';
-    if (score < 0.7) return 'intermediate';
-    return 'advanced';
+    if (score < 0.4) return 'learning';
+    if (score < 0.7) return 'import';
+    return 'broker';
   }
 
   /**
@@ -458,9 +458,9 @@ export class UserExperienceAssessment {
     // Infer from user level and trading data
     let riskLevel: string;
     
-    if (userLevel === 'beginner') {
+    if (userLevel === 'learning') {
       riskLevel = 'conservative';
-    } else if (userLevel === 'advanced') {
+    } else if (userLevel === 'broker') {
       // For advanced users, check if they have substantial account or experience
       if (trading.accountSize && trading.accountSize >= 100000) {
         riskLevel = 'aggressive';
@@ -486,7 +486,7 @@ export class UserExperienceAssessment {
   ): string[] {
     const recommendations: string[] = [];
 
-    if (userLevel === 'beginner') {
+    if (userLevel === 'learning') {
       recommendations.push('Start with the Position Sizing tool to learn proper risk management');
       recommendations.push('Complete the Interactive Tutorial to understand key concepts');
       recommendations.push('Use the Strategy Visualizer to see how different approaches work');
@@ -494,7 +494,7 @@ export class UserExperienceAssessment {
       if (behavior.tutorialProgress && behavior.tutorialProgress < 50) {
         recommendations.push('Continue working through the tutorial - you\'re making good progress!');
       }
-    } else if (userLevel === 'intermediate') {
+    } else if (userLevel === 'import') {
       recommendations.push('Explore the Options Trading tools for advanced strategies');
       recommendations.push('Use Interactive Analytics to analyze your performance');
       recommendations.push('Consider enabling VIX-adjusted position sizing');
@@ -569,7 +569,7 @@ export class UserExperienceAssessment {
     }
 
     // Inconsistent self-reporting
-    if (preferences.selfReportedLevel === 'advanced' && trading.tradingExperienceYears && trading.tradingExperienceYears < 1) {
+    if (preferences.selfReportedLevel === 'broker' && trading.tradingExperienceYears && trading.tradingExperienceYears < 1) {
       warnings.push('Self-reported level may not match trading experience');
     }
 
@@ -581,7 +581,7 @@ export class UserExperienceAssessment {
    */
   private shouldShowOnboarding(userLevel: UserExperienceLevel, preferences: Partial<ExplicitPreferences>): boolean {
     if (preferences.hasCompletedOnboarding) return false;
-    return userLevel === 'beginner' || !preferences.selfReportedLevel;
+    return userLevel === 'learning' || !preferences.selfReportedLevel;
   }
 
   /**
@@ -591,11 +591,11 @@ export class UserExperienceAssessment {
     const features = this.assessmentCriteria.behavior.complexityAccess;
     
     switch (userLevel) {
-      case 'beginner':
+      case 'learning':
         return features.beginner;
-      case 'intermediate':
+      case 'import':
         return [...features.beginner, ...features.intermediate];
-      case 'advanced':
+      case 'broker':
         return [...features.beginner, ...features.intermediate, ...features.advanced];
     }
   }

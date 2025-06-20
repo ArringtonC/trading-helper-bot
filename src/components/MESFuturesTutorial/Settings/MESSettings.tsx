@@ -49,13 +49,13 @@ const MESSettings: React.FC<MESSettingsProps> = ({
                 <select
                   value={userProfile.experienceLevel}
                   onChange={(e) => onUserProfileUpdate({ 
-                    experienceLevel: e.target.value as 'beginner' | 'intermediate' | 'advanced' 
+                    experienceLevel: e.target.value as 'learning' | 'import' | 'broker' 
                   })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
+                  <option value="learning">Beginner</option>
+                  <option value="import">Intermediate</option>
+                  <option value="broker">Advanced</option>
                 </select>
               </div>
             </div>

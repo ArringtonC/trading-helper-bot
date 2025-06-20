@@ -13,7 +13,7 @@ export interface PositionSizingInput {
   tradingStrategy: 'day_trading' | 'swing_trading' | 'position_trading' | 'scalping';
   goalType: 'growth' | 'income' | 'preservation' | 'capital_objective';
   assetClass?: 'stocks' | 'options' | 'futures' | 'forex' | 'crypto';
-  experience?: 'beginner' | 'intermediate' | 'advanced';
+  experience?: 'learning' | 'import' | 'broker';
   timeHorizon?: number; // months
   volatilityContext?: 'low' | 'normal' | 'high';
 }
@@ -72,10 +72,10 @@ export function calculateFixedPercentageLimits(input: PositionSizingInput): Posi
   }
 
   // Adjust for experience level
-  if (input.experience === 'beginner') {
+  if (input.experience === 'learning') {
     maxPosition *= 0.5;
     maxExposure *= 0.6;
-  } else if (input.experience === 'advanced') {
+  } else if (input.experience === 'broker') {
     maxPosition *= 1.2;
     maxExposure *= 1.1;
   }
@@ -266,7 +266,7 @@ export function calculateStrategySpecificLimits(input: PositionSizingInput): Pos
   }
 
   const warnings: string[] = [];
-  if (input.tradingStrategy === 'scalping' && input.experience === 'beginner') {
+  if (input.tradingStrategy === 'scalping' && input.experience === 'learning') {
     warnings.push('Scalping requires advanced skills and may not be suitable for beginners');
   }
 

@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Alert } from './alert';
+import React, { useState } from 'react';
+import { Card, Button, Alert } from 'antd';
+import { IBKRAPIConfig, RequestMetrics } from '../../services/IBKRAPIRateLimiter';
 import { Badge } from './Badge';
-import { Card } from './Card';
-import { IBKRAPIConfig, RequestMetrics, CircuitState } from '../../services/IBKRAPIRateLimiter';
 
 export interface IBKRAPIConfigPanelProps {
   config: IBKRAPIConfig;
@@ -275,41 +274,45 @@ export const IBKRAPIConfigPanel: React.FC<IBKRAPIConfigPanelProps> = ({
 
       {/* Emergency alerts */}
       {metrics?.circuitState === 'OPEN' && (
-        <Alert className="mb-4 border-red-200 bg-red-50">
-          <div className="flex items-center justify-between">
-            <div>
-              <strong>Circuit Breaker Open</strong>
-              <p className="text-sm mt-1">API requests are currently blocked due to consecutive failures.</p>
-            </div>
-            {onResetCircuitBreaker && (
-              <button
+        <Alert 
+          type="error"
+          showIcon
+          className="mb-4"
+          message="Circuit Breaker Open"
+          description="API requests are currently blocked due to consecutive failures."
+          action={
+            onResetCircuitBreaker && (
+              <Button 
+                size="small" 
+                danger 
                 onClick={onResetCircuitBreaker}
-                className="ml-4 px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
               >
                 Reset
-              </button>
-            )}
-          </div>
-        </Alert>
+              </Button>
+            )
+          }
+        />
       )}
 
       {metrics?.errorRate && metrics.errorRate >= config.emergencyStopErrorRate && (
-        <Alert className="mb-4 border-red-200 bg-red-50">
-          <div className="flex items-center justify-between">
-            <div>
-              <strong>Emergency Stop Active</strong>
-              <p className="text-sm mt-1">High error rate detected. API requests are suspended.</p>
-            </div>
-            {onResetEmergencyStop && (
-              <button
+        <Alert 
+          type="error"
+          showIcon
+          className="mb-4"
+          message="Emergency Stop Active"
+          description="High error rate detected. API requests are suspended."
+          action={
+            onResetEmergencyStop && (
+              <Button 
+                size="small" 
+                danger 
                 onClick={onResetEmergencyStop}
-                className="ml-4 px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
               >
                 Reset
-              </button>
-            )}
-          </div>
-        </Alert>
+              </Button>
+            )
+          }
+        />
       )}
 
       {/* Connection Test */}

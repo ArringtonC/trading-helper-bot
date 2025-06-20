@@ -1,4 +1,5 @@
-import { IBKRAccount, IBKRPosition, IBKRTradeRecord, IBKRImportResult } from '../types/ibkr';
+import { IBKRAccount, IBKRTradeRecord, IBKRImportResult } from '../types/ibkr';
+import { NormalizedTradeData, BrokerType } from '../types/trade';
 
 /**
  * Specialized parser for IBKR CSV format with "Trades,Header" structure

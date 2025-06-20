@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PayoffChart from '../../components/visualizations/PayoffChart';
 import DecayChart from '../../components/visualizations/DecayChart';

@@ -16,7 +16,7 @@ export interface ConfigurationOption {
   max?: number;
   step?: number;
   description?: string;
-  category: 'basic' | 'intermediate' | 'advanced';
+  category: 'basic' | 'import' | 'broker';
   priority: number; // Lower numbers = higher priority
 }
 
@@ -41,7 +41,7 @@ export const EnhancedConfigurationPanel: React.FC<EnhancedConfigurationPanelProp
   showLevelSelector = true,
   onUserLevelChange
 }) => {
-  const [uxController] = useState(() => new UXLayersController(userLevel || 'intermediate'));
+  const [uxController] = useState(() => new UXLayersController(userLevel || 'import'));
   const [isExpanded, setIsExpanded] = useState(false);
   const [currentUserLevel, setCurrentUserLevel] = useState<UserExperienceLevel>(
     userLevel || uxController.getUserLevel()
@@ -64,8 +64,8 @@ export const EnhancedConfigurationPanel: React.FC<EnhancedConfigurationPanelProp
     
     // Filter by user level
     const levelFilteredOptions = sortedOptions.filter(option => {
-      if (currentUserLevel === 'advanced') return true;
-      if (currentUserLevel === 'intermediate') return option.category !== 'advanced';
+      if (currentUserLevel === 'broker') return true;
+      if (currentUserLevel === 'import') return option.category !== 'broker';
       return option.category === 'basic';
     });
 
@@ -196,9 +196,9 @@ export const EnhancedConfigurationPanel: React.FC<EnhancedConfigurationPanelProp
                 onChange={(e) => handleUserLevelChange(e.target.value as UserExperienceLevel)}
                 className="text-sm border border-gray-300 rounded px-2 py-1 focus:ring-2 focus:ring-blue-500"
               >
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
+                <option value="learning">Learning</option>
+                <option value="import">Import</option>
+                <option value="broker">Broker</option>
               </select>
             )}
             
@@ -218,8 +218,8 @@ export const EnhancedConfigurationPanel: React.FC<EnhancedConfigurationPanelProp
         <div className="mt-2 flex items-center space-x-2">
           <span className="text-xs text-gray-500">Experience Level:</span>
           <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-            currentUserLevel === 'beginner' ? 'bg-green-100 text-green-800' :
-            currentUserLevel === 'intermediate' ? 'bg-yellow-100 text-yellow-800' :
+            currentUserLevel === 'learning' ? 'bg-green-100 text-green-800' :
+            currentUserLevel === 'import' ? 'bg-yellow-100 text-yellow-800' :
             'bg-red-100 text-red-800'
           }`}>
             {currentUserLevel.charAt(0).toUpperCase() + currentUserLevel.slice(1)}
@@ -256,7 +256,7 @@ export const EnhancedConfigurationPanel: React.FC<EnhancedConfigurationPanelProp
               </svg>
               <span className="text-sm text-blue-800">
                 {options.length - filteredOptions.length} additional options available. 
-                {currentUserLevel !== 'advanced' && (
+                {currentUserLevel !== 'broker' && (
                   <span> Switch to Advanced mode or click "Show More" to access them.</span>
                 )}
               </span>

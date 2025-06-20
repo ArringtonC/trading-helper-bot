@@ -16,7 +16,7 @@ export interface NavigationItem {
   feature: string;
   minLevel: UserExperienceLevel;
   priority: number; // Lower number = higher priority
-  category: 'core' | 'trading' | 'analysis' | 'advanced' | 'debug' | 'learning' | 'import' | 'brokers' | 'hidden';
+  category: 'core' | 'trading' | 'analysis' | 'broker' | 'debug' | 'learning' | 'import' | 'brokers' | 'hidden' | 'stock-picking' | 'options' | 'management' | 'futures' | 'setup';
   description?: string;
   isNew?: boolean;
   requiresAccount?: boolean;
@@ -26,7 +26,7 @@ export interface ConfigurationOption {
   id: string;
   label: string;
   description: string;
-  category: 'display' | 'trading' | 'analysis' | 'advanced';
+  category: 'display' | 'trading' | 'analysis' | 'broker';
   minLevel: UserExperienceLevel;
   priority: number;
   defaultValue: any;
@@ -68,26 +68,27 @@ export class NavigationController {
       description: 'Professional homepage and app overview'
     },
 
-    // LEARNING SECTION (Beginner)
-    {
-      id: 'position-sizing-foundation',
-      path: '/position-sizing',
-      label: '🎯 Position Sizing Tool',
-      feature: 'position-sizing-foundation',
-      minLevel: 'learning',
-      priority: 2,
-      category: 'learning',
-      description: 'Interactive position sizing calculator and education'
-    },
+    // LEARNING & TOOLS SECTION
     {
       id: 'tutorial',
       path: '/tutorial',
       label: '🎮 Interactive Tutorial',
       feature: 'tutorial',
       minLevel: 'learning',
-      priority: 3,
+      priority: 2,
       category: 'learning',
       description: 'Learn position sizing through interactive lessons'
+    },
+    {
+      id: 'trading-tutorials',
+      path: '/tutorials',
+      label: '🎓 Trading Tutorials',
+      feature: 'trading-tutorials',
+      minLevel: 'learning',
+      priority: 3,
+      category: 'learning',
+      description: 'Comprehensive tutorials: NVDA options, stacking, naked calls, and MES futures',
+      isNew: true
     },
     {
       id: 'psychology-simulator',
@@ -100,37 +101,134 @@ export class NavigationController {
       description: 'Practice trading psychology and emotional control'
     },
     {
+      id: 'educational-dashboard',
+      path: '/education',
+      label: '✨ Educational Dashboard',
+      feature: 'educational-dashboard',
+      minLevel: 'learning',
+      priority: 5,
+      category: 'learning',
+      description: 'Comprehensive educational resources and learning dashboard'
+    },
+    {
+      id: 'assessment-test',
+      path: '/assessment-test',
+      label: '🧪 Assessment Test',
+      feature: 'assessment-test',
+      minLevel: 'learning',
+      priority: 6,
+      category: 'learning',
+      description: 'User experience assessment test'
+    },
+
+    // STOCK PICKING SECTION
+    {
+      id: 'quick-picks',
+      path: '/quick-picks',
+      label: '🚀 Quick Picks - Get 5 Best Stocks',
+      feature: 'quick-picks',
+      minLevel: 'learning',
+      priority: 10,
+      category: 'stock-picking',
+      description: 'AI-powered stock selection to get the 5 best stocks for your goals',
+      isNew: true
+    },
+    {
+      id: 'sp500-demo',
+      path: '/sp500-demo',
+      label: '📈 Market Data & Analysis',
+      feature: 'sp500-demo',
+      minLevel: 'learning',
+      priority: 11,
+      category: 'stock-picking',
+      description: 'Real-time S&P 500 charts and market news - Premium Feature',
+      isNew: true
+    },
+    {
+      id: 'advanced-screening',
+      path: '/advanced-screening',
+      label: '🔍 AI Stock Screener',
+      feature: 'advanced-screening',
+      minLevel: 'import',
+      priority: 12,
+      category: 'stock-picking',
+      description: 'Comprehensive stock screening with technical, fundamental, and risk analysis',
+      isNew: true
+    },
+    {
+      id: 'curated-lists',
+      path: '/curated-lists',
+      label: '⭐ Curated Stock Lists',
+      feature: 'curated-lists',
+      minLevel: 'import',
+      priority: 13,
+      category: 'stock-picking',
+      description: 'AI-powered stock curation using Goldman Sachs "Rule of 10" with 4.5% outperformance',
+      isNew: true
+    },
+    {
+      id: 'template-matching',
+      path: '/template-matching',
+      label: '🧬 Template Matching',
+      feature: 'template-matching',
+      minLevel: 'import',
+      priority: 14,
+      category: 'stock-picking',
+      description: 'AI-powered goal-to-stock matching with genetic algorithms (28.41% returns)',
+      isNew: true
+    },
+    {
+      id: 'watchlist',
+      path: '/watchlist',
+      label: '⭐ My Watchlist',
+      feature: 'watchlist',
+      minLevel: 'import',
+      priority: 15,
+      category: 'stock-picking',
+      description: 'Personal watchlist for tracking stocks and opportunities'
+    },
+    {
+      id: 'sp500-professional',
+      path: '/sp500-professional',
+      label: '📊 Professional Terminal',
+      feature: 'sp500-professional',
+      minLevel: 'import',
+      priority: 16,
+      category: 'stock-picking',
+      description: 'Advanced professional trading dashboard with Bloomberg-style terminal, real-time data, and comprehensive market analysis',
+      isNew: true
+    },
+
+    // OPTIONS SECTION
+    {
+      id: 'options-trading',
+      path: '/options',
+      label: '📊 Options Database',
+      feature: 'options-trading',
+      minLevel: 'import',
+      priority: 20,
+      category: 'options',
+      description: 'Advanced options trading tools and analysis'
+    },
+    {
       id: 'visualizer',
       path: '/visualizer',
       label: '🎯 Strategy Visualizer',
       feature: 'strategy-visualizer',
       minLevel: 'learning',
-      priority: 4,
-      category: 'learning',
+      priority: 21,
+      category: 'options',
       description: 'Visualize trading strategies and outcomes'
     },
     {
-      id: 'trading-tutorials',
-      path: '/tutorials',
-      label: '🎓 Trading Tutorials',
-      feature: 'trading-tutorials',
-      minLevel: 'learning',
-      priority: 5,
-      category: 'learning',
-      description: 'Comprehensive tutorials: NVDA options, stacking, naked calls, and MES futures',
-      isNew: true
-    },
-
-    // IMPORT SECTION (Intermediate)
-    {
-      id: 'options-trading',
-      path: '/options',
-      label: '📊 Options Trading',
-      feature: 'options-trading',
-      minLevel: 'import',
-      priority: 6,
-      category: 'import',
-      description: 'Advanced options trading tools and analysis'
+      id: 'ai-analysis',
+      path: '/analysis',
+      label: '🤖 AI Trade Analysis',
+      feature: 'ai-analysis',
+      minLevel: 'broker',
+      priority: 22,
+      category: 'options',
+      description: 'AI-powered market analysis and insights'
     },
     {
       id: 'interactive-analytics',
@@ -138,54 +236,115 @@ export class NavigationController {
       label: '📈 Interactive Analytics',
       feature: 'interactive-analytics',
       minLevel: 'import',
-      priority: 7,
-      category: 'import',
+      priority: 23,
+      category: 'options',
       description: 'Interactive charts and analytics dashboard'
     },
     {
-      id: 'import-analyze',
-      path: '/import-analyze',
-      label: '📥 Import & Analyze',
-      feature: 'import-analyze',
+      id: 'trade-screener',
+      path: '/trade-screener',
+      label: '⚡ Trade Screener',
+      feature: 'trade-screener',
       minLevel: 'import',
-      priority: 8,
-      category: 'import',
-      description: 'Import and analyze trading data'
+      priority: 24,
+      category: 'options',
+      description: 'Advanced trade screening and filtering tools'
     },
 
-    // BROKERS/TESTING SECTION (Advanced)
+    // RISK & POSITION MANAGEMENT SECTION
     {
-      id: 'ibkr-connection-test',
+      id: 'position-sizing-foundation',
+      path: '/position-sizing',
+      label: '🎯 Position Sizing Tool',
+      feature: 'position-sizing-foundation',
+      minLevel: 'learning',
+      priority: 30,
+      category: 'management',
+      description: 'Interactive position sizing calculator and education'
+    },
+    {
+      id: 'goal-sizing-wizard',
+      path: '/goal-sizing',
+      label: '🧭 Goal Sizing Wizard',
+      feature: 'goal-sizing-wizard',
+      minLevel: 'import',
+      priority: 31,
+      category: 'management',
+      description: 'Goal-driven position sizing wizard for optimal risk management'
+    },
+    {
+      id: 'risk-management',
+      path: '/risk-management',
+      label: '🛡️ Risk Management',
+      feature: 'risk-management',
+      minLevel: 'import',
+      priority: 32,
+      category: 'management',
+      description: 'Comprehensive portfolio risk assessment with five-factor analysis and automated filtering',
+      isNew: true
+    },
+    {
+      id: 'weekend-gap-risk',
+      path: '/weekend-gap-risk',
+      label: '⚡ Weekend Gap Risk',
+      feature: 'weekend-gap-risk',
+      minLevel: 'import',
+      priority: 33,
+      category: 'management',
+      description: 'Analyze and manage weekend gap risk in your positions'
+    },
+    {
+      id: 'account-classification',
+      path: '/account-classification',
+      label: '🎯 Account Classification',
+      feature: 'account-classification',
+      minLevel: 'import',
+      priority: 34,
+      category: 'management',
+      description: 'Intelligent account level assessment with 95%+ accuracy and regulatory compliance',
+      isNew: true
+    },
+
+    // FUTURES & ADVANCED SECTION
+    {
+      id: 'mes-futures-tutorial',
+      path: '/mes-futures-tutorial',
+      label: '📚 MES Futures Tutorial',
+      feature: 'mes-futures-tutorial',
+      minLevel: 'import',
+      priority: 40,
+      category: 'futures',
+      description: 'Comprehensive tutorial for MES futures trading'
+    },
+    {
+      id: 'pl-dashboard',
       path: '/pl-dashboard',
-      label: '🔗 IBKR Connection Test',
-      feature: 'ibkr-connection-test',
+      label: '💰 P&L Dashboard',
+      feature: 'pl-dashboard',
       minLevel: 'broker',
-      priority: 9,
-      category: 'brokers',
-      description: 'Test Interactive Brokers API connection',
-      requiresAccount: true
+      priority: 41,
+      category: 'futures',
+      description: 'Profit and loss dashboard for tracking performance'
     },
     {
-      id: 'ai-analysis',
-      path: '/analysis',
-      label: '🤖 AI Analysis',
-      feature: 'ai-analysis',
-      minLevel: 'broker',
-      priority: 10,
-      category: 'brokers',
-      description: 'AI-powered market analysis and insights'
+      id: 'unified-dashboard',
+      path: '/unified-dashboard',
+      label: '📊 Unified Dashboard',
+      feature: 'unified-dashboard',
+      minLevel: 'import',
+      priority: 42,
+      category: 'futures',
+      description: 'Unified dashboard for comprehensive trading overview'
     },
-
-    // SETTINGS/HIDDEN PAGES - Only accessible via settings or direct URL
     {
-      id: 'assessment-test',
-      path: '/assessment-test',
-      label: '🧪 Assessment Test',
-      feature: 'assessment-test',
+      id: 'broker-sync',
+      path: '/broker-sync',
+      label: '🔄 Broker Sync',
+      feature: 'broker-sync',
       minLevel: 'broker',
-      priority: 98,
-      category: 'hidden',
-      description: 'User experience assessment test'
+      priority: 43,
+      category: 'futures',
+      description: 'Synchronize data across multiple brokers'
     },
     {
       id: 'ibkr-api-demo',
@@ -193,61 +352,64 @@ export class NavigationController {
       label: '🔗 IBKR API Demo',
       feature: 'ibkr-api-demo',
       minLevel: 'broker',
-      priority: 99,
-      category: 'hidden',
+      priority: 44,
+      category: 'futures',
       description: 'Interactive Brokers API demonstration'
     },
+
+    // IMPORT & SETUP SECTION
+    {
+      id: 'direct-import',
+      path: '/import/direct',
+      label: '📥 Direct Import',
+      feature: 'direct-import',
+      minLevel: 'import',
+      priority: 50,
+      category: 'setup',
+      description: 'Direct import functionality for trading data'
+    },
+    {
+      id: 'import-analyze',
+      path: '/import-analyze',
+      label: '📊 Import Analysis',
+      feature: 'import-analyze',
+      minLevel: 'import',
+      priority: 51,
+      category: 'setup',
+      description: 'Import and analyze trading data'
+    },
+    {
+      id: 'import-to-database',
+      path: '/import',
+      label: '💾 Import to Database',
+      feature: 'import-to-database',
+      minLevel: 'import',
+      priority: 52,
+      category: 'setup',
+      description: 'Import trading data to database for analysis'
+    },
+    {
+      id: 'validation-dashboard',
+      path: '/validation-dashboard',
+      label: '✅ Validation Dashboard',
+      feature: 'validation-dashboard',
+      minLevel: 'import',
+      priority: 53,
+      category: 'setup',
+      description: 'Comprehensive platform effectiveness validation with backtesting, A/B testing, and research claim verification',
+      isNew: true
+    },
+
+    // HIDDEN/DEBUG PAGES - Only accessible via settings or direct URL
     {
       id: 'volatility-dashboard',
       path: '/volatility-demo',
       label: '📊 Volatility Dashboard',
       feature: 'volatility-dashboard',
       minLevel: 'broker',
-      priority: 100,
+      priority: 98,
       category: 'hidden',
       description: 'Advanced volatility analysis dashboard'
-    },
-    {
-      id: 'education-center',
-      path: '/education',
-      label: '📚 Training Education Center',
-      feature: 'education-center',
-      minLevel: 'broker',
-      priority: 101,
-      category: 'hidden',
-      description: 'Comprehensive educational modules'
-    },
-    {
-      id: 'weekend-gap-risk',
-      path: '/weekend-gap-risk',
-      label: '🏁 Weekend Gap Risk Dashboard',
-      feature: 'weekend-gap-risk',
-      minLevel: 'broker',
-      priority: 102,
-      category: 'hidden',
-      description: 'Analyze weekend gap risk for positions'
-    },
-    {
-      id: 'broker-sync-dashboard',
-      path: '/broker-sync',
-      label: '🔄 Broker Synchronization Dashboard',
-      feature: 'broker-sync-dashboard',
-      minLevel: 'broker',
-      priority: 103,
-      category: 'hidden',
-      description: 'Monitor and control broker API synchronization'
-    },
-
-    // LEGACY/DEBUG - For development and testing
-    {
-      id: 'unified-dashboard',
-      path: '/unified-dashboard',
-      label: '🔄 Unified Dashboard',
-      feature: 'unified-dashboard',
-      minLevel: 'broker',
-      priority: 110,
-      category: 'debug',
-      description: 'Legacy unified trading dashboard'
     },
     {
       id: 'rule-engine',
@@ -255,8 +417,8 @@ export class NavigationController {
       label: '⚙️ Rule Engine',
       feature: 'rule-engine',
       minLevel: 'broker',
-      priority: 111,
-      category: 'debug',
+      priority: 99,
+      category: 'hidden',
       description: 'Create custom trading rules and automation'
     },
     {
@@ -265,8 +427,8 @@ export class NavigationController {
       label: '🔧 Legacy Dashboard',
       feature: 'legacy-dashboard',
       minLevel: 'broker',
-      priority: 112,
-      category: 'debug',
+      priority: 100,
+      category: 'hidden',
       description: 'Original dashboard for debugging'
     }
   ];
@@ -352,7 +514,7 @@ export class NavigationController {
       id: 'apiConnections',
       label: 'API Connections',
       description: 'Manage external API connections',
-      category: 'advanced',
+      category: 'broker',
       minLevel: 'broker',
       priority: 7,
       defaultValue: false,
@@ -362,7 +524,7 @@ export class NavigationController {
       id: 'debugMode',
       label: 'Debug Mode',
       description: 'Enable debug logging and developer tools',
-      category: 'advanced',
+      category: 'broker',
       minLevel: 'broker',
       priority: 8,
       defaultValue: false,
@@ -372,7 +534,7 @@ export class NavigationController {
       id: 'customRules',
       label: 'Custom Trading Rules',
       description: 'Enable custom rule engine features',
-      category: 'advanced',
+      category: 'broker',
       minLevel: 'broker',
       priority: 9,
       defaultValue: false,
@@ -382,7 +544,7 @@ export class NavigationController {
       id: 'experimentalFeatures',
       label: 'Experimental Features',
       description: 'Enable experimental and beta features',
-      category: 'advanced',
+      category: 'broker',
       minLevel: 'broker',
       priority: 10,
       defaultValue: false,
@@ -450,7 +612,12 @@ export class NavigationController {
     const categories: Record<string, NavigationItem[]> = {
       core: [],
       learning: [],
+      'stock-picking': [],
+      options: [],
+      management: [],
+      futures: [],
       import: [],
+      setup: [],
       brokers: []
     };
     
@@ -473,26 +640,56 @@ export class NavigationController {
     items: NavigationItem[];
     level: 'learning' | 'import' | 'broker';
   }> {
+    const categories = this.getNavigationByCategory();
+    
     const sections = [
       {
         key: 'learning',
         title: 'Learning & Education',
         description: 'Foundation tools for learning position sizing and risk management',
-        items: this.getNavigationByCategory()['learning'] || [],
+        items: categories['learning'] || [],
         level: 'learning' as const
       },
       {
-        key: 'import',
-        title: 'Data & Analysis',
-        description: 'Import tools and analysis features for data-driven trading',
-        items: this.getNavigationByCategory()['import'] || [],
+        key: 'stock-picking',
+        title: 'Stock Picking',
+        description: 'AI-powered stock selection, analysis, and market research tools',
+        items: categories['stock-picking'] || [],
+        level: 'import' as const
+      },
+      {
+        key: 'options',
+        title: 'Options',
+        description: 'Options trading tools, analysis, and strategy visualization',
+        items: categories['options'] || [],
+        level: 'import' as const
+      },
+      {
+        key: 'management',
+        title: 'Risk & Position Management',
+        description: 'Risk assessment, position sizing, and goal management tools',
+        items: categories['management'] || [],
+        level: 'import' as const
+      },
+      {
+        key: 'futures',
+        title: 'Futures & Advanced',
+        description: 'Advanced trading tools, futures tutorials, and broker integration',
+        items: categories['futures'] || [],
+        level: 'broker' as const
+      },
+      {
+        key: 'setup',
+        title: 'Import & Setup',
+        description: 'Data import, setup, and configuration tools',
+        items: categories['setup'] || [],
         level: 'import' as const
       },
       {
         key: 'brokers',
         title: 'Broker Integration & Testing',
         description: 'Advanced broker connectivity and testing features',
-        items: this.getNavigationByCategory()['brokers'] || [],
+        items: categories['brokers'] || [],
         level: 'broker' as const
       }
     ];

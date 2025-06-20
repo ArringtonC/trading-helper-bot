@@ -87,7 +87,7 @@ export const POSITION_SIZING_BEST_PRACTICES: BestPracticeRule[] = [
     applicableFor: {
       tradingStrategies: ['day_trading', 'swing_trading', 'position_trading'],
       riskProfiles: ['conservative', 'moderate', 'aggressive'],
-      experienceLevels: ['beginner', 'intermediate', 'advanced']
+      experienceLevels: ['learning', 'import', 'broker']
     },
     severity: 'critical',
     source: 'Van Tharp - Trade Your Way to Financial Freedom'
@@ -154,7 +154,7 @@ export const POSITION_SIZING_BEST_PRACTICES: BestPracticeRule[] = [
     },
     applicableFor: {
       assetClasses: ['options'],
-      experienceLevels: ['intermediate', 'advanced']
+      experienceLevels: ['import', 'broker']
     },
     severity: 'recommended',
     source: 'Options Strategies and Risk Management'
@@ -171,7 +171,7 @@ export const POSITION_SIZING_BEST_PRACTICES: BestPracticeRule[] = [
     },
     applicableFor: {
       assetClasses: ['futures'],
-      experienceLevels: ['intermediate', 'advanced']
+      experienceLevels: ['import', 'broker']
     },
     severity: 'recommended',
     source: 'Futures Trading Risk Management'
@@ -189,7 +189,7 @@ export const POSITION_SIZING_BEST_PRACTICES: BestPracticeRule[] = [
     },
     applicableFor: {
       tradingStrategies: ['day_trading'],
-      experienceLevels: ['intermediate', 'advanced']
+      experienceLevels: ['import', 'broker']
     },
     severity: 'recommended',
     source: 'Professional Day Trading Guidelines'
@@ -207,7 +207,7 @@ export const POSITION_SIZING_BEST_PRACTICES: BestPracticeRule[] = [
     },
     applicableFor: {
       tradingStrategies: ['scalping'],
-      experienceLevels: ['advanced']
+      experienceLevels: ['broker']
     },
     severity: 'critical',
     source: 'High-Frequency Trading Risk Management'
@@ -224,7 +224,7 @@ export const POSITION_SIZING_BEST_PRACTICES: BestPracticeRule[] = [
     },
     applicableFor: {
       tradingStrategies: ['position_trading'],
-      experienceLevels: ['intermediate', 'advanced'],
+      experienceLevels: ['import', 'broker'],
       riskProfiles: ['moderate', 'aggressive']
     },
     severity: 'recommended',
@@ -273,7 +273,7 @@ export const POSITION_SIZING_BEST_PRACTICES: BestPracticeRule[] = [
       notes: 'Focus on learning rather than maximizing returns'
     },
     applicableFor: {
-      experienceLevels: ['beginner'],
+      experienceLevels: ['learning'],
       riskProfiles: ['conservative']
     },
     severity: 'critical',
@@ -289,7 +289,7 @@ export const POSITION_SIZING_BEST_PRACTICES: BestPracticeRule[] = [
     },
     applicableFor: {
       riskProfiles: ['conservative'],
-      experienceLevels: ['beginner', 'intermediate']
+      experienceLevels: ['learning', 'import']
     },
     severity: 'recommended',
     source: 'Small Account Management Strategies'
@@ -319,7 +319,7 @@ export const POSITION_SIZING_BEST_PRACTICES: BestPracticeRule[] = [
     },
     applicableFor: {
       assetClasses: ['forex', 'futures', 'crypto'],
-      experienceLevels: ['intermediate', 'advanced']
+      experienceLevels: ['import', 'broker']
     },
     severity: 'critical',
     source: 'Leverage Risk Management Guidelines'
@@ -428,19 +428,19 @@ export const MARKET_CONDITION_ADJUSTMENTS = {
 
 // Experience level guidelines
 export const EXPERIENCE_LEVEL_ADJUSTMENTS = {
-  beginner: {
+  learning: {
     maxPositionMultiplier: 0.5,
     maxExposureMultiplier: 0.6,
     riskMultiplier: 0.5,
     notes: 'Focus on learning and capital preservation'
   },
-  intermediate: {
+  import: {
     maxPositionMultiplier: 0.8,
     maxExposureMultiplier: 0.9,
     riskMultiplier: 0.8,
     notes: 'Gradual increase as skills develop'
   },
-  advanced: {
+  broker: {
     maxPositionMultiplier: 1.2,
     maxExposureMultiplier: 1.1,
     riskMultiplier: 1.2,

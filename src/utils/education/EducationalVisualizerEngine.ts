@@ -10,7 +10,7 @@ export interface VisualizationConfig {
   type: VisualizationType;
   title: string;
   description: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  difficulty: 'learning' | 'import' | 'broker';
   parameters: { [key: string]: any };
   learningGoals: string[];
   interactionTypes: InteractionType[];
@@ -92,7 +92,7 @@ export default class EducationalVisualizerEngine {
       type: 'options-payoff',
       title: 'Interactive Options Payoff Diagram',
       description: 'Explore how different option strategies perform at various stock prices',
-      difficulty: 'beginner',
+      difficulty: 'learning',
       parameters: {
         strategyType: 'long-call',
         strikePrice: 100,
@@ -115,7 +115,7 @@ export default class EducationalVisualizerEngine {
       type: 'position-sizing',
       title: 'Dynamic Position Sizing Calculator',
       description: 'Learn optimal position sizing with real-time risk visualization',
-      difficulty: 'beginner',
+      difficulty: 'learning',
       parameters: {
         accountSize: 10000,
         riskPercentage: 2,
@@ -137,7 +137,7 @@ export default class EducationalVisualizerEngine {
       type: 'kelly-criterion',
       title: 'Kelly Criterion Simulator',
       description: 'Simulate trading outcomes with different position sizing methods',
-      difficulty: 'intermediate',
+      difficulty: 'import',
       parameters: {
         winRate: 0.6,
         avgWin: 100,
@@ -160,7 +160,7 @@ export default class EducationalVisualizerEngine {
       type: 'correlation-matrix',
       title: 'Portfolio Correlation Matrix',
       description: 'Visualize correlations between different positions and sectors',
-      difficulty: 'intermediate',
+      difficulty: 'import',
       parameters: {
         assets: ['SPY', 'QQQ', 'IWM', 'TLT', 'GLD'],
         timeframe: '1Y',
@@ -181,7 +181,7 @@ export default class EducationalVisualizerEngine {
       type: 'vix-risk',
       title: 'VIX and Volatility Risk Analyzer',
       description: 'Analyze how VIX levels affect option positions',
-      difficulty: 'advanced',
+      difficulty: 'broker',
       parameters: {
         currentVix: 20,
         optionType: 'call',
@@ -230,7 +230,7 @@ export default class EducationalVisualizerEngine {
   /**
    * Get visualizations by difficulty
    */
-  getVisualizationsByDifficulty(difficulty: 'beginner' | 'intermediate' | 'advanced'): VisualizationConfig[] {
+  getVisualizationsByDifficulty(difficulty: 'learning' | 'import' | 'broker'): VisualizationConfig[] {
     return this.getVisualizations().filter(viz => viz.difficulty === difficulty);
   }
 
@@ -672,7 +672,7 @@ export default class EducationalVisualizerEngine {
   /**
    * Get recommended next visualization based on user progress
    */
-  getRecommendedVisualization(userId: string, currentLevel: 'beginner' | 'intermediate' | 'advanced'): VisualizationConfig | null {
+  getRecommendedVisualization(userId: string, currentLevel: 'learning' | 'import' | 'broker'): VisualizationConfig | null {
     const userInteractions = this.userInteractions.get(userId) || [];
     const completedVisualizations = new Set(
       userInteractions

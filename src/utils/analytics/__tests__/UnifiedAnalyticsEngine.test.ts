@@ -47,7 +47,7 @@ describe('UnifiedAnalyticsEngine', () => {
 
   beforeEach(() => {
     mockConfig = {
-      userLevel: 'intermediate',
+      userLevel: 'import',
       enabledModules: [],
       layout: 'compact',
       refreshInterval: 30000
@@ -88,7 +88,7 @@ describe('UnifiedAnalyticsEngine', () => {
     test('should show all modules for advanced user', () => {
       const advancedConfig: AnalyticsConfig = {
         ...mockConfig,
-        userLevel: 'advanced'
+        userLevel: 'broker'
       };
       const advancedEngine = new UnifiedAnalyticsEngine(advancedConfig);
       
@@ -102,7 +102,7 @@ describe('UnifiedAnalyticsEngine', () => {
     test('should limit modules for beginner user', () => {
       const beginnerConfig: AnalyticsConfig = {
         ...mockConfig,
-        userLevel: 'beginner'
+        userLevel: 'learning'
       };
       const beginnerEngine = new UnifiedAnalyticsEngine(beginnerConfig);
       
@@ -125,32 +125,32 @@ describe('UnifiedAnalyticsEngine', () => {
 
     test('should filter modules by category', () => {
       const coreModules = engine.getModulesByCategory('core');
-      const intermediateModules = engine.getModulesByCategory('intermediate');
-      const advancedModules = engine.getModulesByCategory('advanced');
+      const intermediateModules = engine.getModulesByCategory('import');
+      const advancedModules = engine.getModulesByCategory('broker');
       
       expect(coreModules.every(m => m.category === 'core')).toBe(true);
-      expect(intermediateModules.every(m => m.category === 'intermediate')).toBe(true);
-      expect(advancedModules.every(m => m.category === 'advanced')).toBe(true);
+      expect(intermediateModules.every(m => m.category === 'import')).toBe(true);
+      expect(advancedModules.every(m => m.category === 'broker')).toBe(true);
     });
 
     test('should respect max modules for user level', () => {
       const beginnerEngine = new UnifiedAnalyticsEngine({
         ...mockConfig,
-        userLevel: 'beginner'
+        userLevel: 'learning'
       });
       
       expect(beginnerEngine.getMaxModulesForUserLevel()).toBe(3);
       
       const intermediateEngine = new UnifiedAnalyticsEngine({
         ...mockConfig,
-        userLevel: 'intermediate'
+        userLevel: 'import'
       });
       
       expect(intermediateEngine.getMaxModulesForUserLevel()).toBe(6);
       
       const advancedEngine = new UnifiedAnalyticsEngine({
         ...mockConfig,
-        userLevel: 'advanced'
+        userLevel: 'broker'
       });
       
       expect(advancedEngine.getMaxModulesForUserLevel()).toBe(Infinity);
@@ -493,7 +493,7 @@ describe('UnifiedAnalyticsEngine', () => {
       
       const advancedEngine = new UnifiedAnalyticsEngine({
         ...mockConfig,
-        userLevel: 'advanced'
+        userLevel: 'broker'
       });
       
       expect(advancedEngine.shouldShowAdvancedFeatures()).toBe(true);
@@ -542,7 +542,7 @@ describe('UnifiedAnalyticsEngine', () => {
     test('should update configuration and module visibility', () => {
       const initialModules = engine.getEnabledModules().length;
       
-      engine.updateConfig({ userLevel: 'advanced' });
+      engine.updateConfig({ userLevel: 'broker' });
       
       const updatedModules = engine.getEnabledModules().length;
       expect(updatedModules).toBeGreaterThan(initialModules);

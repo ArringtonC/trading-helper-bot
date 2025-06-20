@@ -1,6 +1,5 @@
 import Papa, { ParseResult } from 'papaparse';
 import { NormalizedTradeData, BrokerType } from '../types/trade';
-import { detectBroker } from '../utils/detectBroker';
 import { mapRowToNormalizedTradeData } from '../utils/mapCsvToNormalizedSchema';
 import { validateNormalizedTradeData } from '../utils/validateNormalizedTrade';
 

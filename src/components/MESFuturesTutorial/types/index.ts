@@ -2,7 +2,7 @@
 export interface MESFutorialProps {
   onComplete?: () => void;
   onNext?: () => void;
-  userLevel?: 'beginner' | 'intermediate' | 'advanced';
+  userLevel?: 'learning' | 'import' | 'broker';
   enableEnhancedFeatures?: boolean; // Feature flag for gradual rollout
 }
 
@@ -10,7 +10,7 @@ export interface MESFutorialProps {
 export interface MESFuturesTutorialProps {
   onComplete?: () => void;
   onNext?: () => void;
-  userLevel?: 'beginner' | 'intermediate' | 'advanced';
+  userLevel?: 'learning' | 'import' | 'broker';
 }
 
 export interface MESFutorialState {
@@ -26,7 +26,7 @@ export interface UserProfile {
   id: string;
   name: string;
   email?: string;
-  experienceLevel: 'beginner' | 'intermediate' | 'advanced';
+  experienceLevel: 'learning' | 'import' | 'broker';
   joinDate: Date;
   preferences: UserPreferences;
 }
@@ -77,7 +77,7 @@ export interface LearningModule {
   id: string;
   title: string;
   description: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  difficulty: 'learning' | 'import' | 'broker';
   estimatedTime: number; // minutes
   prerequisites: string[];
   lessons: Lesson[];
@@ -150,7 +150,7 @@ export interface LearningPath {
   id: string;
   name: string;
   description: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  difficulty: 'learning' | 'import' | 'broker';
   estimatedDuration: number; // hours
   modules: string[]; // module IDs in order
   prerequisites?: string[];
@@ -311,7 +311,7 @@ export interface CommunityMember {
   username: string;
   displayName: string;
   avatar?: string;
-  experienceLevel: 'beginner' | 'intermediate' | 'advanced';
+  experienceLevel: 'learning' | 'import' | 'broker';
   joinDate: Date;
   reputation: number;
   badges: Badge[];
@@ -334,7 +334,7 @@ export interface StudyGroup {
   description: string;
   members: CommunityMember[];
   maxMembers: number;
-  experienceLevel: 'beginner' | 'intermediate' | 'advanced' | 'mixed';
+  experienceLevel: 'learning' | 'import' | 'broker' | 'mixed';
   meetingSchedule?: MeetingSchedule;
   currentTopic?: string;
   isPublic: boolean;

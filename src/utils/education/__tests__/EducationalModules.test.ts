@@ -27,7 +27,7 @@ describe('EducationalModules', () => {
       
       expect(module).toBeDefined();
       expect(module?.title).toBe('Options Trading Fundamentals');
-      expect(module?.difficulty).toBe('beginner');
+      expect(module?.difficulty).toBe('learning');
     });
 
     it('should return undefined for non-existent module', () => {
@@ -37,13 +37,13 @@ describe('EducationalModules', () => {
     });
 
     it('should filter modules by difficulty', () => {
-      const beginnerModules = educationalModules.getModulesByDifficulty('beginner');
-      const intermediateModules = educationalModules.getModulesByDifficulty('intermediate');
+      const beginnerModules = educationalModules.getModulesByDifficulty('learning');
+      const intermediateModules = educationalModules.getModulesByDifficulty('import');
       
       expect(beginnerModules).toHaveLength(2);
       expect(intermediateModules).toHaveLength(1);
-      expect(beginnerModules.every(m => m.difficulty === 'beginner')).toBe(true);
-      expect(intermediateModules.every(m => m.difficulty === 'intermediate')).toBe(true);
+      expect(beginnerModules.every(m => m.difficulty === 'learning')).toBe(true);
+      expect(intermediateModules.every(m => m.difficulty === 'import')).toBe(true);
     });
 
     it('should filter modules by type', () => {
@@ -199,34 +199,34 @@ describe('EducationalModules', () => {
 
   describe('Recommendations', () => {
     it('should recommend modules based on user level', () => {
-      const beginnerRecommendations = educationalModules.getRecommendedModules('beginner');
-      const intermediateRecommendations = educationalModules.getRecommendedModules('intermediate');
-      const advancedRecommendations = educationalModules.getRecommendedModules('advanced');
+      const beginnerRecommendations = educationalModules.getRecommendedModules('learning');
+      const intermediateRecommendations = educationalModules.getRecommendedModules('import');
+      const advancedRecommendations = educationalModules.getRecommendedModules('broker');
       
       expect(beginnerRecommendations).toHaveLength(2); // Only beginner modules
       expect(intermediateRecommendations).toHaveLength(3); // Beginner + intermediate
       expect(advancedRecommendations).toHaveLength(3); // All modules
       
-      expect(beginnerRecommendations.every(m => m.difficulty === 'beginner')).toBe(true);
+      expect(beginnerRecommendations.every(m => m.difficulty === 'learning')).toBe(true);
     });
 
     it('should exclude completed modules from recommendations', () => {
       const completedModules = ['basic-options'];
-      const recommendations = educationalModules.getRecommendedModules('beginner', completedModules);
+      const recommendations = educationalModules.getRecommendedModules('learning', completedModules);
       
       expect(recommendations).toHaveLength(1);
       expect(recommendations[0].id).toBe('position-sizing');
     });
 
     it('should sort recommendations by difficulty and time', () => {
-      const recommendations = educationalModules.getRecommendedModules('advanced');
+      const recommendations = educationalModules.getRecommendedModules('broker');
       
       // Should be sorted by difficulty first, then by time
       for (let i = 0; i < recommendations.length - 1; i++) {
         const current = recommendations[i];
         const next = recommendations[i + 1];
         
-        const difficultyOrder = { beginner: 1, intermediate: 2, advanced: 3 };
+        const difficultyOrder = { learning: 1, import: 2, broker: 3 };
         const currentDifficulty = difficultyOrder[current.difficulty];
         const nextDifficulty = difficultyOrder[next.difficulty];
         
@@ -261,7 +261,7 @@ describe('EducationalModules', () => {
       const userId = 'test-user';
       
       // Complete all beginner modules
-      const beginnerModules = educationalModules.getModulesByDifficulty('beginner');
+      const beginnerModules = educationalModules.getModulesByDifficulty('learning');
       beginnerModules.forEach(module => {
         educationalModules.startModule(userId, module.id);
         module.content.forEach(content => {

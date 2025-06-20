@@ -112,14 +112,6 @@ const Settings: React.FC = () => {
     }
   };
 
-  const handleToggle = (key: string, value: boolean) => {
-    value
-      ? saveSetting(key, 'true')
-      : saveSetting(key, 'false');
-    if (key === 'showImport') setShowImport(value);
-    if (key === 'showDirectImport') setShowDirectImport(value);
-  };
-  
   // Enhanced configuration options
   const configOptions: ConfigurationOption[] = React.useMemo(() => [
     // BASIC LEVEL (2 options)
@@ -148,7 +140,7 @@ const Settings: React.FC = () => {
       label: 'Show Direct CSV Import',
       type: 'toggle',
       value: showDirectImport,
-      category: 'intermediate',
+      category: 'import',
       priority: 3,
       description: 'Show or hide the direct CSV import page.'
     },
@@ -157,7 +149,7 @@ const Settings: React.FC = () => {
       label: 'Show Rule Engine Demo',
       type: 'toggle',
       value: showRuleEngine,
-      category: 'intermediate',
+      category: 'import',
       priority: 4,
       description: 'Show or hide the rule engine demo page.'
     },
@@ -166,7 +158,7 @@ const Settings: React.FC = () => {
       label: 'Show Unified Dashboard',
       type: 'toggle',
       value: showUnifiedDashboard,
-      category: 'intermediate',
+      category: 'import',
       priority: 5,
       description: 'Show or hide the unified dashboard in the navigation.'
     },
@@ -175,7 +167,7 @@ const Settings: React.FC = () => {
       label: 'Show Legacy Dashboard',
       type: 'toggle',
       value: showLegacyDashboard,
-      category: 'intermediate',
+      category: 'import',
       priority: 6,
       description: 'Show or hide the legacy dashboard in the navigation.'
     },
@@ -186,7 +178,7 @@ const Settings: React.FC = () => {
       label: 'Advanced Trading Features',
       type: 'toggle',
       value: enableAdvancedFeatures,
-      category: 'advanced',
+      category: 'broker',
       priority: 7,
       description: 'Enable advanced trading features and calculations.'
     },
@@ -195,7 +187,7 @@ const Settings: React.FC = () => {
       label: 'Debug Mode',
       type: 'toggle',
       value: enableDebugMode,
-      category: 'advanced',
+      category: 'broker',
       priority: 8,
       description: 'Enable debug mode for troubleshooting and development.'
     }

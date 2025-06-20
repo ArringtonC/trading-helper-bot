@@ -1,8 +1,18 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import React, { useState } from 'react';
+import { 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer 
+} from 'recharts';
 import AffordableStockFinder from './AffordableStockFinder';
 
 // Import the StockOption type from AffordableStockFinder
+import CommonMistakesEducation from './CommonMistakesEducation';
+
 interface AffordableStockOption {
   symbol: string;
   price: number;
@@ -14,7 +24,6 @@ interface AffordableStockOption {
   reasonForRecommendation: string;
   estimatedPremium: number;
 }
-import CommonMistakesEducation from './CommonMistakesEducation';
 
 interface NVDAOptionsTutorialProps {
   onComplete?: () => void;
@@ -149,9 +158,8 @@ const NVDAOptionsTutorial: React.FC<NVDAOptionsTutorialProps> = ({
       
       if (wasAssigned) {
         // Stock was called away, calculate profit
-        const stockProfit = (strikePrice - startingNVDAPrice) * 100;
         currentBalance = currentBalance - (startingNVDAPrice * 100) + (strikePrice * 100) + premium;
-        stockPrice = stockPrice; // Need to rebuy
+        // Need to rebuy at current market price
       } else {
         // Keep stock, collect premium
         currentBalance += premium;

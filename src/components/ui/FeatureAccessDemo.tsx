@@ -23,9 +23,9 @@ interface FeatureAccessDemoProps {
 }
 
 export const FeatureAccessDemo: React.FC<FeatureAccessDemoProps> = ({ className = '' }) => {
-  const [userLevel, setUserLevel] = useState<UserExperienceLevel>('beginner');
+  const [userLevel, setUserLevel] = useState<UserExperienceLevel>('learning');
   const [controller, setController] = useState<FeatureAccessController>(
-    () => new FeatureAccessController('beginner')
+    () => new FeatureAccessController('learning')
   );
   const [selectedFeature, setSelectedFeature] = useState<string>('basic-calculator');
   const [accessDecision, setAccessDecision] = useState<FeatureAccessDecision | null>(null);
@@ -45,9 +45,9 @@ export const FeatureAccessDemo: React.FC<FeatureAccessDemoProps> = ({ className 
 
   useEffect(() => {
     const newController = new FeatureAccessController(userLevel, {
-      tradesCompleted: userLevel === 'beginner' ? 0 : userLevel === 'intermediate' ? 15 : 60,
-      accountSize: userLevel === 'beginner' ? 1000 : userLevel === 'intermediate' ? 8000 : 25000,
-      timeSpent: userLevel === 'beginner' ? 30 : userLevel === 'intermediate' ? 180 : 600
+      tradesCompleted: userLevel === 'learning' ? 0 : userLevel === 'import' ? 15 : 60,
+      accountSize: userLevel === 'learning' ? 1000 : userLevel === 'import' ? 8000 : 25000,
+      timeSpent: userLevel === 'learning' ? 30 : userLevel === 'import' ? 180 : 600
     });
     setController(newController);
     updateAccessInfo(newController, selectedFeature);
@@ -98,17 +98,17 @@ export const FeatureAccessDemo: React.FC<FeatureAccessDemoProps> = ({ className 
 
   const getUserLevelIcon = (level: UserExperienceLevel) => {
     switch (level) {
-      case 'beginner': return <Users className="h-4 w-4" />;
-      case 'intermediate': return <TrendingUp className="h-4 w-4" />;
-      case 'advanced': return <Zap className="h-4 w-4" />;
+      case 'learning': return <Users className="h-4 w-4" />;
+      case 'import': return <TrendingUp className="h-4 w-4" />;
+      case 'broker': return <Zap className="h-4 w-4" />;
     }
   };
 
   const getUserLevelColor = (level: UserExperienceLevel) => {
     switch (level) {
-      case 'beginner': return 'text-green-600 bg-green-50 border-green-200';
-      case 'intermediate': return 'text-blue-600 bg-blue-50 border-blue-200';
-      case 'advanced': return 'text-purple-600 bg-purple-50 border-purple-200';
+      case 'learning': return 'text-green-600 bg-green-50 border-green-200';
+      case 'import': return 'text-blue-600 bg-blue-50 border-blue-200';
+      case 'broker': return 'text-purple-600 bg-purple-50 border-purple-200';
     }
   };
 
@@ -131,7 +131,7 @@ export const FeatureAccessDemo: React.FC<FeatureAccessDemoProps> = ({ className 
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">User Experience Level</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {(['beginner', 'intermediate', 'advanced'] as UserExperienceLevel[]).map((level) => (
+          {(['learning', 'import', 'broker'] as UserExperienceLevel[]).map((level) => (
             <button
               key={level}
               onClick={() => setUserLevel(level)}

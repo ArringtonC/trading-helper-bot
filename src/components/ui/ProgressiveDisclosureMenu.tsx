@@ -13,7 +13,7 @@ interface MenuSection {
   title: string;
   items: string[];
   isExpanded: boolean;
-  level: 'primary' | 'secondary' | 'advanced';
+  level: 'primary' | 'secondary' | 'broker';
 }
 
 export const ProgressiveDisclosureMenu: React.FC<ProgressiveDisclosureMenuProps> = ({
@@ -54,15 +54,15 @@ export const ProgressiveDisclosureMenu: React.FC<ProgressiveDisclosureMenuProps>
     }
   ];
 
-  // Add advanced section only for intermediate/advanced users
-  if (userLevel !== 'beginner') {
+  // Add advanced section only for import/broker users
+  if (userLevel !== 'learning') {
     const advancedItems = menuSystem.getAdvancedActions();
     if (advancedItems.length > 0) {
       menuSections.push({
         title: 'Advanced Features',
         items: advancedItems,
-        isExpanded: expandedSections.has('advanced'),
-        level: 'advanced'
+        isExpanded: expandedSections.has('broker'),
+        level: 'broker'
       });
     }
   }
@@ -91,18 +91,18 @@ export const ProgressiveDisclosureMenu: React.FC<ProgressiveDisclosureMenuProps>
 
   const getLevelIcon = (level: UserExperienceLevel) => {
     switch (level) {
-      case 'beginner': return '🌱';
-      case 'intermediate': return '📈';
-      case 'advanced': return '🚀';
+      case 'learning': return '🌱';
+      case 'import': return '📈';
+      case 'broker': return '🚀';
       default: return '📊';
     }
   };
 
   const getLevelColor = (level: UserExperienceLevel) => {
     switch (level) {
-      case 'beginner': return '#22c55e';
-      case 'intermediate': return '#3b82f6';
-      case 'advanced': return '#8b5cf6';
+      case 'learning': return '#22c55e';
+      case 'import': return '#3b82f6';
+      case 'broker': return '#8b5cf6';
       default: return '#6b7280';
     }
   };
@@ -123,7 +123,7 @@ export const ProgressiveDisclosureMenu: React.FC<ProgressiveDisclosureMenuProps>
         
         {showLevelSelector && (
           <div className="level-dropdown">
-            {(['beginner', 'intermediate', 'advanced'] as UserExperienceLevel[]).map(level => (
+            {(['learning', 'import', 'broker'] as UserExperienceLevel[]).map(level => (
               <button
                 key={level}
                 className={`level-option ${level === userLevel ? 'active' : ''}`}
@@ -137,9 +137,9 @@ export const ProgressiveDisclosureMenu: React.FC<ProgressiveDisclosureMenuProps>
                 <div className="level-info">
                   <span className="level-name">{level.charAt(0).toUpperCase() + level.slice(1)}</span>
                   <span className="level-description">
-                    {level === 'beginner' && 'Essential features only'}
-                    {level === 'intermediate' && 'Balanced feature set'}
-                    {level === 'advanced' && 'All features available'}
+                    {level === 'learning' && 'Essential features only'}
+                    {level === 'import' && 'Balanced feature set'}
+                    {level === 'broker' && 'All features available'}
                   </span>
                 </div>
               </button>
@@ -182,14 +182,14 @@ export const ProgressiveDisclosureMenu: React.FC<ProgressiveDisclosureMenuProps>
       </div>
 
       {/* Feature Unlock Hints for Lower Levels */}
-      {userLevel !== 'advanced' && (
+      {userLevel !== 'broker' && (
         <div className="unlock-hints">
           <div className="hint-header">
             <span className="hint-icon">💡</span>
             <span className="hint-title">Unlock More Features</span>
           </div>
           <p className="hint-text">
-            {userLevel === 'beginner' 
+            {userLevel === 'learning' 
               ? 'Switch to Intermediate level to access analytics and strategy tools'
               : 'Switch to Advanced level to access all features including custom strategies and API settings'
             }

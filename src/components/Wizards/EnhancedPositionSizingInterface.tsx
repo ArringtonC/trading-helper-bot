@@ -54,6 +54,11 @@ export const EnhancedPositionSizingInterface: React.FC<EnhancedPositionSizingPro
     trend: 'stable'
   });
 
+  // Update showAdvanced when prop changes
+  useEffect(() => {
+    setShowAdvanced(showAdvancedOptions);
+  }, [showAdvancedOptions]);
+
   // Calculate position sizing results
   const positionResult = useMemo(() => {
     return PositionSizingCalculator.calculate(input);
