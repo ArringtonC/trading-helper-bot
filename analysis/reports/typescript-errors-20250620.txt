@@ -1,0 +1,20 @@
+src/components/AdvancedScreening/ScreeningFilters.tsx(55,7): error TS2322: Type '{ rsiRange?: { min: number; max: number; } | undefined; macdSignal?: string | undefined; goldenCross?: boolean | undefined; volumeThreshold?: number | undefined; priceRange?: { min: number; max: number; } | undefined; }' is not assignable to type '{ rsiRange: { min: number; max: number; }; macdSignal: string; goldenCross: boolean; volumeThreshold: number; priceRange: { min: number; max: number; }; }'.
+  Types of property 'rsiRange' are incompatible.
+    Type '{ min: number; max: number; } | undefined' is not assignable to type '{ min: number; max: number; }'.
+      Type 'undefined' is not assignable to type '{ min: number; max: number; }'.
+src/components/AdvancedScreening/ScreeningFilters.tsx(65,7): error TS2322: Type '{ maxDebtToEquity?: number | undefined; minCurrentRatio?: number | undefined; minRevenueGrowth?: number | undefined; maxPegRatio?: number | undefined; minMarketCap?: number | undefined; }' is not assignable to type '{ maxDebtToEquity: number; minCurrentRatio: number; minRevenueGrowth: number; maxPegRatio: number; minMarketCap: number; }'.
+  Types of property 'maxDebtToEquity' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+src/components/AdvancedScreening/ScreeningFilters.tsx(76,7): error TS2345: Argument of type '{ risk: any; minMarketCap?: number | undefined; maxMarketCap?: number | undefined; minPE?: number | undefined; maxPE?: number | undefined; minROE?: number | undefined; maxROE?: number | undefined; ... 5 more ...; level?: string | undefined; }' is not assignable to parameter of type 'ScreeningCriteria'.
+  Object literal may only specify known properties, and 'risk' does not exist in type 'ScreeningCriteria'.
+src/components/AdvancedScreening/ScreeningFilters.tsx(77,21): error TS2339: Property 'risk' does not exist on type 'ScreeningCriteria'.
+src/components/AdvancedScreening/ScreeningFilters.tsx(86,7): error TS2345: Argument of type '{ quality: any; minMarketCap?: number | undefined; maxMarketCap?: number | undefined; minPE?: number | undefined; maxPE?: number | undefined; minROE?: number | undefined; maxROE?: number | undefined; ... 5 more ...; level?: string | undefined; }' is not assignable to parameter of type 'ScreeningCriteria'.
+  Object literal may only specify known properties, and 'quality' does not exist in type 'ScreeningCriteria'.
+src/components/AdvancedScreening/ScreeningFilters.tsx(87,21): error TS2339: Property 'quality' does not exist on type 'ScreeningCriteria'.
+src/components/AdvancedScreening/ScreeningFilters.tsx(178,154): error TS2339: Property 'risk' does not exist on type 'ScreeningCriteria'.
+src/components/AdvancedScreening/ScreeningFilters.tsx(178,170): error TS2339: Property 'quality' does not exist on type 'ScreeningCriteria'.
+src/components/AdvancedScreening/ScreeningFilters.tsx(304,14): error TS18048: 'criteria.technical' is possibly 'undefined'.
+src/components/AdvancedScreening/ScreeningFilters.tsx(304,48): error TS18048: 'criteria.technical' is possibly 'undefined'.
+src/components/AdvancedScreening/ScreeningFilters.tsx(314,15): error TS18048: 'criteria.technical' is possibly 'undefined'.
+src/components/AdvancedScreening/ScreeningFilters.tsx(314,52): error TS18048: 'criteria.technical' is possibly 'undefined'.

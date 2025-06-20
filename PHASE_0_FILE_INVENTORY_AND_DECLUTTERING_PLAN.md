@@ -859,9 +859,9 @@ git push origin --tags
 ### **PHASE 0.1: PREPARATION & SETUP (Day 1)**
 
 #### **Task 1: Environment Setup**
-- [ ] 1.1 Create backup branch: `git checkout -b phase-0-decluttering-backup`
-- [ ] 1.2 Push backup branch: `git push -u origin phase-0-decluttering-backup`
-- [ ] 1.3 Create working branch: `git checkout -b phase-0-file-organization`
+- [x] 1.1 Create backup branch: `git checkout -b phase-0-decluttering-backup`
+- [x] 1.2 Push backup branch: `git push -u origin phase-0-decluttering-backup`
+- [x] 1.3 Create working branch: `git checkout -b phase-0-file-organization`
 - [ ] 1.4 Install knip: `npm install -g knip`
 - [ ] 1.5 Install ts-unused-exports: `npm install -g ts-unused-exports`
 

@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-06-20T21:37:49Z",
+  "phase": "0-baseline",
+  "counts": {
+    "typescript": 212,
+    "tsx": 239,
+    "javascript": 62,
+    "jsx": 1,
+    "services": 91,
+    "components": 185,
+    "pages": 41,
+    "utils": 75,
+    "types": 16,
+    "root_files": 52,
+    "backup_files": 9
+  }
+}
