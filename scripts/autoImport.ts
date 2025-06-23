@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { saveIBKRTradeRecords } from '../src/services/DatabaseService';
-import { IBKRActivityStatementParser } from '../src/services/IBKRActivityStatementParser';
+import { IBKRActivityStatementParser } from '../src/services/brokers/parsers/IBKRActivityStatementParser';
 
 const IMPORT_DIR = path.join(__dirname, '../import');
 const ARCHIVE_DIR = path.join(IMPORT_DIR, 'archive');
@@ -48,7 +48,7 @@ if (require.main === module) {
  
 import path from 'path';
 import { saveIBKRTradeRecords } from '../src/services/DatabaseService';
-import { IBKRActivityStatementParser } from '../src/services/IBKRActivityStatementParser';
+import { IBKRActivityStatementParser } from '../src/services/brokers/parsers/IBKRActivityStatementParser';
 
 const IMPORT_DIR = path.join(__dirname, '../import');
 const ARCHIVE_DIR = path.join(IMPORT_DIR, 'archive');

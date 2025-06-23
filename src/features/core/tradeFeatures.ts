@@ -1,8 +1,8 @@
-import { NormalizedTradeData } from '../../types/trade';
+import { NormalizedTradeData } from '../../shared/types/trade';
 import { FeatureDefinition } from '../types';
 import { RSI, MACD, BollingerBands } from 'technicalindicators';
-import { AnalyticsDataService } from '../../services/AnalyticsDataService';
-import { VolatilityRegime, calculateCurrentVolatilityRegime } from '../../services/MarketAnalysisService';
+import { AnalyticsDataService } from '../../shared/services/AnalyticsDataService';
+import { VolatilityRegime, calculateCurrentVolatilityRegime } from '../../shared/services/MarketAnalysisService';
 
 /**
  * Calculates the duration of a trade in days.

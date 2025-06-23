@@ -1,5 +1,5 @@
-import { loadSetting } from '../services/SettingsService';
-import { MESFeatureFlags } from '../components/MESFuturesTutorial/types';
+import { loadSetting } from '../shared/services/SettingsService';
+import { MESFeatureFlags } from '../features/learning/components/MESFuturesTutorial/types';
 
 export const getMESFeatureFlags = (): MESFeatureFlags => ({
   enhancedTutorial: loadSetting('mesEnhancedTutorial') === 'true',

@@ -1,0 +1,260 @@
+[
+  {
+    "id": "1",
+    "name": "Michael Burry",
+    "imageUrl": "https://a57.foxnews.com/static.foxbusiness.com/foxbusiness.com/content/uploads/2024/03/1440/810/MIchael-Burry-Big-Short-scaled.jpg?ve=1&tl=1",
+    "bio": "An American investor and former physician known for his meticulous, independent research. He founded Scion Capital and famously predicted the 2008 subprime mortgage crisis, a feat detailed in 'The Big Short.' Burry is renowned for his contrarian, deep-value investment style and high-conviction bets against prevailing market sentiment.",
+    "philosophy": "Deep value analysis, contrarian thinking, and an unwavering focus on margin of safety.",
+    "famousTrades": [
+      {
+        "title": "The \"Big Short\" (2005-2008)",
+        "summary": "Identified the 2008 subprime mortgage crisis by analyzing risky loan data and used credit default swaps to bet against the housing market, yielding nearly 500% returns for his fund."
+      },
+      {
+        "title": "GameStop (2019-2020)",
+        "summary": "Identified GameStop as deeply undervalued, successfully pushed for a massive share buyback, and realized significant profits before the famous 2021 short squeeze."
+      },
+      {
+        "title": "Tesla Short (2021)",
+        "summary": "Took a significant short position against Tesla, betting that the company's valuation was unsustainable and overly reliant on regulatory credits."
+      }
+    ],
+    "latestPicks": [
+      {
+        "ticker": "EL (Long)",
+        "thesis": "A contrarian long position in Estée Lauder, betting on the cosmetics giant's recovery despite a significant stock decline amid weakening demand in Asia.",
+        "date": "Q1 2025"
+      },
+      {
+        "ticker": "NVDA (PUT)",
+        "thesis": "A massive bearish bet against NVIDIA, suggesting a belief that the AI-driven market optimism has created an unsustainable valuation bubble.",
+        "date": "Q1 2025"
+      },
+      {
+        "ticker": "BABA (PUT)",
+        "thesis": "A put option against Alibaba, part of a broad reversal on Chinese tech due to concerns about China's economy and regulatory risks.",
+        "date": "Q1 2025"
+      },
+      {
+        "ticker": "JD (PUT)",
+        "thesis": "Another bearish position on Chinese e-commerce, reflecting deep pessimism about the sector's near-term future and geopolitical tensions.",
+        "date": "Q1 2025"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Warren Buffett",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Warren_Buffett_KU_Visit.jpg/400px-Warren_Buffett_KU_Visit.jpg",
+    "bio": "Known as the 'Oracle of Omaha,' Warren Buffett is one of the most successful investors of all time. As chairman and CEO of Berkshire Hathaway, he has built a legendary track record through value investing principles learned from Benjamin Graham. His patient, long-term approach and focus on understanding businesses has made him one of the world's wealthiest individuals.",
+    "philosophy": "Buy wonderful companies at fair prices and hold them forever. Focus on intrinsic value and economic moats.",
+    "famousTrades": [
+      {
+        "title": "Coca-Cola (1988-1989)",
+        "summary": "Invested $1.3 billion in Coca-Cola stock, recognizing the company's global brand strength and consistent cash flows. This position became worth over $20 billion at its peak."
+      },
+      {
+        "title": "Apple (2016-2022)",
+        "summary": "Despite initially avoiding tech stocks, built a massive Apple position worth over $120 billion, calling it 'the best business I know in the world.'"
+      },
+      {
+        "title": "Bank of America (2011-2017)",
+        "summary": "Invested $5 billion in preferred shares during the financial crisis, then converted to common stock for massive gains as the bank recovered."
+      }
+    ],
+    "latestPicks": [
+      {
+        "ticker": "AAPL",
+        "thesis": "Despite trimming the position, Apple remains Berkshire's largest holding due to its strong ecosystem and loyal customer base.",
+        "date": "Q4 2024"
+      },
+      {
+        "ticker": "BAC",
+        "thesis": "Bank of America benefits from rising interest rates and has strong capital ratios for economic uncertainty.",
+        "date": "Q4 2024"
+      },
+      {
+        "ticker": "KO",
+        "thesis": "Coca-Cola's global brand and consistent dividend growth make it a reliable long-term holding.",
+        "date": "Q4 2024"
+      },
+      {
+        "ticker": "CVX",
+        "thesis": "Chevron offers attractive dividend yield and benefits from disciplined capital allocation in the energy sector.",
+        "date": "Q4 2024"
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "name": "Ray Dalio",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Ray_Dalio_2019.jpg/400px-Ray_Dalio_2019.jpg",
+    "bio": "Founder of Bridgewater Associates, the world's largest hedge fund. Dalio is known for his 'Principles' approach to investing and life, emphasizing radical transparency and systematic decision-making. His 'All Weather' portfolio strategy aims to perform well across different economic environments through diversification across asset classes.",
+    "philosophy": "Diversification across uncorrelated assets, systematic risk management, and understanding economic cycles.",
+    "famousTrades": [
+      {
+        "title": "2008 Financial Crisis Prediction",
+        "summary": "Bridgewater's Pure Alpha fund gained 9.5% in 2008 while most funds lost money, thanks to Dalio's understanding of deleveraging cycles."
+      },
+      {
+        "title": "European Debt Crisis (2010-2012)",
+        "summary": "Successfully navigated the European sovereign debt crisis by understanding the mechanics of currency unions and debt dynamics."
+      },
+      {
+        "title": "All Weather Strategy",
+        "summary": "Created a risk parity approach that balances risk across asset classes rather than dollar amounts, becoming one of the most copied strategies in finance."
+      }
+    ],
+    "latestPicks": [
+      {
+        "ticker": "TIPS",
+        "thesis": "Treasury Inflation-Protected Securities provide protection against inflation while maintaining real purchasing power.",
+        "date": "Q4 2024"
+      },
+      {
+        "ticker": "GLD",
+        "thesis": "Gold serves as a hedge against currency debasement and provides diversification during periods of economic uncertainty.",
+        "date": "Q4 2024"
+      },
+      {
+        "ticker": "VT",
+        "thesis": "Global diversification through total world stock index provides exposure to economic growth across all regions.",
+        "date": "Q4 2024"
+      },
+      {
+        "ticker": "TLT",
+        "thesis": "Long-term Treasury bonds provide portfolio balance and perform well during deflationary periods.",
+        "date": "Q4 2024"
+      }
+    ]
+  },
+  {
+    "id": "4",
+    "name": "Peter Lynch",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Peter_Lynch_2011.jpg/400px-Peter_Lynch_2011.jpg",
+    "bio": "Former manager of Fidelity's Magellan Fund (1977-1990), Lynch achieved an average annual return of 29.2%. He popularized the concept of investing in what you know and finding 'ten-baggers' - stocks that increase by 1000%. His accessible investment philosophy has influenced millions of individual investors through his books 'One Up On Wall Street' and 'Beating the Street.'",
+    "philosophy": "Invest in what you understand, look for companies with strong growth prospects, and don't try to time the market.",
+    "famousTrades": [
+      {
+        "title": "Dunkin' Donuts (1980s)",
+        "summary": "Discovered the company through personal observation, recognizing its strong brand and expansion potential before it became widely known."
+      },
+      {
+        "title": "Chrysler (1982)",
+        "summary": "Bought Chrysler when it was near bankruptcy, recognizing the turnaround potential under Lee Iacocca's leadership."
+      },
+      {
+        "title": "Taco Bell (1980s)",
+        "summary": "Identified the fast-food chain's growth potential early, achieving massive returns as the company expanded nationwide."
+      }
+    ],
+    "latestPicks": [
+      {
+        "ticker": "MSFT",
+        "thesis": "Microsoft's cloud dominance and AI leadership position it well for continued growth in enterprise technology.",
+        "date": "Q4 2024"
+      },
+      {
+        "ticker": "V",
+        "thesis": "Visa benefits from the ongoing shift to digital payments and has a strong competitive moat in payment processing.",
+        "date": "Q4 2024"
+      },
+      {
+        "ticker": "HD",
+        "thesis": "Home Depot benefits from housing market trends and has a strong position in the home improvement market.",
+        "date": "Q4 2024"
+      },
+      {
+        "ticker": "UNH",
+        "thesis": "UnitedHealth Group has strong market position in healthcare and benefits from demographic trends.",
+        "date": "Q4 2024"
+      }
+    ]
+  },
+  {
+    "id": "5",
+    "name": "George Soros",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/George_Soros_-_Festival_of_Economics_2012_05.jpg/400px-George_Soros_-_Festival_of_Economics_2012_05.jpg",
+    "bio": "Hungarian-American investor and philanthropist known for his aggressive trading style and macroeconomic bets. Soros is famous for 'breaking the Bank of England' in 1992 and for his theory of reflexivity in markets. His Quantum Fund achieved extraordinary returns through high-leverage bets on currency and market movements.",
+    "philosophy": "Market reflexivity, macroeconomic analysis, and taking large positions when conviction is high.",
+    "famousTrades": [
+      {
+        "title": "Breaking the Bank of England (1992)",
+        "summary": "Shorted £10 billion worth of British pounds, forcing the UK to withdraw from the European Exchange Rate Mechanism and earning $1 billion in profit."
+      },
+      {
+        "title": "Asian Financial Crisis (1997)",
+        "summary": "Profited from the collapse of several Asian currencies, particularly the Thai baht, through well-timed short positions."
+      },
+      {
+        "title": "Technology Bubble (2000)",
+        "summary": "Successfully shorted technology stocks during the dot-com crash, recognizing the unsustainable valuations in the sector."
+      }
+    ],
+    "latestPicks": [
+      {
+        "ticker": "RIVN",
+        "thesis": "Electric vehicle sector has long-term growth potential despite current market volatility and valuation concerns.",
+        "date": "Q4 2024"
+      },
+      {
+        "ticker": "DIS",
+        "thesis": "Disney's content library and streaming platform position it well for the evolving entertainment landscape.",
+        "date": "Q4 2024"
+      },
+      {
+        "ticker": "PARA",
+        "thesis": "Paramount Global represents a potential value play in the media sector with strong content assets.",
+        "date": "Q4 2024"
+      },
+      {
+        "ticker": "TME",
+        "thesis": "Tencent Music benefits from China's digital music growth and has strong market position.",
+        "date": "Q4 2024"
+      }
+    ]
+  },
+  {
+    "id": "6",
+    "name": "Cathie Wood",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Cathie_Wood_2019.jpg/400px-Cathie_Wood_2019.jpg",
+    "bio": "Founder and CEO of ARK Invest, Wood is known for her focus on disruptive innovation and emerging technologies. Her investment philosophy centers on identifying companies that benefit from technological breakthroughs in areas like artificial intelligence, robotics, energy storage, and genomics. ARK's actively managed ETFs have attracted significant attention for their concentrated bets on innovation.",
+    "philosophy": "Invest in disruptive innovation across multiple sectors, with a 5-year investment horizon and high conviction in transformative technologies.",
+    "famousTrades": [
+      {
+        "title": "Tesla (2014-2021)",
+        "summary": "Built a massive position in Tesla early, recognizing the company's potential to revolutionize both automotive and energy storage industries."
+      },
+      {
+        "title": "Zoom (2020)",
+        "summary": "Heavily invested in Zoom during the early pandemic, capitalizing on the shift to remote work and video communications."
+      },
+      {
+        "title": "Square/Block (2016-2021)",
+        "summary": "Identified Square's potential in digital payments and financial services before it became a major fintech player."
+      }
+    ],
+    "latestPicks": [
+      {
+        "ticker": "TSLA",
+        "thesis": "Tesla remains a leader in electric vehicles and energy storage, with autonomous driving providing significant upside potential.",
+        "date": "Q4 2024"
+      },
+      {
+        "ticker": "ROKU",
+        "thesis": "Roku's streaming platform benefits from cord-cutting trends and has strong position in connected TV advertising.",
+        "date": "Q4 2024"
+      },
+      {
+        "ticker": "CRSP",
+        "thesis": "CRISPR gene editing technology has revolutionary potential in treating genetic diseases and cancer.",
+        "date": "Q4 2024"
+      },
+      {
+        "ticker": "COIN",
+        "thesis": "Coinbase benefits from growing cryptocurrency adoption and has first-mover advantage in regulated crypto trading.",
+        "date": "Q4 2024"
+      }
+    ]
+  }
+] 

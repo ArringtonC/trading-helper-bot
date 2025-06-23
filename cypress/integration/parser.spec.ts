@@ -1,8 +1,7 @@
 /// <reference types="cypress" />
-import { IBKRActivityStatementParser } from '../../src/services/IBKRActivityStatementParser';
+import { IBKRActivityStatementParser } from '../../src/services/brokers/parsers/IBKRActivityStatementParser';
 import { IBKRTradeRecord } from '../../src/types/ibkr';
-import { FixedIBKRParser } from '../../src/services/FixedIBKRParser';
-import { ImprovedIBKRActivityStatementParser } from '../../src/services/ImprovedIBKRActivityStatementParser';
+import { FixedIBKRParser } from '../../src/services/brokers/parsers/FixedIBKRParser';
 
 describe('IBKR Activity Statement Parser', () => {
   let parser: IBKRActivityStatementParser;
@@ -118,11 +117,11 @@ describe('IBKR Parser Tests', () => {
     });
   });
 
-  describe('ImprovedIBKRActivityStatementParser', () => {
-    let parser: ImprovedIBKRActivityStatementParser;
+  describe('IBKRActivityStatementParser', () => {
+    let parser: IBKRActivityStatementParser;
 
     beforeEach(() => {
-      parser = new ImprovedIBKRActivityStatementParser(sampleCsvContent);
+      parser = new IBKRActivityStatementParser(sampleCsvContent);
     });
 
     it('extracts the correct number of trades', () => {

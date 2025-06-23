@@ -1,5 +1,5 @@
 import { tradeDuration, tradePL } from './tradeFeatures';
-import { NormalizedTradeData, BrokerType } from '../../types/trade';
+import { NormalizedTradeData, BrokerType } from '../../shared/types/trade';
 import { rsiFeature, macdFeature, bollingerFeature, streakFeature, marketRegimeFeature } from './tradeFeatures';
 
 describe('tradeFeatures', () => {

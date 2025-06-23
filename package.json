@@ -19,13 +19,16 @@
     "@types/react": "^19.1.4",
     "@types/react-dom": "^19.1.5",
     "antd": "^5.25.1",
+    "axios": "^1.7.9",
     "black-scholes": "^1.1.0",
     "chart.js": "^4.4.9",
+    "cors": "^2.8.5",
     "crypto-browserify": "^3.12.1",
     "date-fns": "^4.1.0",
     "dotenv": "^16.5.0",
     "electron-is-dev": "^3.0.1",
     "electron-store": "^10.0.1",
+    "express": "^4.21.2",
     "file-saver": "^2.0.5",
     "framer-motion": "^12.17.0",
     "highlight.js": "^11.11.1",
@@ -113,7 +116,12 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "test:e2e": "start-server-and-test electron-dev http://localhost:3000 cypress:run",
-    "dev": "concurrently -k -r \"npm:start\" \"wait-on http://localhost:3000 && ELECTRON_START_URL=http://localhost:3000 npx electron dist/electron.js\""
+    "dev": "concurrently -k -r \"npm:start\" \"wait-on http://localhost:3000 && ELECTRON_START_URL=http://localhost:3000 npx electron dist/electron.js\"",
+    "update-trader-data": "npm run build && node scripts/automation/update-trader-data.ts",
+    "test-sec-api": "npm run build && node -e \"const { secEdgarService } = require('./dist/services/SECEdgarService.js'); secEdgarService.testConnection().then(console.log);\"",
+    "start-proxy": "node server/sec-edgar-proxy-server.js",
+    "dev-with-proxy": "concurrently \"npm run start-proxy\" \"npm start\"",
+    "dev-full": "node scripts/start-with-proxy.js"
   },
   "eslintConfig": {
     "extends": [

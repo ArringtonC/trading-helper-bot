@@ -11,7 +11,7 @@
  * - Error handling
  */
 
-import VolatilityAnalysisService from '../VolatilityAnalysisService';
+import VolatilityAnalysisService from '../../shared/services/VolatilityAnalysisService';
 
 // Initialize the service
 const volatilityService = new VolatilityAnalysisService({

@@ -1,4 +1,4 @@
-import { IBKRActivityStatementParser } from '../src/services/IBKRActivityStatementParser';
+import { IBKRActivityStatementParser } from '../src/services/brokers/parsers/IBKRActivityStatementParser';
 import { IBKRImportResult, IBKRTradeRecord, IBKRAccount, IBKRPosition } from '../src/types/ibkr'; // Adjust path as needed
 import * as fs from 'fs';
 import * as path from 'path';

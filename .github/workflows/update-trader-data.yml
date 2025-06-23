@@ -1,0 +1,274 @@
+name: Update Trader Data
+
+on:
+  # Run quarterly on the 15th of March, June, September, and December at 9 AM UTC
+  # This aligns with SEC 13F filing deadlines (45 days after quarter end)
+  schedule:
+    - cron: '0 9 15 3,6,9,12 *'
+  
+  # Allow manual triggering for testing and emergency updates
+  workflow_dispatch:
+    inputs:
+      force_update:
+        description: 'Force update even if recent data exists'
+        required: false
+        default: false
+        type: boolean
+      log_level:
+        description: 'Logging level'
+        required: false
+        default: 'INFO'
+        type: choice
+        options:
+          - 'INFO'
+          - 'DEBUG'
+          - 'WARN'
+
+jobs:
+  update-trader-data:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write # Required to commit updated data files
+      pull-requests: write # Required to create PRs if enabled
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Create logs directory
+        run: mkdir -p scripts/automation/logs
+      
+      - name: Test SEC API connection
+        run: |
+          echo "Testing SEC EDGAR API connectivity..."
+          node -e "
+            const { secEdgarService } = require('./dist/services/SECEdgarService.js');
+            secEdgarService.testConnection()
+              .then(result => {
+                console.log('SEC API test result:', result ? 'SUCCESS' : 'FAILED');
+                process.exit(result ? 0 : 1);
+              })
+              .catch(error => {
+                console.error('SEC API test error:', error);
+                process.exit(1);
+              });
+          "
+      
+      - name: Build TypeScript
+        run: npm run build
+      
+      - name: Run trader data update
+        env:
+          FORCE_UPDATE: ${{ github.event.inputs.force_update || 'false' }}
+          LOG_LEVEL: ${{ github.event.inputs.log_level || 'INFO' }}
+        run: |
+          echo "Starting trader data update..."
+          echo "Force update: $FORCE_UPDATE"
+          echo "Log level: $LOG_LEVEL"
+          
+          # Run the update script
+          node scripts/automation/update-trader-data.ts
+          
+          echo "Update completed. Checking for changes..."
+      
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet public/data/traders.json; then
+            echo "No changes detected in trader data"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changes detected in trader data"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            
+            # Show the diff for logging
+            echo "=== Changes in traders.json ==="
+            git diff public/data/traders.json || true
+          fi
+      
+      - name: Validate updated data
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          echo "Validating updated trader data..."
+          node -e "
+            const fs = require('fs');
+            try {
+              const data = JSON.parse(fs.readFileSync('public/data/traders.json', 'utf8'));
+              
+              if (!Array.isArray(data)) {
+                throw new Error('Traders data is not an array');
+              }
+              
+              if (data.length === 0) {
+                throw new Error('No trader profiles found');
+              }
+              
+              const burry = data.find(t => t.name === 'Michael Burry');
+              if (!burry) {
+                throw new Error('Michael Burry profile not found');
+              }
+              
+              if (!burry.latestPicks || burry.latestPicks.length === 0) {
+                throw new Error('No latest picks found for Michael Burry');
+              }
+              
+              console.log('✅ Validation passed');
+              console.log(\`Found \${data.length} trader profiles\`);
+              console.log(\`Michael Burry has \${burry.latestPicks.length} latest picks\`);
+              
+            } catch (error) {
+              console.error('❌ Validation failed:', error.message);
+              process.exit(1);
+            }
+          "
+      
+      - name: Commit and push changes
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          # Configure git
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          # Add changed files
+          git add public/data/traders.json
+          
+          # Also add backup and logs if they exist
+          if [ -f public/data/traders-backup.json ]; then
+            git add public/data/traders-backup.json
+          fi
+          
+          if [ -f scripts/automation/logs/last-update-summary.json ]; then
+            git add scripts/automation/logs/last-update-summary.json
+          fi
+          
+          # Create commit
+          current_date=$(date -u +"%Y-%m-%d %H:%M UTC")
+          git commit -m "🤖 Automated trader data update - $current_date
+
+          - Updated Michael Burry's latest picks from SEC 13F filings
+          - Data source: SEC EDGAR API
+          - Updated by GitHub Actions workflow
+          
+          [skip ci]"
+          
+          # Push changes
+          git push origin main
+      
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trader-update-logs-${{ github.run_number }}
+          path: scripts/automation/logs/
+          retention-days: 30
+      
+      - name: Create issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `🚨 Trader Data Update Failed - ${new Date().toISOString().split('T')[0]}`;
+            const body = `
+            ## Automated Trader Data Update Failed
+            
+            **Workflow Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            **Trigger:** ${{ github.event_name }}
+            **Branch:** ${{ github.ref_name }}
+            **Commit:** ${{ github.sha }}
+            
+            ### Possible Causes
+            - SEC EDGAR API connectivity issues
+            - Rate limiting from SEC servers
+            - Network connectivity problems
+            - Changes in SEC filing format
+            - Authentication or permission issues
+            
+            ### Next Steps
+            1. Check the workflow logs for specific error messages
+            2. Verify SEC EDGAR API status at https://www.sec.gov/edgar
+            3. Test manual execution: \`npm run update-trader-data\`
+            4. Consider running with debug logging
+            
+            ### Manual Recovery
+            If urgent, you can manually trigger the workflow:
+            1. Go to Actions → Update Trader Data
+            2. Click "Run workflow"
+            3. Enable "Force update" if needed
+            
+            This issue will be automatically closed when the next update succeeds.
+            `;
+            
+            // Check if there's already an open issue
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: ['trader-data-update', 'automated']
+            });
+            
+            if (issues.data.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['bug', 'trader-data-update', 'automated']
+              });
+            }
+      
+      - name: Close success issue
+        if: success() && steps.changes.outputs.has_changes == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Close any existing failure issues
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: ['trader-data-update', 'automated']
+            });
+            
+            for (const issue of issues.data) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `✅ Trader data update succeeded in workflow run ${{ github.run_id }}. Closing this issue.`
+              });
+              
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed'
+              });
+            }
+      
+      - name: Summary
+        if: always()
+        run: |
+          echo "=== Trader Data Update Summary ==="
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Run ID: ${{ github.run_id }}"
+          echo "Trigger: ${{ github.event_name }}"
+          echo "Changes detected: ${{ steps.changes.outputs.has_changes }}"
+          echo "Status: ${{ job.status }}"
+          
+          if [ -f scripts/automation/logs/last-update-summary.json ]; then
+            echo "=== Update Summary ==="
+            cat scripts/automation/logs/last-update-summary.json
+          fi 

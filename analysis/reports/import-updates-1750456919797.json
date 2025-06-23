@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-06-20T22:01:59.796Z",
+  "totalFiles": 2,
+  "totalUpdates": 2,
+  "details": [
+    {
+      "file": "src/services/brokers/parsers/IBKRParser.spec.ts",
+      "updates": [
+        {
+          "type": "ES6 import",
+          "count": 1,
+          "oldPath": "../services/IBKRActivityStatementParser",
+          "newPath": "../services/brokers/parsers/IBKRActivityStatementParser"
+        }
+      ]
+    },
+    {
+      "file": "src/components/EnhancedIBKRImportForm.tsx",
+      "updates": [
+        {
+          "type": "ES6 import",
+          "count": 1,
+          "oldPath": "../services/IBKRActivityStatementParser",
+          "newPath": "../services/brokers/parsers/IBKRActivityStatementParser"
+        }
+      ]
+    }
+  ]
+}
