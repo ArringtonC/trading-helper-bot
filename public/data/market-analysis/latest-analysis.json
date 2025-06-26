@@ -1,0 +1,59 @@
+{
+  "weekOf": "2024-06-24",
+  "marketConditions": {
+    "spyTrend": "BULLISH",
+    "vixLevel": 18.5,
+    "vixTrend": "FALLING",
+    "sectorRotation": {
+      "leading": [
+        "Technology",
+        "Consumer Discretionary"
+      ],
+      "lagging": [
+        "Energy",
+        "Utilities"
+      ]
+    },
+    "marketRegime": "RISK_ON",
+    "volatilityLevel": "NORMAL"
+  },
+  "economicEvents": [
+    {
+      "date": "2024-06-25",
+      "time": "08:30",
+      "event": "Initial Jobless Claims",
+      "impact": "MEDIUM",
+      "forecast": "225K",
+      "previous": "229K"
+    }
+  ],
+  "majorEarnings": [
+    {
+      "symbol": "AAPL",
+      "date": "2024-06-25",
+      "time": "AMC",
+      "estimatedEPS": 1.35,
+      "marketCap": "Large",
+      "sector": "Technology"
+    }
+  ],
+  "recommendedStrategies": {
+    "primary": "BUFFETT_GUARDIAN",
+    "secondary": "LYNCH_SCOUT",
+    "reasoning": "Low volatility bull market favors value accumulation and growth stock selection"
+  },
+  "riskLevel": "LOW",
+  "watchlistSuggestions": [
+    {
+      "symbol": "AAPL",
+      "reason": "Strong fundamentals, reasonable valuation",
+      "strategy": "Value accumulation on dips"
+    },
+    {
+      "symbol": "MSFT",
+      "reason": "Cloud dominance, consistent cash flow",
+      "strategy": "Long-term position building"
+    }
+  ],
+  "weeklyTargetAdjustment": 0.1
+}

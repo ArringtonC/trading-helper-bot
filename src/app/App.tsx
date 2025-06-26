@@ -1,199 +1,471 @@
-import 'highlight.js/styles/github.css';
-import React, { Suspense, useEffect, useState } from 'react';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Navigation from './layout/Navigation';
-import OnboardingGuide from '../shared/components/ui/OnboardingGuide';
-import { TutorialDisplay } from '../features/goal-setting/components/Wizards/TutorialDisplay';
-import { GoalSizingProvider } from '../shared/context/GoalSizingContext';
-import { TradesProvider } from '../features/trading/hooks/TradesContext';
-import { TutorialProvider } from '../shared/context/TutorialContext';
-import { WinRateProvider } from '../shared/context/WinRateContext';
-import { initializeSettings, loadSetting } from '../shared/services/SettingsService';
-import { UserExperienceAssessment } from '../features/learning/utils/assessment/UserExperienceAssessment';
-import { UserExperienceLevel } from '../shared/utils/ux/UXLayersController';
+import "highlight.js/styles/github.css";
+import React, { Suspense, useEffect, useState } from "react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { TutorialDisplay } from "../features/goal-setting/components/Wizards/TutorialDisplay";
+import { UserExperienceAssessment } from "../features/learning/utils/assessment/UserExperienceAssessment";
+import { TradesProvider } from "../features/trading/hooks/TradesContext";
+import OnboardingGuide from "../shared/components/ui/OnboardingGuide";
+import { GoalSizingProvider } from "../shared/context/GoalSizingContext";
+import { TutorialProvider } from "../shared/context/TutorialContext";
+import { WinRateProvider } from "../shared/context/WinRateContext";
+import {
+  initializeSettings,
+  loadSetting,
+} from "../shared/services/SettingsService";
+import { UserExperienceLevel } from "../shared/utils/ux/UXLayersController";
+import Navigation from "./layout/Navigation";
 
 // Lazy load route components with chunk names
-const HomePage = React.lazy(() => import(
-  /* webpackChunkName: "page-home" */
-  './pages/HomePage'
-));
+const HomePage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-home" */
+      "./pages/HomePage"
+    )
+);
 
-const UnifiedDashboard = React.lazy(() => import(
-  /* webpackChunkName: "page-unified-dashboard" */
-  './pages/trading/UnifiedDashboard'
-));
-const OptionsDB = React.lazy(() => import(
-  /* webpackChunkName: "page-options-db" */
-  './pages/trading/OptionsDB'
-));
-const Settings = React.lazy(() => import(
-  /* webpackChunkName: "page-settings" */
-  './pages/Settings'
-));
-const ImportToDatabase = React.lazy(() => import(
-  /* webpackChunkName: "page-import-database" */
-  './pages/import/ImportToDatabase'
-));
-const ImportDirect = React.lazy(() => import(
-  /* webpackChunkName: "page-import-direct" */
-  './pages/import/ImportDirect'
-).then(module => ({ default: module.ImportDirect })));
-const AITradeAnalysis = React.lazy(() => import(
-  /* webpackChunkName: "page-ai-analysis" */
-  './pages/trading/AITradeAnalysis'
-));
-const StrategyVisualizer = React.lazy(() => import(
-  /* webpackChunkName: "page-strategy-visualizer" */
-  './pages/trading/StrategyVisualizer'
-));
-const RuleEngineDemo = React.lazy(() => import(
-  /* webpackChunkName: "page-rule-engine-demo" */
-  './pages/testing/RuleEngineDemo'
-));
-const IBKRAPIConfigDemo = React.lazy(() => import(
-  /* webpackChunkName: "page-ibkr-api-demo" */
-  '../features/broker-integration/components/IBKRAPIConfigDemo'
-).then(module => ({ default: module.IBKRAPIConfigDemo })));
-const VolatilityDashboardDemo = React.lazy(() => import(
-  /* webpackChunkName: "page-volatility-demo" */
-  './pages/testing/VolatilityDashboardDemo'
-));
-const ImportAnalyze = React.lazy(() => import(
-  /* webpackChunkName: "page-import-analyze" */
-  './pages/import/ImportAnalyze'
-));
-const InteractiveAnalytics = React.lazy(() => import(
-  /* webpackChunkName: "page-interactive-analytics" */
-  './pages/trading/InteractiveAnalytics'
-));
-const PositionSizingResults = React.lazy(() => import(
-  /* webpackChunkName: "page-position-sizing-results" */
-  './pages/trading/PositionSizingResults'
-));
-const GoalSizingPage = React.lazy(() => import(
-  /* webpackChunkName: "page-goal-sizing" */
-  './pages/trading/GoalSizingPage'
-));
-const GoalSizingResults = React.lazy(() => import(
-  /* webpackChunkName: "page-goal-sizing-results" */
-  './pages/trading/GoalSizingResults'
-));
-const PLDashboard = React.lazy(() => import(
-  /* webpackChunkName: "page-pl-dashboard" */
-  './pages/trading/PLDashboard'
-));
-const EnhancedHomePage = React.lazy(() => import(
-  /* webpackChunkName: "page-enhanced-home" */
-  './pages/EnhancedHomePage'
-));
-const TutorialPage = React.lazy(() => import(
-  /* webpackChunkName: "page-tutorial" */
-  './pages/learning/TutorialPage'
-));
-const AssessmentTest = React.lazy(() => import(
-  /* webpackChunkName: "page-assessment-test" */
-  './pages/learning/AssessmentTest'
-));
-const EducationalDashboard = React.lazy(() => import(
-  /* webpackChunkName: "page-educational-dashboard" */
-  './pages/learning/EducationalDashboard'
-));
-const AnalyticsTestPage = React.lazy(() => import(
-  /* webpackChunkName: "page-analytics-test" */
-  './pages/testing/AnalyticsTestPage'
-));
-const BrokerSyncDashboard = React.lazy(() => import(
-  /* webpackChunkName: "page-broker-sync" */
-  './pages/import/BrokerSyncDashboard'
-));
-const WeekendGapRiskDashboard = React.lazy(() => import(
-  /* webpackChunkName: "page-weekend-gap-risk" */
-  '../features/risk-management/components/WeekendGapRiskDashboard'
-));
-const PositionSizingFoundationPage = React.lazy(() => import('./pages/learning/PositionSizingFoundation'));
-const PsychologicalTradingPage = React.lazy(() => import(
-  /* webpackChunkName: "page-psychological-trading" */
-  './pages/testing/PsychologicalTradingPage'
-));
-const TradeScreener = React.lazy(() => import(
-  /* webpackChunkName: "page-trade-screener" */
-  './pages/trading/TradeScreener'
-));
-const NVDAOptionsTutorialPage = React.lazy(() => import(
-  /* webpackChunkName: "page-nvda-tutorial" */
-  './pages/learning/NVDAOptionsTutorialPage'
-));
-const StackingCoveredCallsTutorialPage = React.lazy(() => import(
-  /* webpackChunkName: "page-stacking-tutorial" */
-  './pages/learning/StackingCoveredCallsTutorialPage'
-));
-const SellingCallsTutorialPage = React.lazy(() => import(
-  /* webpackChunkName: "page-selling-calls-tutorial" */
-  './pages/learning/SellingCallsTutorialPage'
-));
-const MESFuturesTutorialPage = React.lazy(() => import(
-  /* webpackChunkName: "page-mes-futures-tutorial" */
-  './pages/learning/MESFuturesTutorialPage'
-));
-const TutorialsPage = React.lazy(() => import(
-  /* webpackChunkName: "page-tutorials" */
-  './pages/learning/TutorialsPage'
-));
-const SP500DemoPage = React.lazy(() => import(
-  /* webpackChunkName: "page-sp500-demo" */
-  './pages/learning/SP500DemoPage'
-));
-const SP500Demo = React.lazy(() => import(
-  /* webpackChunkName: "page-sp500-professional" */
-  './pages/demo/SP500Demo'
-));
-const RiskManagementPage = React.lazy(() => import(
-  /* webpackChunkName: "page-risk-management" */
-  './pages/trading/RiskManagementPage'
-));
-const CuratedStockListsPage = React.lazy(() => import(
-  /* webpackChunkName: "page-curated-lists" */
-  './pages/trading/CuratedStockListsPage'
-));
+const UnifiedDashboard = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-unified-dashboard" */
+      "./pages/trading/UnifiedDashboard"
+    )
+);
+const OptionsDB = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-options-db" */
+      "./pages/trading/OptionsDB"
+    )
+);
+const Settings = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-settings" */
+      "./pages/Settings"
+    )
+);
+const ImportToDatabase = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-import-database" */
+      "./pages/import/ImportToDatabase"
+    )
+);
+const ImportDirect = React.lazy(() =>
+  import(
+    /* webpackChunkName: "page-import-direct" */
+    "./pages/import/ImportDirect"
+  ).then((module) => ({ default: module.ImportDirect }))
+);
+const AITradeAnalysis = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-ai-analysis" */
+      "./pages/trading/AITradeAnalysis"
+    )
+);
+const HMMWorkflowDashboard = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-hmm-workflow" */
+      "./pages/trading/HMMWorkflowDashboard"
+    )
+);
+const VIXProfessionalPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-vix-professional" */
+      "./pages/trading/VIXProfessionalPage"
+    )
+);
+const StrategyVisualizer = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-strategy-visualizer" */
+      "./pages/trading/StrategyVisualizer"
+    )
+);
+const RuleEngineDemo = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-rule-engine-demo" */
+      "./pages/testing/RuleEngineDemo"
+    )
+);
+const IBKRAPIConfigDemo = React.lazy(() =>
+  import(
+    /* webpackChunkName: "page-ibkr-api-demo" */
+    "../features/broker-integration/components/IBKRAPIConfigDemo"
+  ).then((module) => ({ default: module.IBKRAPIConfigDemo }))
+);
+const VolatilityDashboardDemo = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-volatility-demo" */
+      "./pages/testing/VolatilityDashboardDemo"
+    )
+);
+const ImportAnalyze = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-import-analyze" */
+      "./pages/import/ImportAnalyze"
+    )
+);
+const InteractiveAnalytics = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-interactive-analytics" */
+      "./pages/trading/InteractiveAnalytics"
+    )
+);
+const PositionSizingResults = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-position-sizing-results" */
+      "./pages/trading/PositionSizingResults"
+    )
+);
+const GoalSizingPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-goal-sizing" */
+      "./pages/trading/GoalSizingPage"
+    )
+);
+const GoalSizingResults = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-goal-sizing-results" */
+      "./pages/trading/GoalSizingResults"
+    )
+);
+const PLDashboard = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-pl-dashboard" */
+      "./pages/trading/PLDashboard"
+    )
+);
+const EnhancedHomePage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-enhanced-home" */
+      "./pages/EnhancedHomePage"
+    )
+);
+const TutorialPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-tutorial" */
+      "./pages/learning/TutorialPage"
+    )
+);
+const AssessmentTest = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-assessment-test" */
+      "./pages/learning/AssessmentTest"
+    )
+);
+const EducationalDashboard = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-educational-dashboard" */
+      "./pages/learning/EducationalDashboard"
+    )
+);
+const AnalyticsTestPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-analytics-test" */
+      "./pages/testing/AnalyticsTestPage"
+    )
+);
+const BrokerSyncDashboard = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-broker-sync" */
+      "./pages/import/BrokerSyncDashboard"
+    )
+);
+const WeekendGapRiskDashboard = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-weekend-gap-risk" */
+      "../features/risk-management/components/WeekendGapRiskDashboard"
+    )
+);
+const PositionSizingFoundationPage = React.lazy(
+  () => import("./pages/learning/PositionSizingFoundation")
+);
+const PsychologicalTradingPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-psychological-trading" */
+      "./pages/testing/PsychologicalTradingPage"
+    )
+);
+const PsychologyTestPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-psychology-test" */
+      "./pages/testing/PsychologyTestPage"
+    )
+);
+const Component1TestPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-component1-test" */
+      "./pages/testing/Component1TestPage"
+    )
+);
+const ImprovedChallengeTest = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-improved-challenge-test" */
+      "./pages/testing/ImprovedChallengeTest"
+    )
+);
+const ImprovedChallengeTestPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-improved-challenge-test" */
+      "./pages/testing/ImprovedChallengeTestPage"
+    )
+);
+const Component2TestPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-component2-test" */
+      "./pages/testing/Component2TestPage"
+    )
+);
+const TradingStrategyDatabasePage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-trading-strategy-database" */
+      "./pages/trading/TradingStrategyDatabasePage"
+    )
+);
+const Component4TestPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-component4-test" */
+      "./pages/testing/Component4TestPage"
+    )
+);
+const PatternRecognitionPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-pattern-recognition" */
+      "./pages/trading/PatternRecognitionPage"
+    )
+);
+const Component7TestPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-component7-test" */
+      "./pages/testing/Component7TestPage"
+    )
+);
+const HMMAnalysisPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-hmm-analysis" */
+      "./pages/analytics/HMMAnalysisPage"
+    )
+);
+const TradeScreener = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-trade-screener" */
+      "./pages/trading/TradeScreener"
+    )
+);
+const NVDAOptionsTutorialPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-nvda-tutorial" */
+      "./pages/learning/NVDAOptionsTutorialPage"
+    )
+);
+const StackingCoveredCallsTutorialPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-stacking-tutorial" */
+      "./pages/learning/StackingCoveredCallsTutorialPage"
+    )
+);
+const SellingCallsTutorialPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-selling-calls-tutorial" */
+      "./pages/learning/SellingCallsTutorialPage"
+    )
+);
+const MESFuturesTutorialPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-mes-futures-tutorial" */
+      "./pages/learning/MESFuturesTutorialPage"
+    )
+);
+const TutorialsPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-tutorials" */
+      "./pages/learning/TutorialsPage"
+    )
+);
+const SP500DemoPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-sp500-demo" */
+      "./pages/learning/SP500DemoPage"
+    )
+);
+const SP500Demo = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-sp500-professional" */
+      "./pages/demo/SP500Demo"
+    )
+);
+const RiskManagementPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-risk-management" */
+      "./pages/trading/RiskManagementPage"
+    )
+);
+const CuratedStockListsPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-curated-lists" */
+      "./pages/trading/CuratedStockListsPage"
+    )
+);
 
-const AdvancedScreeningPage = React.lazy(() => import(
-  /* webpackChunkName: "page-advanced-screening" */
-  './pages/trading/AdvancedScreeningPage'
-));
+const AdvancedScreeningPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-advanced-screening" */
+      "./pages/trading/AdvancedScreeningPage"
+    )
+);
 
-const WatchlistPage = React.lazy(() => import(
-  /* webpackChunkName: "page-watchlist" */
-  './pages/trading/WatchlistPage'
-));
+const WatchlistPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-watchlist" */
+      "./pages/trading/WatchlistPage"
+    )
+);
 
-const TemplateMatchingDemo = React.lazy(() => import(
-  /* webpackChunkName: "page-template-matching" */
-  '../features/goal-setting/components/Goals/TemplateMatchingDemo'
-).then(module => ({ default: module.default })));
+const TemplateMatchingDemo = React.lazy(() =>
+  import(
+    /* webpackChunkName: "page-template-matching" */
+    "../features/goal-setting/components/Goals/TemplateMatchingDemo"
+  ).then((module) => ({ default: module.default }))
+);
 
-const AccountClassificationInterface = React.lazy(() => import(
-  /* webpackChunkName: "page-account-classification" */
-  '../features/goal-setting/components/Goals/AccountClassificationInterface'
-).then(module => ({ default: module.default })));
+const AccountClassificationInterface = React.lazy(() =>
+  import(
+    /* webpackChunkName: "page-account-classification" */
+    "../features/goal-setting/components/Goals/AccountClassificationInterface"
+  ).then((module) => ({ default: module.default }))
+);
 
-const ValidationDashboard = React.lazy(() => import(
-  /* webpackChunkName: "page-validation-dashboard" */
-  './pages/ValidationDashboard'
-));
+const ValidationDashboard = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-validation-dashboard" */
+      "./pages/ValidationDashboard"
+    )
+);
 
-const NavigationSectionsTest = React.lazy(() => import(
-  /* webpackChunkName: "page-navigation-test" */
-  './layout/NavigationSections'
-).then(module => ({ default: () => React.createElement('div', { className: 'p-8' }, React.createElement(module.default)) })));
+const NavigationSectionsTest = React.lazy(() =>
+  import(
+    /* webpackChunkName: "page-navigation-test" */
+    "./layout/NavigationSections"
+  ).then((module) => ({
+    default: () =>
+      React.createElement(
+        "div",
+        { className: "p-8" },
+        React.createElement(module.default)
+      ),
+  }))
+);
 
-const StockSelectionLanding = React.lazy(() => import('../features/analytics/components/StockSelectionLanding'));
+const StockSelectionLanding = React.lazy(
+  () => import("../features/analytics/components/StockSelectionLanding")
+);
 
-const FamousTradersPage = React.lazy(() => import(
-  /* webpackChunkName: "page-famous-traders" */
-  './pages/learning/FamousTradersPage'
-));
+const FamousTradersPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-famous-traders" */
+      "./pages/learning/FamousTradersPage"
+    )
+);
+
+const PositionSizingCalculatorPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-position-sizing-calculator" */
+      "./pages/tools/PositionSizingCalculatorPage"
+    )
+);
+
+const HowToPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-how-to" */
+      "./pages/HowToPage"
+    )
+);
+const WorkItemsPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-work-items" */
+      "./pages/WorkItemsPage"
+    )
+);
+
+// Challenge System Pages
+const ChallengeDashboardPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-challenge-dashboard" */
+      "./pages/challenges/ChallengeDashboardPage"
+    )
+);
+const WeeklyPlanningPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-weekly-planning" */
+      "./pages/challenges/WeeklyPlanningPage"
+    )
+);
+const DailyWorkflowPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-daily-workflow" */
+      "./pages/challenges/DailyWorkflowPage"
+    )
+);
+const ProgressVisualizationPage = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "page-progress-visualization" */
+      "./pages/challenges/ProgressVisualizationPage"
+    )
+);
 
 // Loading component for suspense fallback
 const Loading = () => (
@@ -203,7 +475,7 @@ const Loading = () => (
 );
 
 const App: React.FC = () => {
-  const [userLevel, setUserLevel] = useState<UserExperienceLevel>('import');
+  const [userLevel, setUserLevel] = useState<UserExperienceLevel>("import");
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
   const [showOnboardingGuide, setShowOnboardingGuide] = useState(false);
   const [assessment] = useState(() => new UserExperienceAssessment());
@@ -211,13 +483,16 @@ const App: React.FC = () => {
   // Initialize settings and user assessment on app start
   useEffect(() => {
     initializeSettings();
-    
+
     // Perform user experience assessment
     const performAssessment = () => {
       // Get stored user data or use defaults for new users
-      const storedLevel = localStorage.getItem('userExperienceLevel') as UserExperienceLevel;
-      const storedOnboarding = localStorage.getItem('hasCompletedOnboarding') === 'true';
-      
+      const storedLevel = localStorage.getItem(
+        "userExperienceLevel"
+      ) as UserExperienceLevel;
+      const storedOnboarding =
+        localStorage.getItem("hasCompletedOnboarding") === "true";
+
       if (storedLevel && storedOnboarding) {
         setUserLevel(storedLevel);
         setHasCompletedOnboarding(storedOnboarding);
@@ -234,7 +509,7 @@ const App: React.FC = () => {
           helpRequestsCount: 0,
           sessionDuration: 0,
           returnVisits: 1,
-          complexFeaturesAccessed: []
+          complexFeaturesAccessed: [],
         };
 
         const tradingHistory = {
@@ -247,28 +522,35 @@ const App: React.FC = () => {
           instrumentsTraded: [],
           strategiesUsed: [],
           maxDrawdown: 0,
-          hasLiveTradingExperience: false
+          hasLiveTradingExperience: false,
         };
 
         const preferences = {
           selfReportedLevel: null,
-          preferredRiskLevel: 'conservative' as const,
-          primaryTradingGoal: 'learning' as const,
-          timeAvailableForTrading: 'minimal' as const,
-          preferredComplexity: 'simple' as const,
+          preferredRiskLevel: "conservative" as const,
+          primaryTradingGoal: "learning" as const,
+          timeAvailableForTrading: "minimal" as const,
+          preferredComplexity: "simple" as const,
           hasCompletedOnboarding: false,
-          manualOverride: null
+          manualOverride: null,
         };
 
-        const result = assessment.assessUser(behaviorMetrics, tradingHistory, preferences);
-        
+        const result = assessment.assessUser(
+          behaviorMetrics,
+          tradingHistory,
+          preferences
+        );
+
         setUserLevel(result.userLevel);
         setHasCompletedOnboarding(result.shouldShowOnboarding ? false : true);
         setShowOnboardingGuide(result.shouldShowOnboarding);
-        
+
         // Store assessment results
-        localStorage.setItem('userExperienceLevel', result.userLevel);
-        localStorage.setItem('hasCompletedOnboarding', result.shouldShowOnboarding ? 'false' : 'true');
+        localStorage.setItem("userExperienceLevel", result.userLevel);
+        localStorage.setItem(
+          "hasCompletedOnboarding",
+          result.shouldShowOnboarding ? "false" : "true"
+        );
       }
     };
 
@@ -278,15 +560,15 @@ const App: React.FC = () => {
   const handleOnboardingComplete = () => {
     setHasCompletedOnboarding(true);
     setShowOnboardingGuide(false);
-    localStorage.setItem('hasCompletedOnboarding', 'true');
+    localStorage.setItem("hasCompletedOnboarding", "true");
   };
 
   // Check feature flags
-  const showImport = loadSetting('showImport') === 'true';
-  const showDirectImport = loadSetting('showDirectImport') === 'true';
-  const showUnifiedDashboard = loadSetting('showUnifiedDashboard') === 'true';
-  const showRuleEngine = loadSetting('showRuleEngine') === 'true';
-  const showLegacyDashboard = loadSetting('showLegacyDashboard') === 'true';
+  const showImport = loadSetting("showImport") === "true";
+  const showDirectImport = loadSetting("showDirectImport") === "true";
+  const showUnifiedDashboard = loadSetting("showUnifiedDashboard") === "true";
+  const showRuleEngine = loadSetting("showRuleEngine") === "true";
+  const showLegacyDashboard = loadSetting("showLegacyDashboard") === "true";
 
   return (
     <GoalSizingProvider>
@@ -299,91 +581,292 @@ const App: React.FC = () => {
                 <header className="bg-blue-800 text-white p-4">
                   <h1 className="text-2xl font-bold">Trading Helper Bot</h1>
                 </header>
-              
+
                 {/* Navigation */}
                 <Navigation />
-                
+
                 {/* Main Content */}
                 <main className="max-w-6xl mx-auto p-4">
                   <Suspense fallback={<Loading />}>
                     <Routes>
                       {/* Position Sizing Foundation as Primary Landing Page */}
                       <Route path="/" element={<EnhancedHomePage />} />
-                      
+
                       {/* Original Position Sizing Foundation page */}
-                      <Route path="/position-sizing" element={<PositionSizingFoundationPage />} />
-                      
+                      <Route
+                        path="/position-sizing"
+                        element={<PositionSizingFoundationPage />}
+                      />
+
                       {/* Gamified Position Sizing Tutorial */}
                       <Route path="/tutorial" element={<TutorialPage />} />
-                      
+
                       {/* Assessment Test Page */}
-                      <Route path="/assessment-test" element={<AssessmentTest />} />
-                      
+                      <Route
+                        path="/assessment-test"
+                        element={<AssessmentTest />}
+                      />
+
                       {/* Educational Dashboard */}
-                      <Route path="/education" element={<EducationalDashboard />} />
-                      
+                      <Route
+                        path="/education"
+                        element={<EducationalDashboard />}
+                      />
+
                       {/* Analytics Test Page */}
-                      <Route path="/analytics-test" element={<AnalyticsTestPage />} />
-                      
+                      <Route
+                        path="/analytics-test"
+                        element={<AnalyticsTestPage />}
+                      />
+
                       {/* Original home page moved to /dashboard */}
                       {showLegacyDashboard && (
                         <Route path="/dashboard" element={<HomePage />} />
                       )}
 
                       {showUnifiedDashboard && (
-                        <Route path="/unified-dashboard" element={<UnifiedDashboard />} />
+                        <Route
+                          path="/unified-dashboard"
+                          element={<UnifiedDashboard />}
+                        />
                       )}
                       <Route path="/options" element={<OptionsDB />} />
-                      <Route path="/analysis" element={<AITradeAnalysis />} />
-                      <Route path="/interactive-analytics" element={<InteractiveAnalytics />} />
-                      <Route path="/visualizer" element={<StrategyVisualizer />} />
+                      <Route
+                        path="/analysis"
+                        element={<HMMWorkflowDashboard />}
+                      />
+                      <Route
+                        path="/analysis/legacy"
+                        element={<AITradeAnalysis />}
+                      />
+                      <Route
+                        path="/hmm-analysis"
+                        element={<HMMAnalysisPage />}
+                      />
+                      <Route
+                        path="/vix-professional"
+                        element={<VIXProfessionalPage />}
+                      />
+                      <Route
+                        path="/interactive-analytics"
+                        element={<InteractiveAnalytics />}
+                      />
+                      <Route
+                        path="/visualizer"
+                        element={<StrategyVisualizer />}
+                      />
                       {showRuleEngine && (
-                        <Route path="/rule-engine-demo" element={<RuleEngineDemo />} />
+                        <Route
+                          path="/rule-engine-demo"
+                          element={<RuleEngineDemo />}
+                        />
                       )}
-                      <Route path="/ibkr-api-demo" element={<IBKRAPIConfigDemo />} />
-                      <Route path="/volatility-demo" element={<VolatilityDashboardDemo />} />
-                      <Route path="/import-analyze" element={<ImportAnalyze />} />
-                      <Route path="/position-sizing-results" element={<PositionSizingResults />} />
+                      <Route
+                        path="/ibkr-api-demo"
+                        element={<IBKRAPIConfigDemo />}
+                      />
+                      <Route
+                        path="/volatility-demo"
+                        element={<VolatilityDashboardDemo />}
+                      />
+                      <Route
+                        path="/import-analyze"
+                        element={<ImportAnalyze />}
+                      />
+                      <Route
+                        path="/position-sizing-results"
+                        element={<PositionSizingResults />}
+                      />
                       <Route path="/goal-sizing" element={<GoalSizingPage />} />
-                      <Route path="/goal-sizing-results" element={<GoalSizingResults />} />
+                      <Route
+                        path="/goal-sizing-results"
+                        element={<GoalSizingResults />}
+                      />
                       <Route path="/pl-dashboard" element={<PLDashboard />} />
                       <Route path="/settings" element={<Settings />} />
+                      <Route path="/work-items" element={<WorkItemsPage />} />
                       {showImport && (
                         <Route path="/import" element={<ImportToDatabase />} />
                       )}
                       {showDirectImport && (
-                        <Route path="/import/direct" element={<ImportDirect />} />
+                        <Route
+                          path="/import/direct"
+                          element={<ImportDirect />}
+                        />
                       )}
-                      <Route path="/broker-sync" element={<BrokerSyncDashboard />} />
-                      <Route path="/weekend-gap-risk" element={<WeekendGapRiskDashboard />} />
-                      <Route path="/psychological-trading" element={<PsychologicalTradingPage />} />
-                      <Route path="/trade-screener" element={<TradeScreener />} />
+                      <Route
+                        path="/broker-sync"
+                        element={<BrokerSyncDashboard />}
+                      />
+                      <Route
+                        path="/weekend-gap-risk"
+                        element={<WeekendGapRiskDashboard />}
+                      />
+                      <Route
+                        path="/psychological-trading"
+                        element={<PsychologicalTradingPage />}
+                      />
+                      <Route
+                        path="/psychology-test"
+                        element={<PsychologyTestPage />}
+                      />
+                      <Route
+                        path="/component1-test"
+                        element={<Component1TestPage />}
+                      />
+                      <Route
+                        path="/improved-challenge-test"
+                        element={<ImprovedChallengeTest />}
+                      />
+                      <Route
+                        path="/trade-screener"
+                        element={<TradeScreener />}
+                      />
                       <Route path="/learning" element={<TutorialsPage />} />
                       <Route path="/tutorials" element={<TutorialsPage />} />
-                      <Route path="/nvda-tutorial" element={<NVDAOptionsTutorialPage />} />
-                      <Route path="/stacking-tutorial" element={<StackingCoveredCallsTutorialPage />} />
-                      <Route path="/selling-calls-tutorial" element={<SellingCallsTutorialPage />} />
-                      <Route path="/mes-futures-tutorial" element={<MESFuturesTutorialPage />} />
+                      <Route
+                        path="/nvda-tutorial"
+                        element={<NVDAOptionsTutorialPage />}
+                      />
+                      <Route
+                        path="/stacking-tutorial"
+                        element={<StackingCoveredCallsTutorialPage />}
+                      />
+                      <Route
+                        path="/selling-calls-tutorial"
+                        element={<SellingCallsTutorialPage />}
+                      />
+                      <Route
+                        path="/mes-futures-tutorial"
+                        element={<MESFuturesTutorialPage />}
+                      />
                       <Route path="/sp500-demo" element={<SP500DemoPage />} />
-                      <Route path="/sp500-professional" element={<SP500Demo />} />
-                      <Route path="/risk-management" element={<RiskManagementPage />} />
-                      <Route path="/curated-lists" element={<CuratedStockListsPage />} />
-                      <Route path="/template-matching" element={<TemplateMatchingDemo />} />
-                      <Route path="/account-classification" element={<AccountClassificationInterface />} />
-                      <Route path="/advanced-screening" element={<AdvancedScreeningPage />} />
-                      <Route path="/validation-dashboard" element={<ValidationDashboard />} />
-                      <Route path="/navigation-test" element={<NavigationSectionsTest />} />
+                      <Route
+                        path="/sp500-professional"
+                        element={<SP500Demo />}
+                      />
+                      <Route
+                        path="/risk-management"
+                        element={<RiskManagementPage />}
+                      />
+                      <Route
+                        path="/curated-lists"
+                        element={<CuratedStockListsPage />}
+                      />
+                      <Route
+                        path="/template-matching"
+                        element={<TemplateMatchingDemo />}
+                      />
+                      <Route
+                        path="/account-classification"
+                        element={<AccountClassificationInterface />}
+                      />
+                      <Route
+                        path="/advanced-screening"
+                        element={<AdvancedScreeningPage />}
+                      />
+                      <Route
+                        path="/validation-dashboard"
+                        element={<ValidationDashboard />}
+                      />
+                      <Route
+                        path="/navigation-test"
+                        element={<NavigationSectionsTest />}
+                      />
                       <Route path="/watchlist" element={<WatchlistPage />} />
-                      <Route path="/quick-picks" element={
-                        <React.Suspense fallback={<div className="p-8 text-center">Loading Quick Picks...</div>}>
-                          <StockSelectionLanding />
-                        </React.Suspense>
-                      } />
-                      <Route path="/learning/famous-traders" element={<FamousTradersPage />} />
+                      <Route
+                        path="/quick-picks"
+                        element={
+                          <React.Suspense
+                            fallback={
+                              <div className="p-8 text-center">
+                                Loading Quick Picks...
+                              </div>
+                            }
+                          >
+                            <StockSelectionLanding />
+                          </React.Suspense>
+                        }
+                      />
+                      <Route
+                        path="/learning/famous-traders"
+                        element={<FamousTradersPage />}
+                      />
+
+                      {/* Tools Routes */}
+                      <Route
+                        path="/calculator/position-sizing"
+                        element={<PositionSizingCalculatorPage />}
+                      />
+
+                      {/* Challenge System Routes */}
+                      <Route
+                        path="/challenge"
+                        element={<ChallengeDashboardPage />}
+                      />
+                      <Route
+                        path="/challenge/dashboard"
+                        element={<ChallengeDashboardPage />}
+                      />
+                      <Route
+                        path="/challenge/planning"
+                        element={<WeeklyPlanningPage />}
+                      />
+                      <Route
+                        path="/challenge/daily"
+                        element={<DailyWorkflowPage />}
+                      />
+                      <Route
+                        path="/challenge/progress"
+                        element={<ProgressVisualizationPage />}
+                      />
+
+                      {/* HOW TO Guide */}
+                      <Route path="/how-to" element={<HowToPage />} />
+
+                      {/* Improved Challenge Test */}
+                      <Route
+                        path="/improved-challenge-test"
+                        element={<ImprovedChallengeTestPage />}
+                      />
+
+                      {/* Component 2 Test */}
+                      <Route
+                        path="/component2-test"
+                        element={<Component2TestPage />}
+                      />
+
+                      {/* Component 4: Trading Strategy Database */}
+                      <Route
+                        path="/strategy-database"
+                        element={<TradingStrategyDatabasePage />}
+                      />
+
+                      {/* Component 4 Test */}
+                      <Route
+                        path="/component4-test"
+                        element={<Component4TestPage />}
+                      />
+
+                      {/* Component 7: Pattern Recognition Alerts */}
+                      <Route
+                        path="/pattern-recognition"
+                        element={<PatternRecognitionPage />}
+                      />
+                      <Route
+                        path="/trading/pattern-recognition"
+                        element={<PatternRecognitionPage />}
+                      />
+
+                      {/* Component 7 Test */}
+                      <Route
+                        path="/component7-test"
+                        element={<Component7TestPage />}
+                      />
                     </Routes>
                   </Suspense>
                 </main>
-                
+
                 {/* Footer */}
                 <footer className="bg-gray-100 border-t border-gray-200 p-4 text-center text-gray-500 text-sm">
                   <p>Trading Helper Bot - Demo Version</p>

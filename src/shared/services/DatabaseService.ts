@@ -174,18 +174,50 @@ const initializeSqlJs = async (): Promise<SqlJsStatic> => {
   }
   
   try {
-    const wasmPath = '/sql-wasm.wasm';
+    // Try multiple potential WASM paths
+    const possiblePaths = ['/sql-wasm.wasm', '/sqljs-wasm.wasm'];
+    let sqlJsModule = null;
     
-    const config: SqlJsConfig = {
-      locateFile: () => wasmPath
-    };
+    for (const wasmPath of possiblePaths) {
+      try {
+        console.log(`[DEBUG] Attempting to load SQL.js WASM from: ${wasmPath}`);
+        
+        const config: SqlJsConfig = {
+          locateFile: (filename: string) => {
+            console.log(`[DEBUG] SQL.js requesting file: ${filename}`);
+            return wasmPath;
+          }
+        };
+        
+        sqlJsModule = await initSqlJs(config);
+        console.log(`[DEBUG] Successfully loaded SQL.js from: ${wasmPath}`);
+        break;
+      } catch (wasmError) {
+        console.warn(`[DEBUG] Failed to load from ${wasmPath}:`, wasmError);
+        if (wasmPath === possiblePaths[possiblePaths.length - 1]) {
+          throw wasmError; // Re-throw on last attempt
+        }
+      }
+    }
     
-    const sqlJsModule = await initSqlJs(config);
+    if (!sqlJsModule) {
+      throw new Error('Failed to initialize SQL.js with any WASM path');
+    }
+    
     sql = sqlJsModule;
     return sqlJsModule;
   } catch (err) {
     console.error('Error initializing SQL.js', err);
-    throw err;
+    // Fallback: try without WASM configuration
+    try {
+      console.log('[DEBUG] Attempting fallback SQL.js initialization without WASM config...');
+      const fallbackModule = await initSqlJs();
+      sql = fallbackModule;
+      return fallbackModule;
+    } catch (fallbackErr) {
+      console.error('Fallback SQL.js initialization also failed:', fallbackErr);
+      throw err;
+    }
   }
 };
 

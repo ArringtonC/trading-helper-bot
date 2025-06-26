@@ -1,0 +1,9 @@
+Date,VIX,Signal,Signal_Description,Regime,Fear_Level,Market_Sentiment,Confidence
+2024-12-01,14.75,BUY,"Complacency - Enter positions",BULL,LOW,"Market complacent - Investors feel secure",0.900
+2024-12-02,15.23,BUY,"Complacency - Enter positions",BULL,LOW,"Market complacent - Investors feel secure",0.900
+2024-12-03,16.89,HOLD,"Normal - Maintain positions",NEUTRAL,MODERATE,"Normal conditions - Balanced sentiment",0.900
+2024-12-04,18.45,HOLD,"Normal - Maintain positions",NEUTRAL,MODERATE,"Normal conditions - Balanced sentiment",0.900
+2024-12-05,17.92,HOLD,"Normal - Maintain positions",NEUTRAL,MODERATE,"Normal conditions - Balanced sentiment",0.900
+2024-12-18,25.67,HEDGE,"Elevated fear - Add protection",VOLATILE,ELEVATED,"Increased anxiety - Investors nervous",0.900
+2024-12-19,28.92,HEDGE,"Elevated fear - Add protection",VOLATILE,ELEVATED,"High stress - Market fear elevated",0.900
+2024-12-20,31.45,SELL,"Panic - Reduce exposure",BEAR,EXTREME,"Panic mode - Extreme fear and uncertainty",0.900

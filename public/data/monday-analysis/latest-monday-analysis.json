@@ -1,0 +1,44 @@
+{
+  "date": "2024-06-24",
+  "symbol": "SPY",
+  "rangeData": {
+    "symbol": "SPY",
+    "date": "2024-06-24",
+    "open": 520.15,
+    "high": 523.75,
+    "low": 518.2,
+    "close": 522.4,
+    "volume": 85000000,
+    "range": 5.55,
+    "rangePercent": 1.07
+  },
+  "classification": "NORMAL_RANGE",
+  "battleStrategy": {
+    "type": "STANDARD_RANGE",
+    "confidence": "MEDIUM",
+    "description": "📈 Normal market conditions. Follow Monday high/low breakout strategy with standard position sizing."
+  },
+  "breakoutLevels": {
+    "bullishBreakout": 524.31,
+    "bearishBreakout": 517.64,
+    "midpoint": 520.98
+  },
+  "stopLossLevels": {
+    "bullish": 518.2,
+    "bearish": 523.75
+  },
+  "positionSizing": {
+    "riskLevel": "NORMAL",
+    "maxPositionSize": 20,
+    "recommendedRisk": 2
+  },
+  "tradingSignals": [
+    {
+      "setup": "Bullish Breakout",
+      "entry": "Above $524.31",
+      "stop": "$518.20",
+      "target": "$527.09",
+      "riskReward": 0.45
+    }
+  ]
+}

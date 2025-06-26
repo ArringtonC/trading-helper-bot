@@ -2,6 +2,25 @@ import { NormalizedTradeData } from '../types/trade';
 import { tradeDurationFeature, tradePLFeature, rsiFeature, macdFeature, bollingerFeature, streakFeature, marketRegimeFeature } from './core/tradeFeatures';
 import { FeatureDefinition, FeatureResult } from './types';
 
+// Export Trading Strategy Service for Component 4
+export { 
+  TradingStrategyService,
+  tradingStrategyService,
+  StrategyCategory,
+  RiskLevel,
+  TimeHorizon,
+  MarketCondition,
+  SkillCategory
+} from './trading';
+
+export type {
+  TradingStrategy,
+  StrategyRecommendation,
+  MarketEnvironment,
+  UserProfile,
+  StrategyPerformance
+} from './trading';
+
 // Registry of all feature definitions
 const featureRegistry: FeatureDefinition[] = [
   tradeDurationFeature,

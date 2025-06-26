@@ -1,0 +1,360 @@
+/**
+ * Strategy Recommendation Engine Styles
+ * 
+ * Professional styling for the Strategy Recommendation Engine component
+ * with mobile-responsive design and modern UI patterns.
+ */
+
+.strategy-recommendation-engine {
+  padding: 0;
+  background: transparent;
+}
+
+/* Strategy Card Styling */
+.strategy-card {
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f0f0f0;
+}
+
+.strategy-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  border-color: #1890ff;
+}
+
+.strategy-card-header {
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 12px;
+}
+
+.strategy-card .ant-card-actions {
+  background: #fafafa;
+  border-top: 1px solid #f0f0f0;
+}
+
+.strategy-card .ant-card-actions > li {
+  margin: 0;
+  padding: 12px 16px;
+}
+
+.strategy-card .ant-card-actions > li:not(:last-child) {
+  border-right: 1px solid #f0f0f0;
+}
+
+.strategy-card .ant-card-actions > li > span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* Market Dashboard Styling */
+.market-dashboard .ant-statistic-title {
+  font-size: 12px;
+  color: #8c8c8c;
+  margin-bottom: 4px;
+}
+
+.market-dashboard .ant-statistic-content {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Filter Controls */
+.filter-controls .ant-card-body {
+  padding: 16px;
+}
+
+.filter-controls .ant-select,
+.filter-controls .ant-slider {
+  margin-top: 4px;
+}
+
+/* Profile Section */
+.profile-section .skill-radar {
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .strategy-card {
+    margin-bottom: 16px;
+  }
+  
+  .strategy-card .ant-card-actions {
+    flex-direction: column;
+  }
+  
+  .strategy-card .ant-card-actions > li {
+    border-right: none;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .strategy-card .ant-card-actions > li:last-child {
+    border-bottom: none;
+  }
+  
+  .market-dashboard .ant-col {
+    margin-bottom: 16px;
+  }
+  
+  .filter-controls .ant-col {
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .strategy-recommendation-engine {
+    padding: 0 8px;
+  }
+  
+  .strategy-card .strategy-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .strategy-card .strategy-card-header .text-right {
+    text-align: left;
+    margin-top: 8px;
+    width: 100%;
+  }
+}
+
+/* Performance Chart Styling */
+.performance-chart .recharts-wrapper {
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+/* Modal Styling */
+.strategy-detail-modal .ant-modal-body {
+  padding: 24px;
+}
+
+.strategy-detail-modal .ant-tabs-content-holder {
+  padding-top: 16px;
+}
+
+/* Confidence Score Styling */
+.confidence-excellent {
+  color: #52c41a;
+  font-weight: 600;
+}
+
+.confidence-good {
+  color: #faad14;
+  font-weight: 600;
+}
+
+.confidence-poor {
+  color: #ff4d4f;
+  font-weight: 600;
+}
+
+/* XP Badge Styling */
+.xp-badge {
+  background: linear-gradient(45deg, #faad14, #ffd53e);
+  color: #000;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 2px 4px rgba(250, 173, 20, 0.3);
+}
+
+/* Risk Level Tags */
+.risk-very-low {
+  background: #f6ffed;
+  color: #52c41a;
+  border-color: #52c41a;
+}
+
+.risk-low {
+  background: #f6ffed;
+  color: #73d13d;
+  border-color: #73d13d;
+}
+
+.risk-moderate {
+  background: #fffbe6;
+  color: #faad14;
+  border-color: #faad14;
+}
+
+.risk-high {
+  background: #fff2e8;
+  color: #ff7a45;
+  border-color: #ff7a45;
+}
+
+.risk-very-high {
+  background: #fff1f0;
+  color: #ff4d4f;
+  border-color: #ff4d4f;
+}
+
+/* Loading Animation */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  background: #fafafa;
+  border-radius: 8px;
+}
+
+/* Utility Classes */
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mb-1 {
+  margin-bottom: 4px;
+}
+
+.mb-2 {
+  margin-bottom: 8px;
+}
+
+.mb-3 {
+  margin-bottom: 12px;
+}
+
+.mb-4 {
+  margin-bottom: 16px;
+}
+
+.mt-2 {
+  margin-top: 8px;
+}
+
+.mt-3 {
+  margin-top: 12px;
+}
+
+.mt-4 {
+  margin-top: 16px;
+}
+
+.mt-6 {
+  margin-top: 24px;
+}
+
+.ml-2 {
+  margin-left: 8px;
+}
+
+.mr-2 {
+  margin-right: 8px;
+}
+
+.pl-4 {
+  padding-left: 16px;
+}
+
+.py-8 {
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+.text-sm {
+  font-size: 12px;
+}
+
+.text-gray-600 {
+  color: #6b7280;
+}
+
+.text-green-500 {
+  color: #10b981;
+}
+
+.text-green-600 {
+  color: #059669;
+}
+
+.text-yellow-500 {
+  color: #f59e0b;
+}
+
+.text-yellow-600 {
+  color: #d97706;
+}
+
+.text-red-600 {
+  color: #dc2626;
+}
+
+/* Animation for new recommendations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.strategy-card {
+  animation: slideInUp 0.3s ease-out;
+}
+
+/* Hover effects for interactive elements */
+.strategy-card .ant-btn:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+.market-dashboard .ant-statistic:hover {
+  background: rgba(24, 144, 255, 0.04);
+  border-radius: 6px;
+  padding: 8px;
+  margin: -8px;
+  transition: all 0.2s ease;
+}
+
+/* Focus states for accessibility */
+.strategy-card:focus-within {
+  outline: 2px solid #1890ff;
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  .strategy-recommendation-engine {
+    background: white;
+  }
+  
+  .strategy-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  
+  .ant-card-actions {
+    display: none;
+  }
+}

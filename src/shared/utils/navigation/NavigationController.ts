@@ -70,12 +70,23 @@ export class NavigationController {
 
     // LEARNING & TOOLS SECTION
     {
+      id: 'challenge-dashboard',
+      path: '/challenge',
+      label: '🎯 $10k → $20k Challenge',
+      feature: 'challenge-dashboard',
+      minLevel: 'learning',
+      priority: 2,
+      category: 'learning',
+      description: 'Structured 90-day challenge to double your account with daily tasks and weekly planning',
+      isNew: true
+    },
+    {
       id: 'tutorial',
       path: '/tutorial',
       label: '🎮 Interactive Tutorial',
       feature: 'tutorial',
       minLevel: 'learning',
-      priority: 2,
+      priority: 3,
       category: 'learning',
       description: 'Learn position sizing through interactive lessons'
     },
@@ -85,7 +96,7 @@ export class NavigationController {
       label: '🎓 Trading Tutorials',
       feature: 'trading-tutorials',
       minLevel: 'learning',
-      priority: 3,
+      priority: 4,
       category: 'learning',
       description: 'Comprehensive tutorials: NVDA options, stacking, naked calls, and MES futures',
       isNew: true
@@ -96,7 +107,7 @@ export class NavigationController {
       label: '🧠 Psychology Simulator',
       feature: 'psychology-simulator',
       minLevel: 'learning',
-      priority: 4,
+      priority: 5,
       category: 'learning',
       description: 'Practice trading psychology and emotional control'
     },
@@ -106,7 +117,7 @@ export class NavigationController {
       label: '✨ Educational Dashboard',
       feature: 'educational-dashboard',
       minLevel: 'learning',
-      priority: 5,
+      priority: 6,
       category: 'learning',
       description: 'Comprehensive educational resources and learning dashboard'
     },
@@ -116,7 +127,7 @@ export class NavigationController {
       label: '🧪 Assessment Test',
       feature: 'assessment-test',
       minLevel: 'learning',
-      priority: 6,
+      priority: 7,
       category: 'learning',
       description: 'User experience assessment test'
     },
@@ -231,6 +242,17 @@ export class NavigationController {
       description: 'AI-powered market analysis and insights'
     },
     {
+      id: 'hmm-analysis',
+      path: '/hmm-analysis',
+      label: '📊 HMM Market Analysis',
+      feature: 'hmm-analysis',
+      minLevel: 'broker',
+      priority: 22.5,
+      category: 'options',
+      description: 'Enhanced HMM predictions with interactive visualizations',
+      isNew: true
+    },
+    {
       id: 'interactive-analytics',
       path: '/interactive-analytics',
       label: '📈 Interactive Analytics',
@@ -253,14 +275,91 @@ export class NavigationController {
 
     // RISK & POSITION MANAGEMENT SECTION
     {
+      id: 'pattern-recognition',
+      path: '/pattern-recognition',
+      label: '🎯 Pattern Recognition Alerts',
+      feature: 'pattern-recognition',
+      minLevel: 'learning',
+      priority: 28,
+      category: 'management',
+      description: 'Component 7: Real-time pattern detection with technical analysis alerts and XP rewards',
+      isNew: true
+    },
+    {
+      id: 'challenge-planning',
+      path: '/challenge/planning',
+      label: '📅 Weekly Planning Wizard',
+      feature: 'challenge-planning',
+      minLevel: 'learning',
+      priority: 30,
+      category: 'management',
+      description: 'Strategic weekly planning for the $10k → $20k challenge',
+      isNew: true
+    },
+    {
+      id: 'challenge-daily',
+      path: '/challenge/daily',
+      label: '✅ Daily Workflow',
+      feature: 'challenge-daily',
+      minLevel: 'learning',
+      priority: 31,
+      category: 'management',
+      description: 'Daily checklist and pre/post-market routines',
+      isNew: true
+    },
+    {
+      id: 'challenge-progress',
+      path: '/challenge/progress',
+      label: '📊 Progress Tracking',
+      feature: 'challenge-progress',
+      minLevel: 'learning',
+      priority: 32,
+      category: 'management',
+      description: 'Visualize your challenge progress and performance analytics',
+      isNew: true
+    },
+    {
+      id: 'strategy-database',
+      path: '/strategy-database',
+      label: '🎯 Trading Strategy Database',
+      feature: 'strategy-database',
+      minLevel: 'learning',
+      priority: 29,
+      category: 'management',
+      description: 'Component 4: AI-powered strategy recommendations, backtesting, and trading intelligence',
+      isNew: true
+    },
+    {
+      id: 'pattern-recognition',
+      path: '/pattern-recognition',
+      label: '⚡ Pattern Recognition Alerts',
+      feature: 'pattern-recognition',
+      minLevel: 'learning',
+      priority: 28,
+      category: 'trading',
+      description: 'Component 7: Real-time chart pattern detection with AI-powered trading signals and RPG achievement tracking',
+      isNew: true
+    },
+    {
       id: 'position-sizing-foundation',
       path: '/position-sizing',
       label: '🎯 Position Sizing Tool',
       feature: 'position-sizing-foundation',
       minLevel: 'learning',
-      priority: 30,
+      priority: 33,
       category: 'management',
       description: 'Interactive position sizing calculator and education'
+    },
+    {
+      id: 'position-sizing-calculator',
+      path: '/calculator/position-sizing',
+      label: '🧮 Position Calculator',
+      feature: 'position-sizing-calculator',
+      minLevel: 'learning',
+      priority: 34,
+      category: 'management',
+      description: 'Professional position sizing calculator with Kelly Criterion and VIX adjustments',
+      isNew: true
     },
     {
       id: 'goal-sizing-wizard',
@@ -268,7 +367,7 @@ export class NavigationController {
       label: '🧭 Goal Sizing Wizard',
       feature: 'goal-sizing-wizard',
       minLevel: 'import',
-      priority: 31,
+      priority: 35,
       category: 'management',
       description: 'Goal-driven position sizing wizard for optimal risk management'
     },
@@ -278,7 +377,7 @@ export class NavigationController {
       label: '🛡️ Risk Management',
       feature: 'risk-management',
       minLevel: 'import',
-      priority: 32,
+      priority: 36,
       category: 'management',
       description: 'Comprehensive portfolio risk assessment with five-factor analysis and automated filtering',
       isNew: true
@@ -289,7 +388,7 @@ export class NavigationController {
       label: '⚡ Weekend Gap Risk',
       feature: 'weekend-gap-risk',
       minLevel: 'import',
-      priority: 33,
+      priority: 37,
       category: 'management',
       description: 'Analyze and manage weekend gap risk in your positions'
     },
@@ -299,7 +398,7 @@ export class NavigationController {
       label: '🎯 Account Classification',
       feature: 'account-classification',
       minLevel: 'import',
-      priority: 34,
+      priority: 38,
       category: 'management',
       description: 'Intelligent account level assessment with 95%+ accuracy and regulatory compliance',
       isNew: true
@@ -420,6 +519,28 @@ export class NavigationController {
       priority: 99,
       category: 'hidden',
       description: 'Create custom trading rules and automation'
+    },
+    {
+      id: 'psychology-test',
+      path: '/psychology-test',
+      label: '🧠 Psychology Test Lab',
+      feature: 'psychology-test',
+      minLevel: 'import',
+      priority: 99,
+      category: 'hidden',
+      description: 'Test and explore trading psychology protection features including stress management, profit extraction, and behavioral analytics',
+      isNew: true
+    },
+    {
+      id: 'component1-test',
+      path: '/component1-test',
+      label: '🧪 Component 1 Test Lab',
+      feature: 'component1-test',
+      minLevel: 'import',
+      priority: 98,
+      category: 'hidden',
+      description: 'Test Component 1: Weekly Market Scan Automation ($50 value) - Famous Trader strategies, Sunday quests, and intelligent watchlist generation',
+      isNew: true
     },
     {
       id: 'legacy-dashboard',
@@ -613,6 +734,7 @@ export class NavigationController {
       core: [],
       learning: [],
       'stock-picking': [],
+      trading: [],
       options: [],
       management: [],
       futures: [],
@@ -656,6 +778,13 @@ export class NavigationController {
         description: 'AI-powered stock selection, analysis, and market research tools',
         items: categories['stock-picking'] || [],
         level: 'import' as const
+      },
+      {
+        key: 'trading',
+        title: 'Trading Analysis',
+        description: 'Advanced trading tools including pattern recognition and real-time alerts',
+        items: categories['trading'] || [],
+        level: 'learning' as const
       },
       {
         key: 'options',

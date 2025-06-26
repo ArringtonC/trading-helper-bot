@@ -1,6 +1,19 @@
 import { loadSetting } from '../shared/services/SettingsService';
 import { MESFeatureFlags } from '../features/learning/components/MESFuturesTutorial/types';
 
+// General feature flags hook
+export const useFeatureFlags = () => {
+  return {
+    showImport: loadSetting('showImport') === 'true',
+    showDirectImport: loadSetting('showDirectImport') === 'true',
+    showUnifiedDashboard: loadSetting('showUnifiedDashboard') === 'true',
+    showRuleEngine: loadSetting('showRuleEngine') === 'true',
+    showLegacyDashboard: loadSetting('showLegacyDashboard') === 'true',
+    strategyDatabase: true, // Component 4 is always enabled
+    mesFeatures: getMESFeatureFlags()
+  };
+};
+
 export const getMESFeatureFlags = (): MESFeatureFlags => ({
   enhancedTutorial: loadSetting('mesEnhancedTutorial') === 'true',
   realTimeData: loadSetting('mesRealTimeData') === 'true',

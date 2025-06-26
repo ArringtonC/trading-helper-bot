@@ -1,0 +1,760 @@
+/* Gamified Position Sizing Tutorial Styles */
+
+.tutorial-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Tutorial Progress Styles */
+.tutorial-progress {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 24px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.progress-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.step-indicator {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+}
+
+.progress-bar-container {
+  margin: 16px 0;
+}
+
+.progress-bar {
+  background: rgba(255, 255, 255, 0.2);
+  height: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, #00ff88 0%, #00d4ff 100%);
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+.progress-percentage {
+  text-align: center;
+  margin-top: 8px;
+  font-weight: 600;
+  color: #00ff88;
+}
+
+.progress-badges {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+}
+
+.badge-completed {
+  background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+  transform: scale(1.1);
+}
+
+.badge-active {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  animation: pulse 2s infinite;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+}
+
+.badge-locked {
+  background: rgba(255, 255, 255, 0.1);
+  opacity: 0.5;
+}
+
+.xp-counter {
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #ffd700;
+  margin-top: 16px;
+}
+
+.xp-breakdown {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-left: 8px;
+}
+
+.completion-celebration {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(0, 255, 136, 0.2);
+  border-radius: 8px;
+  animation: celebrate 2s ease-in-out;
+}
+
+/* Tutorial Step Styles */
+.tutorial-step {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.step-header {
+  margin-bottom: 24px;
+}
+
+.step-header h2 {
+  margin: 0 0 12px 0;
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.concept-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.explanation-section {
+  margin-bottom: 32px;
+}
+
+.explanation {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.analogy {
+  background: linear-gradient(145deg, #e8f4f8 0%, #d1ecf1 100%);
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 4px solid #17a2b8;
+  margin: 16px 0;
+  font-style: italic;
+  position: relative;
+}
+
+.analogy::before {
+  content: '💡';
+  position: absolute;
+  top: -8px;
+  left: 16px;
+  background: white;
+  padding: 4px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+}
+
+.warning {
+  background: linear-gradient(145deg, #fff3cd 0%, #ffeaa7 100%);
+  padding: 16px;
+  border-radius: 8px;
+  border-left: 4px solid #ffc107;
+  margin: 16px 0;
+  color: #856404;
+}
+
+/* Interactive Components */
+.interactive-section {
+  margin-bottom: 24px;
+}
+
+/* Risk Demo Styles */
+.risk-demo {
+  background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 24px;
+  border-radius: 12px;
+  border: 2px solid #dee2e6;
+}
+
+.demo-title {
+  margin: 0 0 16px 0;
+  color: #495057;
+  font-weight: 700;
+}
+
+.demo-description {
+  margin-bottom: 24px;
+  color: #6c757d;
+}
+
+.risk-slider-container {
+  margin: 24px 0;
+}
+
+.risk-slider {
+  text-align: center;
+}
+
+.slider {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  outline: none;
+  margin: 16px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.risk-display {
+  margin-top: 16px;
+}
+
+.risk-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #495057;
+}
+
+.risk-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-top: 4px;
+}
+
+.survival-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.account-health-bar {
+  display: flex;
+  gap: 2px;
+  margin: 16px 0;
+  height: 24px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.health-segment {
+  flex: 1;
+  transition: all 0.3s ease;
+}
+
+.risk-assessment {
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 16px 0;
+}
+
+.learning-insights {
+  background: rgba(23, 162, 184, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  margin: 24px 0;
+}
+
+.learning-insights h5 {
+  margin: 0 0 16px 0;
+  color: #17a2b8;
+}
+
+.learning-insights ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.learning-insights li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+/* Position Calculator Styles */
+.position-calc-demo {
+  background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 24px;
+  border-radius: 12px;
+  border: 2px solid #dee2e6;
+}
+
+.formula-explanation {
+  margin-bottom: 32px;
+}
+
+.formula-visual {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.formula-parts {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.formula-part {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: center;
+  min-width: 100px;
+}
+
+.operator {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #495057;
+}
+
+.calculator-inputs {
+  margin: 32px 0;
+}
+
+.input-group {
+  margin-bottom: 24px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin-top: 4px;
+}
+
+.calculation-result {
+  margin: 32px 0;
+}
+
+.calculation-steps {
+  margin-bottom: 24px;
+}
+
+.calculation-step {
+  padding: 16px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 0.9rem;
+}
+
+.result-card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.result-card.valid {
+  border-left: 4px solid #28a745;
+}
+
+.result-card.invalid {
+  border-left: 4px solid #dc3545;
+}
+
+.result-card h4 {
+  margin: 0 0 16px 0;
+  color: #495057;
+}
+
+.result-details p {
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+.result-details .safe {
+  color: #28a745;
+}
+
+.result-details .moderate {
+  color: #ffc107;
+}
+
+.result-details .risky {
+  color: #dc3545;
+}
+
+/* Button Styles */
+.complete-step, .continue-button {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  margin-top: 24px;
+  width: 100%;
+  max-width: 400px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.complete-step:hover, .continue-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+.complete-step.disabled {
+  background: linear-gradient(135deg, #6c757d 0%, #adb5bd 100%);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.complete-step.disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.back-button {
+  background: transparent;
+  color: #6c757d;
+  border: 2px solid #dee2e6;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.expert-mode-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 20px 40px;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.expert-mode-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+/* Account Input Demo */
+.account-input-demo {
+  text-align: center;
+  padding: 24px;
+}
+
+.account-input {
+  width: 100%;
+  max-width: 300px;
+  padding: 16px;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  text-align: center;
+  margin: 16px 0;
+  transition: border-color 0.3s ease;
+}
+
+.account-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.hint {
+  color: #6c757d;
+  font-style: italic;
+  margin: 16px 0;
+}
+
+/* Goal Selector Demo */
+.goal-selector-demo {
+  text-align: center;
+  padding: 24px;
+}
+
+.goal-options {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin: 24px 0;
+  flex-wrap: wrap;
+}
+
+.goal-option {
+  background: white;
+  border: 2px solid #dee2e6;
+  padding: 20px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+}
+
+.goal-option:hover {
+  border-color: #667eea;
+  transform: translateY(-2px);
+}
+
+.goal-option.selected {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: #667eea;
+}
+
+/* VIX Demo */
+.vix-demo {
+  padding: 24px;
+  background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+}
+
+.vix-scenarios {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.vix-scenario {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.vix-scenario h5 {
+  margin: 0 0 12px 0;
+  color: #495057;
+}
+
+/* Progress Footer */
+.progress-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #dee2e6;
+}
+
+.progress-reward {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  color: #856404;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  animation: slideInRight 0.5s ease-out;
+}
+
+/* Badge Notifications */
+.badge-notifications {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.badge-notification {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  animation: slideInRight 0.5s ease-out;
+  font-weight: 600;
+}
+
+/* Expert Mode Transition */
+.expert-mode-transition {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 16px;
+}
+
+.expert-mode-transition h2 {
+  margin: 0 0 20px 0;
+  font-size: 2.5rem;
+}
+
+.expert-mode-transition p {
+  font-size: 1.2rem;
+  margin-bottom: 32px;
+  opacity: 0.9;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes celebrate {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tutorial-container {
+    padding: 16px;
+  }
+  
+  .tutorial-step {
+    padding: 20px;
+  }
+  
+  .step-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .progress-header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+  
+  .formula-parts {
+    flex-direction: column;
+  }
+  
+  .goal-options {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .survival-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .progress-footer {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .badge-notifications {
+    left: 20px;
+    right: 20px;
+  }
+} 
